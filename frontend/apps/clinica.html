@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Salud & Clínicas · AuraFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+<style>.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:8px}
+.slot{background:#020617;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center;font-size:.82rem;cursor:pointer;color:var(--txt);font:inherit}
+.slot.sel{border-color:var(--cyan);background:rgba(34,211,238,.12)}.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}</style>
+</head><body><main>
+<h1>🏥 Agenda Médica</h1><p class="mut">Agenda citas, confirma pacientes y factura con IVA 4% (Ley 9635).</p>
+<div class="grid g2" style="margin-top:16px">
+  <form class="card" id="f"><h2>Nueva cita</h2>
+    <div class="row"><div><label>Paciente *</label><input id="pac" required></div><div><label>Teléfono / WhatsApp *</label><input id="tel" required value="+506 "></div></div>
+    <label>Servicio</label><select id="srv"><option>Consulta general</option><option>Odontología</option><option>Control pediátrico</option><option>Laboratorio clínico</option><option>Fisioterapia</option></select>
+    <label>Fecha *</label><input id="fecha" type="date" required>
+    <label>Hora *</label><div class="slots" id="slots"></div><input type="hidden" id="hora">
+    <label>Notas</label><textarea id="notas" rows="2"></textarea>
+    <button class="btn w">Agendar cita</button></form>
+  <div class="card"><div class="row"><h2 style="flex:0 0 auto">Citas del día</h2><input id="dia" type="date" style="max-width:180px;margin-left:auto"></div><div id="list"></div></div>
+</div>
+</main><script>
+const {esc,api,money,$}=AF; let citasDia=[], estados=[];
+const HORAS=["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30"];
+const CLS={pendiente:"warn",confirmada:"ok",atendida:"",cancelada:"bad"};
+const today=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+$("#fecha").value=$("#dia").value=today;$("#fecha").min=today;
+async function slots(){const d=$("#fecha").value;const r=await api("/api/citas?fecha="+d);const taken=r.citas.filter(c=>c.estado!=="cancelada").map(c=>c.hora);
+  $("#hora").value="";$("#slots").innerHTML=HORAS.map(h=>`<button type="button" class="slot" data-h="${h}" ${taken.includes(h)?"disabled":""}>${h}</button>`).join("");
+  document.querySelectorAll(".slot").forEach(b=>b.onclick=()=>{document.querySelectorAll(".slot").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");$("#hora").value=b.dataset.h});}
+async function list(){const r=await api("/api/citas?fecha="+$("#dia").value);citasDia=r.citas;estados=r.estados;
+  $("#list").innerHTML=citasDia.length?`<table><tr><th>Hora</th><th>Paciente</th><th>Servicio</th><th>Estado</th><th></th></tr>${citasDia.map(c=>`<tr>
+    <td><b>${esc(c.hora)}</b></td><td>${esc(c.paciente)}<br><a class="mut" href="https://wa.me/${esc(c.telefono.replace(/\D/g,""))}" target="_blank">${esc(c.telefono)}</a></td><td>${esc(c.servicio)}</td>
+    <td><select onchange="estado(${c.id},this.value)">${estados.map(e=>`<option ${e===c.estado?"selected":""}>${e}</option>`).join("")}</select></td>
+    <td>${c.estado!=="atendida"&&c.estado!=="cancelada"?`<button class="btn s sm" onclick="facturar(${c.id})">Facturar</button>`:`<span class="b ${CLS[c.estado]}">${c.estado}</span>`}</td></tr>`).join("")}</table>`:'<div class="empty">No hay citas este día</div>';}
+window.estado=async(id,e)=>{try{await api("/api/citas/estado",{body:{id,estado:e}});await Promise.all([list(),slots()])}catch(err){AF.toast(err.message,true)}};
+window.facturar=async id=>{const p=prompt("Monto de la consulta (₡, sin IVA):","35000");if(!p)return;
+  try{const r=await api("/api/citas/facturar",{body:{id,precio:+p}});AF.toast("Factura emitida: "+money(r.factura.total)+" (IVA 4%)");await list();}catch(err){AF.toast(err.message,true)}};
+$("#fecha").onchange=slots;$("#dia").onchange=list;
+$("#f").onsubmit=async e=>{e.preventDefault();if(!$("#hora").value){AF.toast("Selecciona una hora",true);return;}
+  try{await api("/api/citas",{body:{paciente:$("#pac").value,telefono:$("#tel").value,servicio:$("#srv").value,fecha:$("#fecha").value,hora:$("#hora").value,notas:$("#notas").value}});
+    AF.toast("Cita agendada para el "+$("#fecha").value+" a las "+$("#hora").value);$("#pac").value="";$("#notas").value="";$("#tel").value="+506 ";
+    $("#dia").value=$("#fecha").value;await Promise.all([slots(),list()]);}catch(err){AF.toast(err.message,true)}};
+AF.shell("clinica");slots();list();
+</script></body></html>

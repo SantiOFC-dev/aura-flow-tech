@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kanban CRM Comercial & Leads WhatsApp · AuraFlow Tech</title>
+<meta name="description" content="CRM Kanban comercial de AuraFlow Tech Costa Rica con captura automática de prospectos desde WhatsApp, calificación IA y pipeline de ventas.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://crm.auraflowtech.lat/">
+<meta property="og:title" content="Kanban CRM Comercial · AuraFlow Tech">
+<meta property="og:description" content="Gestiona prospectos y cotizaciones de WhatsApp con IA en tiempo real.">
+<meta property="og:url" content="https://crm.auraflowtech.lat/">
+<meta property="og:image" content="https://auraflowtech.lat/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+<style>.kan{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;margin-top:16px}
+.col{min-width:250px;flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.col.over{border-color:var(--cyan)}.col h3{font-size:.85rem;margin:0 0 8px;display:flex;justify-content:space-between}
+.lead{background:#020617;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;cursor:grab;font-size:.82rem}
+.lead:active{cursor:grabbing}.lead b{display:block}.lead select{margin-top:6px;padding:4px;font-size:.75rem}
+dialog{background:#0b1325;color:var(--txt);border:1px solid var(--cyan);border-radius:16px;max-width:520px;width:92%}
+dialog::backdrop{background:rgba(0,0,0,.6)}</style>
+</head><body><main>
+<div class="row"><div><h1>📊 Kanban CRM</h1><p class="mut">Arrastra los prospectos entre etapas. Los contactos de WhatsApp entran solos.</p></div>
+<div style="flex:0 0 auto"><button class="btn" id="new">+ Nuevo prospecto</button></div></div>
+<input id="q" placeholder="Buscar prospecto…" style="max-width:320px;margin-top:10px">
+<div class="kan" id="kan"></div>
+<dialog id="dlg"><form id="f" method="dialog">
+  <h2>Nuevo prospecto</h2>
+  <div class="row"><div><label>Nombre *</label><input id="n" required></div><div><label>WhatsApp *</label><input id="ph" required value="+506 "></div></div>
+  <div class="row"><div><label>Correo *</label><input id="em" type="email" required></div><div><label>Empresa</label><input id="co"></div></div>
+  <label>Plan de interés</label><select id="pl"><option>Plan Emprendedor CR v4.4</option><option selected>Plan PYME Pro (WaBot IA + Factura CR v4.4)</option><option>Plan Ecosistema Cloud Completo</option><option>AuraFlow PTT Radio + Radar GPS</option></select>
+  <label>¿Qué necesita? *</label><textarea id="go" rows="3" required></textarea>
+  <div class="row" style="margin-top:14px"><button type="button" class="btn s" id="cancel">Cancelar</button><button class="btn">Guardar</button></div>
+</form></dialog>
+</main><script>
+const {esc,api,$}=AF; let leads=[], statuses=[];
+const LABEL={nuevo_whatsapp:"🆕 Nuevo",whatsapp_activo:"💬 WhatsApp activo",calificado_ia:"🤖 Calificado",propuesta:"📄 Propuesta",negociacion:"🤝 Negociación",ganado:"🏆 Ganado",perdido:"❌ Perdido"};
+function draw(){const q=$("#q").value.toLowerCase();
+  $("#kan").innerHTML=statuses.map(s=>{const ls=leads.filter(l=>l.status===s&&(!q||(l.name+l.company+l.phone).toLowerCase().includes(q)));
+    return `<div class="col" data-s="${s}"><h3><span>${LABEL[s]||s}</span><span class="b">${ls.length}</span></h3>${ls.map(l=>`
+      <div class="lead" draggable="true" data-id="${l.id}"><b>${esc(l.name)}</b><span class="mut">${esc(l.company)} · ${esc(l.phone)}</span>
+      <div class="mut" style="margin-top:4px">${esc((l.automation_goal||"").slice(0,90))}</div>
+      <select onchange="move(${l.id},this.value)">${statuses.map(x=>`<option value="${x}" ${x===s?"selected":""}>${LABEL[x]||x}</option>`).join("")}</select></div>`).join("")}</div>`}).join("");
+  document.querySelectorAll(".lead").forEach(el=>el.ondragstart=e=>e.dataTransfer.setData("id",el.dataset.id));
+  document.querySelectorAll(".col").forEach(c=>{c.ondragover=e=>{e.preventDefault();c.classList.add("over")};c.ondragleave=()=>c.classList.remove("over");
+    c.ondrop=e=>{e.preventDefault();c.classList.remove("over");move(+e.dataTransfer.getData("id"),c.dataset.s)}});}
+window.move=async(id,s)=>{const l=leads.find(x=>x.id===id);if(!l||l.status===s)return;const prev=l.status;l.status=s;draw();
+  try{await api("/api/leads/status",{body:{id,status:s}})}catch(err){l.status=prev;draw();AF.toast(err.message,true)}};
+async function load(){[leads,statuses]=await Promise.all([api("/api/leads").then(d=>d.leads),api("/api/leads/statuses").then(d=>d.statuses)]);draw();}
+$("#q").oninput=draw;
+$("#new").onclick=()=>$("#dlg").showModal(); $("#cancel").onclick=()=>$("#dlg").close();
+$("#f").onsubmit=async e=>{e.preventDefault();
+  try{await api("/api/leads",{body:{name:$("#n").value,phone:$("#ph").value,email:$("#em").value,company:$("#co").value,plan_interest:$("#pl").value,automation_goal:$("#go").value}});
+    $("#dlg").close();e.target.reset();AF.toast("Prospecto agregado");await load();}catch(err){AF.toast(err.message,true)}};
+AF.shell("crm");load();if(location.hash==="#nuevo")$("#dlg").showModal();setInterval(load,30000);
+</script></body></html>

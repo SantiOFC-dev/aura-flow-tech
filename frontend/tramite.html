@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Centro de Trámites & Atención Inteligente | AuraFlow Tech (Aura Flow Tech)</title>
+  <meta name="description" content="Formulario inteligente de trámites, soporte técnico, atención al cliente y facturación electrónica v4.4 de AuraFlow Tech Costa Rica." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://auraflowtech.lat/tramite" />
+  <meta property="og:title" content="Centro de Trámites & Atención Inteligente | AuraFlow Tech" />
+  <meta property="og:url" content="https://auraflowtech.lat/tramite" />
+  <meta property="og:image" content="https://auraflowtech.lat/og-image.png" />
+  <meta name="theme-color" content="#0a0f1d" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #070b14;
+      --card-bg: #0f172a;
+      --card-border: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --indigo: #6366f1;
+      --violet: #8b5cf6;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-top: 8px;
+    }
+
+    .badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #090e1a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+      color: #fff;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      background: #0d1527;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #475569;
+    }
+
+    .hacienda-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: #34d399;
+    }
+
+    .hacienda-badge.loading {
+      display: flex;
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+    }
+
+    .hacienda-badge.active {
+      display: flex;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .option-card {
+      background: #090e1a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 12px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      border-color: #334155;
+      background: #0f172a;
+    }
+
+    .option-card.selected {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      box-shadow: 0 0 0 1px var(--cyan);
+    }
+
+    .option-card .icon {
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .option-card .title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: block;
+    }
+
+    .option-card .desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: block;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 15px 30px -5px rgba(14, 165, 233, 0.55);
+    }
+
+    .btn-submit:active {
+      transform: translateY(1px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .confirmation-view {
+      display: none;
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .success-icon {
+      width: 68px;
+      height: 68px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid var(--emerald);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 2rem;
+      color: var(--emerald);
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+    }
+
+    .ticket-badge {
+      display: inline-block;
+      background: #090e1a;
+      border: 1px dashed var(--cyan);
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin: 12px 0 16px;
+    }
+
+    .btn-wa-direct {
+      background: #25D366;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 0.94rem;
+      box-shadow: 0 10px 20px -5px rgba(37, 211, 102, 0.4);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    footer a { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge-top">
+        <span class="badge-dot"></span>
+        AuraFlow Tech • Atención Inteligente
+      </div>
+      <h1>Centro de Trámites & Solicitudes</h1>
+      <p class="subtitle">Canal oficial verificado del Ing. Santiago Delgado Leiva. Conexión en vivo con Hacienda CR y WhatsApp.</p>
+    </header>
+
+    <div class="card" id="formCard">
+      <form id="tramiteForm">
+        
+        <div class="section-title">
+          <span>🪪 1. Identificación & Datos de Contacto</span>
+        </div>
+
+        <div class="form-group">
+          <label for="cedulaInput">Cédula de Identidad (Costa Rica)</label>
+          <div class="input-wrapper">
+            <input type="text" id="cedulaInput" placeholder="Ej: 119540878 o 3101849201" inputmode="numeric" maxlength="12" autofocus required />
+          </div>
+          <div id="haciendaBadge" class="hacienda-badge">
+            <span id="haciendaIcon">⏳</span>
+            <span id="haciendaText">Consultando Ministerio de Hacienda...</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombreInput">Nombre Completo o Razón Social</label>
+          <input type="text" id="nombreInput" placeholder="Nombre completo" required />
+        </div>
+
+        <div class="form-group">
+          <label for="telefonoInput">Teléfono WhatsApp de Contacto</label>
+          <input type="tel" id="telefonoInput" placeholder="Ej: 89418680 o +506 8941 8680" required />
+        </div>
+
+        <div class="section-title" style="margin-top: 22px;">
+          <span>📋 2. Selecciona tu Tipo de Trámite</span>
+        </div>
+
+        <div class="options-grid">
+          <div class="option-card selected" data-value="Planes y Soluciones">
+            <span class="icon">💼</span>
+            <span class="title">Contratar Plan</span>
+            <span class="desc">₡18.5k / ₡49.5k / ₡95k</span>
+          </div>
+          <div class="option-card" data-value="Facturación v4.4">
+            <span class="icon">🧾</span>
+            <span class="title">Factura v4.4</span>
+            <span class="desc">Hacienda & CABYS</span>
+          </div>
+          <div class="option-card" data-value="Soporte y Redes">
+            <span class="icon">🛠️</span>
+            <span class="title">Soporte Técnico</span>
+            <span class="desc">Redes, FTTH o VPS</span>
+          </div>
+          <div class="option-card" data-value="Consultoría IA">
+            <span class="icon">🧠</span>
+            <span class="title">Proyectos con IA</span>
+            <span class="desc">Bots & Automatización</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="planSelect">Servicio / Plan de Interés</label>
+          <select id="planSelect">
+            <option value="Plan PYME Pro (₡49,500/mes) - WaBot IA + Factura v4.4">Plan PYME Pro (₡49,500/mes) — WaBot IA + Factura v4.4</option>
+            <option value="Plan Emprendedor (₡18,500/mes) - Facturación CR v4.4">Plan Emprendedor (₡18,500/mes) — Facturación v4.4 Ilimitada</option>
+            <option value="Plan Ecosistema Cloud (₡95,000/mes) - Clínicas & Empresas">Plan Ecosistema Cloud (₡95,000/mes) — Clínicas & Empresas</option>
+            <option value="Desarrollo de Software / Bot a la Medida">Desarrollo de Software / Bot a la Medida</option>
+            <option value="Soporte de Redes, FTTH o Servidor VPS">Soporte de Redes, FTTH o Servidor VPS</option>
+            <option value="Consulta General">Consulta General</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="detalleInput">Detalle de tu solicitud o pregunta</label>
+          <textarea id="detalleInput" rows="3" placeholder="Describe brevemente lo que necesitas para que Santiago o el Asistente IA te atiendan preparado..."></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">
+          <span>⚡ Registrar y Enviar Trámite</span>
+        </button>
+
+      </form>
+
+      <!-- Pantalla de Éxito -->
+      <div id="confirmationView" class="confirmation-view">
+        <div class="success-icon">✓</div>
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">¡Trámite Registrado con Éxito!</h2>
+        <p style="font-size: 0.88rem; color: #94a3b8;">Tu solicitud ya fue asignada al Ing. Santiago Delgado Leiva y a nuestro Asistente Inteligente.</p>
+        
+        <div class="ticket-badge" id="ticketBadge">TICKET #AF-0000</div>
+        
+        <p style="font-size: 0.84rem; color: #cbd5e1; line-height: 1.5;">
+          Hemos enviado un comprobante a tu WhatsApp.<br/>
+          Puedes continuar la conversación directamente:
+        </p>
+
+        <a id="waDirectBtn" href="#" class="btn-wa-direct">
+          <span>💬 Abrir Chat en WhatsApp</span>
+        </a>
+      </div>
+
+    </div>
+
+    <footer>
+      ⚡ <strong>AuraFlow Tech</strong> · Sistema Propio Autoalojado en VPS<br/>
+      Fundado por el <strong>Ing. Santiago Delgado Leiva</strong> · <a href="https://auraflowtech.lat">auraflowtech.lat</a>
+    </footer>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefillWa = urlParams.get('wa') || urlParams.get('tel') || '';
+    if (prefillWa) {
+      document.getElementById('telefonoInput').value = prefillWa;
+    }
+
+    // Selección de tarjetas de trámite
+    let selectedTipo = "Planes y Soluciones";
+    document.querySelectorAll('.option-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedTipo = card.getAttribute('data-value');
+      });
+    });
+
+    // Auto-búsqueda en vivo de Cédula en Hacienda CR
+    let debounceTimer = null;
+    const cedulaInput = document.getElementById('cedulaInput');
+    const nombreInput = document.getElementById('nombreInput');
+    const badge = document.getElementById('haciendaBadge');
+    const badgeIcon = document.getElementById('haciendaIcon');
+    const badgeText = document.getElementById('haciendaText');
+
+    cedulaInput.addEventListener('input', (e) => {
+      const clean = e.target.value.replace(/\D/g, '');
+      clearTimeout(debounceTimer);
+      if (clean.length < 9) {
+        badge.classList.remove('active', 'loading');
+        return;
+      }
+
+      badge.classList.remove('active');
+      badge.classList.add('loading');
+      badgeIcon.textContent = '⏳';
+      badgeText.textContent = `Consultando Hacienda CR para cédula ${clean}...`;
+
+      debounceTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/cedula?q=${clean}`);
+          const json = await res.json();
+          if (json.ok && json.nombre) {
+            nombreInput.value = json.nombre;
+            badge.classList.remove('loading');
+            badge.classList.add('active');
+            badgeIcon.textContent = '✓';
+            badgeText.innerHTML = `<strong>Contribuyente Verificado:</strong> ${json.nombre}`;
+          } else {
+            badge.classList.remove('loading');
+            badge.classList.add('active');
+            badgeIcon.textContent = 'ℹ️';
+            badgeText.textContent = 'Cédula no inscrita en padrón de Hacienda (puedes continuar).';
+          }
+        } catch (err) {
+          badge.classList.remove('loading');
+          badge.classList.remove('active');
+        }
+      }, 350);
+    });
+
+    // Envío del Formulario
+    const form = document.getElementById('tramiteForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formCard = document.getElementById('formCard');
+    const confirmationView = document.getElementById('confirmationView');
+    const ticketBadge = document.getElementById('ticketBadge');
+    const waDirectBtn = document.getElementById('waDirectBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⚡ Registrando en AuraFlow Cloud...</span>';
+
+      const payload = {
+        cedula: cedulaInput.value.trim(),
+        nombre: nombreInput.value.trim(),
+        telefono: document.getElementById('telefonoInput').value.trim(),
+        tipo_tramite: selectedTipo,
+        plan: document.getElementById('planSelect').value,
+        detalle: document.getElementById('detalleInput').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/tramite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          form.style.display = 'none';
+          confirmationView.style.display = 'block';
+          ticketBadge.textContent = `TICKET #${data.ticket_id}`;
+          
+          const waMsg = encodeURIComponent(`Hola Santiago, acabo de registrar el trámite #${data.ticket_id} (${payload.tipo_tramite}) desde auraflowtech.lat.`);
+          waDirectBtn.href = `https://wa.me/50689418680?text=${waMsg}`;
+        } else {
+          alert('Error: ' + (data.error || 'No se pudo registrar el trámite.'));
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>⚡ Registrar y Enviar Trámite</span>';
+        }
+      } catch (err) {
+        alert('Fallo de conexión al enviar el trámite. Intenta nuevamente.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>⚡ Registrar y Enviar Trámite</span>';
+      }
+    });
+  </script>
+
+</body>
+</html>

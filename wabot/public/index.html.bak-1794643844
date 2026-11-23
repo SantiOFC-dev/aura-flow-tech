@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraFlow Bot — Dashboard de Chats, Asistente & Visión en Vivo</title>
+  <style>
+    :root {
+      --bg-dark: #070b14;
+      --bg-panel: #0f172a;
+      --bg-panel-2: #131e36;
+      --bg-hover: #1e293b;
+      --border: rgba(148, 163, 184, 0.16);
+      --cyan: #22d3ee;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --indigo: #818cf8;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --bubble-in: #1e293b;
+      --bubble-me: #065f46;
+      --bubble-bot: #1e1b4b;
+      --bubble-assist: #311042;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: radial-gradient(circle at top right, #0f172a 0%, #070b14 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header */
+    .topbar {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan), var(--emerald));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #041019;
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title p {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+    }
+
+    .status-pill.offline {
+      background: rgba(245, 158, 11, 0.14);
+      color: #fbbf24;
+    }
+
+    /* Quick Assistant Mode Switcher */
+    .mode-switcher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #090e1a;
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.79rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .mode-btn.active-away {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #070b14;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+    }
+
+    .mode-btn.active-auto {
+      background: linear-gradient(135deg, var(--cyan), #0284c7);
+      color: #041019;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+    }
+
+    .mode-btn.active-online {
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: #041019;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .metrics-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .metric-chip {
+      background: var(--bg-panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px 12px;
+      text-align: center;
+      min-width: 88px;
+    }
+
+    .metric-chip .val {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .metric-chip .lbl {
+      font-size: 0.68rem;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Main Grid Layout */
+    .dashboard-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 330px 1fr 370px;
+      height: calc(100vh - 73px);
+      overflow: hidden;
+    }
+
+    @media (max-width: 1180px) {
+      .dashboard-grid {
+        grid-template-columns: 290px 1fr;
+        height: auto;
+        min-height: calc(100vh - 73px);
+        overflow: visible;
+      }
+      .right-col {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .chats-col {
+        max-height: 360px;
+      }
+      .chat-view-col {
+        height: 540px;
+      }
+    }
+
+    /* Left Column: Chats List */
+    .chats-col {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .col-header {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(19, 30, 54, 0.65);
+    }
+
+    .col-header h2 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-input {
+      width: 100%;
+      background: #070b14;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .filter-tab {
+      flex: 1;
+      background: #070b14;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .filter-tab.active {
+      background: rgba(34, 211, 238, 0.15);
+      color: var(--cyan);
+      border-color: rgba(34, 211, 238, 0.45);
+    }
+
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .chat-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .chat-item.active {
+      background: rgba(34, 211, 238, 0.12);
+      border-left: 3px solid var(--cyan);
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e293b, #334155);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--cyan);
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .avatar.group {
+      color: var(--indigo);
+    }
+
+    .chat-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3px;
+    }
+
+    .chat-name {
+      font-size: 0.87rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-time {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      flex-shrink: 0;
+      margin-left: 6px;
+    }
+
+    .chat-preview {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-badges {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .mini-badge {
+      font-size: 0.64rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      background: rgba(148, 163, 184, 0.14);
+      color: var(--text-sub);
+    }
+
+    .mini-badge.assisted {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+    }
+
+    .mini-badge.muted {
+      background: rgba(244, 63, 94, 0.18);
+      color: #fb7185;
+    }
+
+    /* Center Column: Active Chat View */
+    .chat-view-col {
+      display: flex;
+      flex-direction: column;
+      background: #080d19;
+      overflow: hidden;
+    }
+
+    .chat-view-header {
+      padding: 12px 18px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chat-view-title h3 {
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .chat-view-title p {
+      font-size: 0.76rem;
+      color: var(--text-sub);
+      font-family: monospace;
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--bg-panel-2);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn:hover {
+      border-color: var(--cyan);
+      background: rgba(34, 211, 238, 0.12);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), #0284c7);
+      color: #041019;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      background: linear-gradient(135deg, var(--cyan), #0284c7);
+    }
+
+    .btn-amber {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .messages-container {
+      flex: 1;
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .empty-state {
+      margin: auto;
+      text-align: center;
+      color: var(--text-sub);
+      max-width: 360px;
+      padding: 24px;
+    }
+
+    .empty-state .icon {
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+    }
+
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 78%;
+    }
+
+    .msg-row.incoming {
+      align-self: flex-start;
+    }
+
+    .msg-row.outgoing {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 10px 13px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .msg-row.incoming .msg-bubble {
+      background: var(--bubble-in);
+      border-top-left-radius: 3px;
+    }
+
+    .msg-row.outgoing.owner .msg-bubble {
+      background: var(--bubble-me);
+      border-top-right-radius: 3px;
+    }
+
+    .msg-row.outgoing.assistant .msg-bubble {
+      background: var(--bubble-assist);
+      border-color: rgba(245, 158, 11, 0.35);
+      border-top-right-radius: 3px;
+    }
+
+    .msg-row.outgoing.botcmd .msg-bubble {
+      background: var(--bubble-bot);
+      border-color: rgba(34, 211, 238, 0.35);
+      border-top-right-radius: 3px;
+    }
+
+    .msg-header {
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--cyan);
+    }
+
+    .msg-row.outgoing.owner .msg-header {
+      color: #6ee7b7;
+    }
+
+    .msg-row.outgoing.assistant .msg-header {
+      color: #fbbf24;
+    }
+
+    .msg-footer {
+      font-size: 0.67rem;
+      color: rgba(248, 250, 252, 0.55);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .msg-thumb {
+      margin-top: 6px;
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: block;
+    }
+
+    .composer-bar {
+      padding: 12px 16px;
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .composer-input {
+      flex: 1;
+      background: #070b14;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      outline: none;
+    }
+
+    .composer-input:focus {
+      border-color: var(--cyan);
+    }
+
+    /* Right Column: Assistant Config & Live Bot Vision */
+    .right-col {
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .panel-section {
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-section h3 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--cyan);
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 86px;
+      background: #070b14;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 9px 11px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #070b14;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .vision-feed {
+      max-height: 310px;
+      overflow-y: auto;
+      background: #060a12;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.74rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .vision-item {
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.85);
+      border-left: 3px solid var(--cyan);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .vision-item.assist {
+      border-left-color: var(--amber);
+    }
+
+    .vision-item.cmd {
+      border-left-color: var(--emerald);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0f172a;
+      border: 1px solid var(--cyan);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 100;
+    }
+
+    /* Exclusive Admin Login Gate */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #0f172a 0%, #050811 100%);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 430px;
+      background: #0f172a;
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    .auth-card h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .auth-card p {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+      line-height: 1.45;
+    }
+
+    .auth-error {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #fda4af;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .auth-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Exclusive Login Gate for support@auraflowtech.lat -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-card">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div class="brand-icon">🔐</div>
+        <div>
+          <h2>Acceso Privado — AuraFlow Bot</h2>
+          <span style="font-size:0.73rem; color:var(--cyan); font-family:monospace;">Exclusivo Ing. Santiago Delgado Leiva</span>
+        </div>
+      </div>
+      <p>Este panel de monitoreo de WhatsApp está restringido únicamente a tu correo oficial.</p>
+
+      <div class="auth-error" id="auth-error"></div>
+      <div class="auth-success" id="auth-success"></div>
+
+      <div class="form-group">
+        <label for="auth-email">Correo Electrónico Autorizado:</label>
+        <input type="email" id="auth-email" class="form-input" value="support@auraflowtech.lat" placeholder="support@auraflowtech.lat" />
+      </div>
+
+      <div class="filter-tabs" style="margin-bottom:14px;">
+        <button type="button" class="filter-tab active" id="auth-tab-otp" onclick="switchAuthMethod('otp')">📧 Código al Correo (6 dígitos)</button>
+        <button type="button" class="filter-tab" id="auth-tab-pass" onclick="switchAuthMethod('pass')">🔑 Contraseña del Correo</button>
+      </div>
+
+      <div id="auth-otp-box">
+        <button type="button" class="btn" style="width:100%; justify-content:center; margin-bottom:12px;" onclick="requestLoginCode()" id="btn-send-otp">
+          📨 Enviar código de 6 dígitos a support@auraflowtech.lat
+        </button>
+        <div class="form-group">
+          <label for="auth-code">Código de 6 dígitos recibido en tu correo:</label>
+          <input type="text" id="auth-code" class="form-input" placeholder="123456" maxlength="6" style="font-size:1.1rem; letter-spacing:4px; text-align:center; font-family:monospace;" />
+        </div>
+      </div>
+
+      <div id="auth-pass-box" style="display:none;">
+        <div class="form-group">
+          <label for="auth-password">Contraseña de support@auraflowtech.lat:</label>
+          <input type="password" id="auth-password" class="form-input" placeholder="••••••••••••" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; padding:11px; margin-top:6px;" onclick="verifyAdminLogin()">
+        Entrar al Dashboard ➤
+      </button>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-title">
+        <h1>
+          AuraFlow Bot — Centro de Monitoreo &amp; Asistente
+          <span class="status-pill" id="wa-conn-badge">Conectando...</span>
+        </h1>
+        <p id="owner-activity-label">Monitoreando en tiempo real lo que ve el bot en tu WhatsApp</p>
+      </div>
+    </div>
+
+    <!-- Assistant Mode Switcher -->
+    <div class="mode-switcher" title="Elige cómo debe responder tu asistente cuando te escriben">
+      <button class="mode-btn" id="mode-away-btn" onclick="setAssistantMode('always_away')">
+        🌙 No Disponible (Avisar 1 vez)
+      </button>
+      <button class="mode-btn" id="mode-auto-btn" onclick="setAssistantMode('auto')">
+        🤖 Automático (Si estoy inactivo)
+      </button>
+      <button class="mode-btn" id="mode-online-btn" onclick="setAssistantMode('commands_only')">
+        🟢 Disponible (Solo Comandos -)
+      </button>
+    </div>
+
+    <div class="metrics-bar">
+      <div class="metric-chip">
+        <div class="val" id="stat-chats">0</div>
+        <div class="lbl">Chats</div>
+      </div>
+      <div class="metric-chip">
+        <div class="val" id="stat-msgs">0</div>
+        <div class="lbl">Mensajes</div>
+      </div>
+      <div class="metric-chip">
+        <div class="val" id="stat-assist">0</div>
+        <div class="lbl">Avisos</div>
+      </div>
+      <div class="metric-chip">
+        <div class="val" id="stat-cmds">0</div>
+        <div class="lbl">Comandos</div>
+      </div>
+      <button class="btn" onclick="logoutAdmin()" title="Cerrar sesión en este navegador">🚪 Salir</button>
+    </div>
+  </header>
+
+  <!-- Main 3-Column Workspace -->
+  <main class="dashboard-grid">
+
+    <!-- Left: Chats List -->
+    <section class="chats-col">
+      <div class="col-header">
+        <h2>
+          <span>💬 Conversaciones Vistas</span>
+          <span style="font-size:0.72rem; color:var(--text-sub);" id="poll-indicator">● En vivo</span>
+        </h2>
+        <input type="text" id="chat-search" class="search-input" placeholder="Buscar por nombre o número..." oninput="renderChatList()" />
+        <div class="filter-tabs">
+          <button class="filter-tab active" id="tab-all" onclick="setChatFilter('all')">Todos</button>
+          <button class="filter-tab" id="tab-private" onclick="setChatFilter('private')">Privados</button>
+          <button class="filter-tab" id="tab-groups" onclick="setChatFilter('groups')">Grupos</button>
+        </div>
+      </div>
+      <div class="chat-list" id="chat-list">
+        <div class="empty-state">
+          <div class="icon">📡</div>
+          <p>Esperando actividad de mensajes en WhatsApp...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center: Active Chat Messages & Composer -->
+    <section class="chat-view-col">
+      <div class="chat-view-header" id="active-chat-header" style="display:none;">
+        <div class="chat-view-title">
+          <h3 id="active-chat-name">Selecciona un chat</h3>
+          <p id="active-chat-jid"></p>
+        </div>
+        <div class="chat-actions">
+          <button class="btn btn-amber" onclick="sendInstantAwayReply()" title="Envía inmediatamente el aviso de que no estás disponible a este chat">
+            🤖 Enviar Aviso "No disponible"
+          </button>
+          <button class="btn" id="btn-toggle-chat-mute" onclick="toggleChatMute()">
+            🔔 Asistente Activo aquí
+          </button>
+        </div>
+      </div>
+
+      <div class="messages-container" id="messages-box">
+        <div class="empty-state">
+          <div class="icon">👁️</div>
+          <h3 style="color:var(--text-main); margin-bottom:6px;">Visor en Tiempo Real de AuraFlow Bot</h3>
+          <p>Selecciona cualquier conversación a la izquierda para ver todos los mensajes, stickers, imágenes y avisos automáticos que el bot está viendo.</p>
+        </div>
+      </div>
+
+      <form class="composer-bar" id="composer-form" style="display:none;" onsubmit="sendManualMessage(event)">
+        <input type="text" id="composer-input" class="composer-input" placeholder="Escribe un mensaje para enviar desde tu WhatsApp a este chat..." autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Enviar a WhatsApp ➤</button>
+      </form>
+    </section>
+
+    <!-- Right: Assistant Configuration & Live Bot Vision -->
+    <aside class="right-col">
+      <div class="panel-section">
+        <h3>
+          <span>🤖 Aviso Único de Ausencia (Sin Menú)</span>
+          <span id="assistant-active-pill" style="font-size:0.72rem; color:#fbbf24;">ACTIVO</span>
+        </h3>
+
+        <div class="form-group">
+          <label for="cfg-away-msg">Mensaje único cuando no estás disponible (se envía solo 1 vez por contacto):</label>
+          <textarea id="cfg-away-msg" class="form-textarea"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cfg-inactivity">Minutos de inactividad (para modo Automático):</label>
+          <input type="number" id="cfg-inactivity" class="form-input" min="1" max="240" value="3" title="En modo Automático, cuántos minutos sin que envíes mensajes para considerarte No Disponible" />
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="cfg-private-only" checked />
+          <span>Responder solo en chats privados (ignorar grupos)</span>
+        </label>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="saveAssistantSettings()">
+            💾 Guardar Configuración
+          </button>
+          <button class="btn" onclick="resetAllCooldowns()" title="Permite volver a enviar 1 vez el aviso a quienes ya fueron notificados">
+            🔄 Reiniciar Avisos
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section" style="flex:1; display:flex; flex-direction:column;">
+        <h3>
+          <span>👁️ Lo que ve el Bot (Eventos en Vivo)</span>
+          <span style="font-size:0.7rem; color:var(--text-sub);">Baileys Stream</span>
+        </h3>
+        <div class="vision-feed" id="vision-feed">
+          <div class="vision-item">Conectando al stream del bot...</div>
+        </div>
+      </div>
+
+      <!-- Optional QR / Re-link Box (only visible if disconnected) -->
+      <div class="panel-section" id="qr-relink-section" style="display:none;">
+        <h3>📱 Vincular Dispositivo WhatsApp</h3>
+        <div id="qr-box" style="text-align:center; padding:10px;"></div>
+      </div>
+    </aside>
+
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let dashboardData = {
+      status: "starting",
+      connectedUser: null,
+      assistant: {},
+      chats: [],
+      logs: [],
+      stats: {}
+    };
+    let selectedChatJid = null;
+    let currentFilter = "all";
+    let configDirty = false;
+    let authMethod = "otp";
+    let authToken = localStorage.getItem("af_bot_token") || "";
+
+    function authHeaders(extra = {}) {
+      const h = { ...extra };
+      if (authToken) h["Authorization"] = `Bearer ${authToken}`;
+      return h;
+    }
+
+    function switchAuthMethod(m) {
+      authMethod = m;
+      document.getElementById("auth-tab-otp").className = "filter-tab" + (m === "otp" ? " active" : "");
+      document.getElementById("auth-tab-pass").className = "filter-tab" + (m === "pass" ? " active" : "");
+      document.getElementById("auth-otp-box").style.display = m === "otp" ? "block" : "none";
+      document.getElementById("auth-pass-box").style.display = m === "pass" ? "block" : "none";
+      document.getElementById("auth-error").style.display = "none";
+    }
+
+    function showAuthError(msg) {
+      const errEl = document.getElementById("auth-error");
+      const okEl = document.getElementById("auth-success");
+      okEl.style.display = "none";
+      errEl.textContent = msg;
+      errEl.style.display = "block";
+    }
+
+    function showAuthSuccess(msg) {
+      const errEl = document.getElementById("auth-error");
+      const okEl = document.getElementById("auth-success");
+      errEl.style.display = "none";
+      okEl.textContent = msg;
+      okEl.style.display = "block";
+    }
+
+    async function requestLoginCode() {
+      const email = (document.getElementById("auth-email").value || "").trim();
+      const btn = document.getElementById("btn-send-otp");
+      btn.disabled = true;
+      btn.textContent = "Enviando código a support@auraflowtech.lat...";
+      try {
+        const res = await fetch("/api/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showAuthError(data.error || "No se pudo enviar el código.");
+        } else {
+          showAuthSuccess(data.message || "Código enviado a support@auraflowtech.lat");
+        }
+      } catch (e) {
+        showAuthError("Error de red al solicitar el código.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "📨 Enviar código de 6 dígitos a support@auraflowtech.lat";
+      }
+    }
+
+    async function verifyAdminLogin() {
+      const email = (document.getElementById("auth-email").value || "").trim();
+      const code = (document.getElementById("auth-code").value || "").trim();
+      const password = (document.getElementById("auth-password").value || "").trim();
+      try {
+        const res = await fetch("/api/auth/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            code: authMethod === "otp" ? code : "",
+            password: authMethod === "pass" ? password : ""
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showAuthError(data.error || "Credenciales inválidas.");
+          return;
+        }
+        authToken = data.token || "";
+        if (authToken) localStorage.setItem("af_bot_token", authToken);
+        document.getElementById("auth-overlay").style.display = "none";
+        showToast("🔓 Bienvenido, Ing. Santiago Delgado");
+        await fetchDashboard();
+      } catch (e) {
+        showAuthError("Error al verificar acceso.");
+      }
+    }
+
+    async function logoutAdmin() {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: authHeaders({ "Content-Type": "application/json" })
+        });
+      } catch (e) {}
+      authToken = "";
+      localStorage.removeItem("af_bot_token");
+      document.getElementById("auth-overlay").style.display = "flex";
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 3200);
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "";
+      const d = new Date(ts);
+      return d.toLocaleTimeString("es-CR", { timeZone: "America/Costa_Rica", hour: "2-digit", minute: "2-digit", hour12: true });
+    }
+
+    function formatRelativeMin(ts) {
+      if (!ts) return "sin actividad reciente";
+      const diffSec = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+      if (diffSec < 60) return `hace ${diffSec}s`;
+      const mins = Math.floor(diffSec / 60);
+      if (mins < 60) return `hace ${mins} min`;
+      const hrs = Math.floor(mins / 60);
+      return `hace ${hrs}h ${mins % 60}m`;
+    }
+
+    ["cfg-away-msg", "cfg-inactivity", "cfg-private-only"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", () => { configDirty = true; });
+    });
+
+    async function fetchDashboard() {
+      try {
+        const url = selectedChatJid
+          ? `/api/dashboard?chatJid=${encodeURIComponent(selectedChatJid)}`
+          : `/api/dashboard`;
+        const res = await fetch(url, { headers: authHeaders() });
+        if (res.status === 401) {
+          document.getElementById("auth-overlay").style.display = "flex";
+          return;
+        }
+        if (!res.ok) return;
+        document.getElementById("auth-overlay").style.display = "none";
+        const data = await res.json();
+        dashboardData = data;
+        updateTopBar();
+        updateAssistantForm();
+        renderChatList();
+        renderVisionFeed();
+        if (selectedChatJid && data.activeChat) {
+          renderActiveChat(data.activeChat);
+        } else if (!selectedChatJid && data.chats && data.chats.length > 0) {
+          selectChat(data.chats[0].jid);
+        }
+      } catch (e) {}
+    }
+
+    function updateTopBar() {
+      const badge = document.getElementById("wa-conn-badge");
+      const qrSec = document.getElementById("qr-relink-section");
+      if (dashboardData.status === "connected" && dashboardData.connectedUser) {
+        badge.textContent = `● Conectado (${dashboardData.connectedUser.phone})`;
+        badge.className = "status-pill";
+        qrSec.style.display = "none";
+      } else {
+        badge.textContent = `● ${dashboardData.status === "qr_ready" ? "Esperando QR" : "Reconectando..."}`;
+        badge.className = "status-pill offline";
+        if (dashboardData.qrDataUrl) {
+          qrSec.style.display = "block";
+          document.getElementById("qr-box").innerHTML = `<img src="${dashboardData.qrDataUrl}" style="max-width:210px;border-radius:10px;" />`;
+        }
+      }
+
+      const a = dashboardData.assistant || {};
+      const btnAway = document.getElementById("mode-away-btn");
+      const btnAuto = document.getElementById("mode-auto-btn");
+      const btnOnline = document.getElementById("mode-online-btn");
+      btnAway.className = "mode-btn" + (a.mode === "always_away" ? " active-away" : "");
+      btnAuto.className = "mode-btn" + (a.mode === "auto" ? " active-auto" : "");
+      btnOnline.className = "mode-btn" + (a.mode === "commands_only" ? " active-online" : "");
+
+      const ownerLabel = document.getElementById("owner-activity-label");
+      const pill = document.getElementById("assistant-active-pill");
+      if (a.isCurrentlyAway) {
+        pill.textContent = "🌙 AVISANDO (1 SOLA VEZ)";
+        pill.style.color = "#fbbf24";
+      } else {
+        pill.textContent = "🟢 EN PAUSA (TÚ DISPONIBLE)";
+        pill.style.color = "#34d399";
+      }
+      ownerLabel.textContent = `Tu última actividad desde WhatsApp: ${formatRelativeMin(a.lastOwnerActivityAt)} · Estado actual: ${
+        a.isCurrentlyAway ? "No disponible (Avisa 1 sola vez por contacto sin menú)" : "Disponible (Solo comandos -)"
+      }`;
+
+      document.getElementById("stat-chats").textContent = dashboardData.stats?.totalChats || 0;
+      document.getElementById("stat-msgs").textContent = dashboardData.stats?.totalMessagesSeen || 0;
+      document.getElementById("stat-assist").textContent = dashboardData.stats?.autoRepliesSent || 0;
+      document.getElementById("stat-cmds").textContent = dashboardData.commandsExecuted || 0;
+    }
+
+    function updateAssistantForm() {
+      if (configDirty) return;
+      const a = dashboardData.assistant || {};
+      if (a.awayMessage !== undefined) {
+        document.getElementById("cfg-away-msg").value = a.awayMessage;
+      }
+      if (a.inactivityMinutes !== undefined) {
+        document.getElementById("cfg-inactivity").value = a.inactivityMinutes;
+      }
+      if (a.onlyPrivateChats !== undefined) {
+        document.getElementById("cfg-private-only").checked = Boolean(a.onlyPrivateChats);
+      }
+    }
+
+    function setChatFilter(filter) {
+      currentFilter = filter;
+      document.getElementById("tab-all").className = "filter-tab" + (filter === "all" ? " active" : "");
+      document.getElementById("tab-private").className = "filter-tab" + (filter === "private" ? " active" : "");
+      document.getElementById("tab-groups").className = "filter-tab" + (filter === "groups" ? " active" : "");
+      renderChatList();
+    }
+
+    function renderChatList() {
+      const listEl = document.getElementById("chat-list");
+      const q = (document.getElementById("chat-search").value || "").toLowerCase().trim();
+      let chats = dashboardData.chats || [];
+
+      if (currentFilter === "private") chats = chats.filter((c) => !c.isGroup);
+      if (currentFilter === "groups") chats = chats.filter((c) => c.isGroup);
+      if (q) {
+        chats = chats.filter(
+          (c) =>
+            (c.name || "").toLowerCase().includes(q) ||
+            (c.phone || "").toLowerCase().includes(q) ||
+            (c.lastMessagePreview || "").toLowerCase().includes(q)
+        );
+      }
+
+      if (chats.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">💬</div>
+            <p>Aún no hay conversaciones que coincidan con el filtro.</p>
+          </div>`;
+        return;
+      }
+
+      listEl.innerHTML = chats
+        .map((c) => {
+          const isSelected = c.jid === selectedChatJid;
+          const initials = (c.name || "WA").replace(/[^a-zA-Z0-9]/g, "").slice(0, 2).toUpperCase() || "WA";
+          return `
+            <div class="chat-item ${isSelected ? "active" : ""}" onclick="selectChat('${escapeHtml(c.jid)}')">
+              <div class="avatar ${c.isGroup ? "group" : ""}">${c.isGroup ? "👥" : escapeHtml(initials)}</div>
+              <div class="chat-meta">
+                <div class="chat-top">
+                  <span class="chat-name">${escapeHtml(c.name || c.phone)}</span>
+                  <span class="chat-time">${formatTime(c.lastMessageAt)}</span>
+                </div>
+                <div class="chat-preview">${escapeHtml(c.lastMessagePreview || "Sin mensajes")}</div>
+                <div class="chat-badges">
+                  <span class="mini-badge">${c.messageCount || 0} msgs</span>
+                  ${c.isGroup ? '<span class="mini-badge">Grupo</span>' : '<span class="mini-badge">Privado</span>'}
+                  ${c.awayNotified ? '<span class="mini-badge assisted">🤖 Avisado (1 vez)</span>' : ""}
+                  ${c.muteAssistant ? '<span class="mini-badge muted">🔕 Silenciado</span>' : ""}
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function selectChat(jid) {
+      selectedChatJid = jid;
+      renderChatList();
+      await fetchDashboard();
+    }
+
+    function renderActiveChat(chat) {
+      document.getElementById("active-chat-header").style.display = "flex";
+      document.getElementById("composer-form").style.display = "flex";
+      document.getElementById("active-chat-name").textContent = chat.name || chat.phone || chat.jid;
+      document.getElementById("active-chat-jid").textContent = `${chat.phone || ""} · ${chat.jid}`;
+
+      const muteBtn = document.getElementById("btn-toggle-chat-mute");
+      if (chat.muteAssistant) {
+        muteBtn.textContent = "🔕 Asistente Silenciado aquí (Activar)";
+        muteBtn.style.borderColor = "#f43f5e";
+      } else {
+        muteBtn.textContent = "🔔 Asistente Activo aquí (Silenciar)";
+        muteBtn.style.borderColor = "";
+      }
+
+      const box = document.getElementById("messages-box");
+      const wasAtBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 90;
+
+      const msgs = chat.messages || [];
+      if (msgs.length === 0) {
+        box.innerHTML = `<div class="empty-state"><p>No hay mensajes registrados en esta conversación todavía.</p></div>`;
+        return;
+      }
+
+      box.innerHTML = msgs
+        .map((m) => {
+          let rowClass = "msg-row incoming";
+          let roleBadge = escapeHtml(m.senderName || m.senderPhone || "Contacto");
+          if (m.fromMe) {
+            if (m.kind === "assistant") {
+              rowClass = "msg-row outgoing assistant";
+              roleBadge = "🤖 Asistente Personal (Aviso único)";
+            } else if (m.kind === "bot_command") {
+              rowClass = "msg-row outgoing botcmd";
+              roleBadge = "⚡ AuraFlow Bot (Comando)";
+            } else {
+              rowClass = "msg-row outgoing owner";
+              roleBadge = "👤 Tú (Santiago)";
+            }
+          }
+
+          const thumbHtml = m.mediaThumb
+            ? `<img src="${m.mediaThumb}" class="msg-thumb" alt="Media vista por el bot" />`
+            : "";
+
+          return `
+            <div class="${rowClass}">
+              <div class="msg-bubble">
+                <div class="msg-header">
+                  <span>${roleBadge}</span>
+                  <span style="font-size:0.65rem; opacity:0.75;">${escapeHtml(m.mediaType || "texto")}</span>
+                </div>
+                <div>${escapeHtml(m.text || "")}</div>
+                ${thumbHtml}
+                <div class="msg-footer">${formatTime(m.timestamp)}</div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      if (wasAtBottom) {
+        box.scrollTop = box.scrollHeight;
+      }
+    }
+
+    function renderVisionFeed() {
+      const feed = document.getElementById("vision-feed");
+      const logs = dashboardData.logs || [];
+      if (logs.length === 0) return;
+      feed.innerHTML = logs
+        .map((l) => {
+          let cls = "vision-item";
+          if (l.includes("Asistente")) cls += " assist";
+          else if (l.includes("Comando")) cls += " cmd";
+          return `<div class="${cls}">${escapeHtml(l)}</div>`;
+        })
+        .join("");
+    }
+
+    async function setAssistantMode(mode) {
+      try {
+        const res = await fetch("/api/assistant/config", {
+          method: "POST",
+          headers: authHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ mode })
+        });
+        if (res.ok) {
+          const labels = {
+            always_away: "🌙 Modo No Disponible activado: avisará 1 sola vez por contacto.",
+            auto: "🤖 Modo Automático activado: avisará 1 sola vez cuando estés inactivo.",
+            commands_only: "🟢 Modo Disponible: solo responderá a comandos con '-'."
+          };
+          showToast(labels[mode] || "Modo actualizado");
+          await fetchDashboard();
+        }
+      } catch (e) {}
+    }
+
+    async function saveAssistantSettings() {
+      const awayMessage = document.getElementById("cfg-away-msg").value.trim();
+      const inactivityMinutes = parseFloat(document.getElementById("cfg-inactivity").value) || 3;
+      const onlyPrivateChats = document.getElementById("cfg-private-only").checked;
+
+      const res = await fetch("/api/assistant/config", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({
+          awayMessage,
+          inactivityMinutes,
+          onlyPrivateChats
+        })
+      });
+      if (res.ok) {
+        configDirty = false;
+        showToast("✅ Configuración del asistente guardada");
+        await fetchDashboard();
+      }
+    }
+
+    async function resetAllCooldowns() {
+      await fetch("/api/assistant/config", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ resetCooldowns: true })
+      });
+      showToast("🔄 Avisos reiniciados: volverá a avisar 1 vez si escriben");
+      await fetchDashboard();
+    }
+
+    async function toggleChatMute() {
+      if (!selectedChatJid) return;
+      const res = await fetch("/api/chat/toggle-mute", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid })
+      });
+      if (res.ok) {
+        showToast("Estado del asistente actualizado para este chat");
+        await fetchDashboard();
+      }
+    }
+
+    async function sendInstantAwayReply() {
+      if (!selectedChatJid) return;
+      const msg = document.getElementById("cfg-away-msg").value.trim();
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid, text: msg, isAssistant: true })
+      });
+      if (res.ok) {
+        showToast("🤖 Aviso de ausencia enviado al chat");
+        await fetchDashboard();
+      }
+    }
+
+    async function sendManualMessage(e) {
+      e.preventDefault();
+      if (!selectedChatJid) return;
+      const input = document.getElementById("composer-input");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid, text, isAssistant: false })
+      });
+      if (res.ok) {
+        showToast("✉️ Mensaje enviado a WhatsApp");
+        await fetchDashboard();
+      }
+    }
+
+    fetchDashboard();
+    setInterval(fetchDashboard, 2500);
+  </script>
+</body>
+</html>

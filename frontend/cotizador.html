@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotizador de Servicios & Software | AuraFlow Tech (Aura Flow Tech)</title>
+  <meta name="description" content="Cotizador en línea de servicios de Inteligencia Artificial, Bots de WhatsApp, Facturación Electrónica v4.4 y Desarrollo de Software de AuraFlow Tech Costa Rica." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://auraflowtech.lat/cotizador" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      body { background: #fff !important; color: #0f172a !important; }
+      .no-print { display: none !important; }
+      #printArea {
+        box-shadow: none !important;
+        border: none !important;
+        background: #fff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .print-dark-text { color: #0f172a !important; }
+      .print-muted-text { color: #475569 !important; }
+      .print-border { border-color: #cbd5e1 !important; }
+      .print-bg-light { background: #f8fafc !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+  <!-- Login -->
+  <div id="loginBox" class="min-h-screen flex items-center justify-center p-4 no-print">
+    <form id="loginForm" class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="text-center">
+        <span class="text-2xl">🧾</span>
+        <h1 class="text-lg font-bold text-white mt-1">Cotizador PDF & Mini CRM</h1>
+        <p class="text-xs text-slate-400">Acceso exclusivo de administración</p>
+      </div>
+      <input id="passInput" type="password" required placeholder="Contraseña" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-sky-400 focus:outline-none" />
+      <p id="loginErr" class="hidden text-xs text-rose-400 text-center"></p>
+      <button type="submit" class="w-full py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm">Entrar</button>
+    </form>
+  </div>
+
+  <!-- App -->
+  <div id="appBox" class="hidden max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+    <header class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4 no-print">
+      <div class="flex items-center gap-3">
+        <a href="/servicios/" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">← Servicios</a>
+        <h1 class="text-lg font-bold text-white">Cotizador PDF & CRM</h1>
+      </div>
+      <div class="flex gap-2">
+        <button id="tabQuoteBtn" onclick="switchTab('quote')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950">🧾 Cotizador PDF</button>
+        <button id="tabCrmBtn" onclick="switchTab('crm')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">👥 Prospectos CRM</button>
+      </div>
+    </header>
+
+    <!-- Tab 1: Cotizador PDF -->
+    <section id="tabQuote" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Editor Controls -->
+      <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 no-print">
+        <h2 class="font-bold text-white text-sm">Datos de la Cotización</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Cliente</label>
+            <input id="cCliente" type="text" placeholder="Nombre o empresa" oninput="renderPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Contacto</label>
+            <input id="cContacto" type="text" placeholder="WhatsApp / correo" oninput="renderPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Moneda</label>
+            <select id="cMoneda" onchange="renderPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              <option value="₡">Colones (₡ CRC)</option>
+              <option value="$">Dólares ($ USD)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Validez (días)</label>
+            <input id="cValidez" type="number" value="15" oninput="renderPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold text-slate-300">Conceptos / Servicios</label>
+            <button type="button" onclick="addItem()" class="text-xs px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30">+ Agregar</button>
+          </div>
+          <div id="itemsEditor" class="space-y-2"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Notas / Condiciones</label>
+          <textarea id="cNotas" rows="2" oninput="renderPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">50% de adelanto para iniciar, 50% contra entrega. Incluye soporte inicial y capacitación.</textarea>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <button type="button" onclick="window.print()" class="flex-1 py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs">🖨️ Descargar / Imprimir PDF</button>
+          <button type="button" onclick="sendWhatsAppQuote()" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">💬 Enviar por WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- Printable Preview -->
+      <div id="printArea" class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex justify-between items-start border-b border-slate-800 print-border pb-5">
+          <div>
+            <h2 class="text-xl font-extrabold text-white print-dark-text">AuraFlow Tech</h2>
+            <p class="text-xs text-slate-400 print-muted-text">Ing. Santiago Delgado Leiva · Costa Rica</p>
+            <p class="text-xs text-slate-400 print-muted-text">support@auraflowtech.lat · auraflowtech.lat</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs uppercase tracking-widest text-sky-400 font-bold">Cotización</span>
+            <p id="pNumero" class="text-sm font-bold text-white print-dark-text"></p>
+            <p id="pFecha" class="text-xs text-slate-400 print-muted-text"></p>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-slate-950/60 print-bg-light border border-slate-800 print-border p-4 text-xs space-y-1">
+          <p class="text-slate-400 print-muted-text">Preparado para:</p>
+          <p id="pCliente" class="text-sm font-bold text-white print-dark-text">Cliente</p>
+          <p id="pContacto" class="text-slate-300 print-muted-text"></p>
+        </div>
+
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700 print-border text-slate-400 print-muted-text">
+              <th class="py-2">Descripción</th>
+              <th class="py-2 text-center">Cant.</th>
+              <th class="py-2 text-right">Precio</th>
+              <th class="py-2 text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody id="pItemsBody" class="divide-y divide-slate-800 print-border"></tbody>
+        </table>
+
+        <div class="flex justify-end border-t border-slate-700 print-border pt-4">
+          <div class="text-right space-y-1">
+            <p class="text-xs text-slate-400 print-muted-text">Total Estimado</p>
+            <p id="pTotal" class="text-2xl font-extrabold text-sky-400 print-dark-text"></p>
+          </div>
+        </div>
+
+        <div class="text-xs text-slate-400 print-muted-text border-t border-slate-800 print-border pt-4 space-y-1">
+          <p id="pNotas"></p>
+          <p id="pValidez" class="font-semibold"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Mini CRM -->
+    <section id="tabCrm" class="hidden space-y-4 no-print">
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-white text-base">Solicitudes Recibidas desde /servicios/</h2>
+        <button onclick="loadProspectos()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">🔄 Actualizar</button>
+      </div>
+      <div id="crmList" class="space-y-3"></div>
+    </section>
+  </div>
+
+  <script>
+    let adminPass = sessionStorage.getItem('af_crm_pass') || '';
+    let items = [{ desc: 'Bot de WhatsApp con IA 24/7 + Panel Web', qty: 1, price: 150000 }];
+
+    function hdrs() {
+      return { 'Content-Type': 'application/json', 'x-admin-password': adminPass };
+    }
+
+    async function checkLogin(pass) {
+      const resp = await fetch('/api/crm/prospectos', { headers: { 'x-admin-password': pass } });
+      return resp.ok;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pass = document.getElementById('passInput').value;
+      if (await checkLogin(pass)) {
+        adminPass = pass;
+        sessionStorage.setItem('af_crm_pass', pass);
+        document.getElementById('loginBox').classList.add('hidden');
+        document.getElementById('appBox').classList.remove('hidden');
+        initApp();
+      } else {
+        const err = document.getElementById('loginErr');
+        err.textContent = 'Contraseña incorrecta.';
+        err.classList.remove('hidden');
+      }
+    });
+
+    if (adminPass) {
+      checkLogin(adminPass).then((ok) => {
+        if (ok) {
+          document.getElementById('loginBox').classList.add('hidden');
+          document.getElementById('appBox').classList.remove('hidden');
+          initApp();
+        }
+      });
+    }
+
+    function initApp() {
+      const now = new Date();
+      document.getElementById('pNumero').textContent = '#COT-' + now.toISOString().slice(2, 10).replace(/-/g, '');
+      document.getElementById('pFecha').textContent = now.toLocaleDateString('es-CR');
+      renderEditorItems();
+      renderPreview();
+      loadProspectos();
+    }
+
+    function switchTab(tab) {
+      const isQ = tab === 'quote';
+      document.getElementById('tabQuote').classList.toggle('hidden', !isQ);
+      document.getElementById('tabCrm').classList.toggle('hidden', isQ);
+      document.getElementById('tabQuoteBtn').className = isQ ? 'px-3.5 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950' : 'px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300';
+      document.getElementById('tabCrmBtn').className = !isQ ? 'px-3.5 py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950' : 'px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300';
+    }
+
+    function addItem() {
+      items.push({ desc: 'Nuevo servicio', qty: 1, price: 50000 });
+      renderEditorItems();
+      renderPreview();
+    }
+
+    function removeItem(idx) {
+      items.splice(idx, 1);
+      renderEditorItems();
+      renderPreview();
+    }
+
+    function renderEditorItems() {
+      const box = document.getElementById('itemsEditor');
+      box.innerHTML = items.map((it, i) => `
+        <div class="grid grid-cols-12 gap-2 items-center">
+          <input type="text" value="${it.desc.replace(/"/g, '&quot;')}" oninput="items[${i}].desc=this.value;renderPreview()" class="col-span-6 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          <input type="number" min="1" value="${it.qty}" oninput="items[${i}].qty=Number(this.value)||1;renderPreview()" class="col-span-2 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white text-center" />
+          <input type="number" min="0" value="${it.price}" oninput="items[${i}].price=Number(this.value)||0;renderPreview()" class="col-span-3 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white text-right" />
+          <button type="button" onclick="removeItem(${i})" class="col-span-1 text-rose-400 text-xs font-bold">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function fmtMoney(n, cur) {
+      return cur + Number(n || 0).toLocaleString('es-CR');
+    }
+
+    function renderPreview() {
+      const cur = document.getElementById('cMoneda').value;
+      document.getElementById('pCliente').textContent = document.getElementById('cCliente').value.trim() || 'Cliente';
+      document.getElementById('pContacto').textContent = document.getElementById('cContacto').value.trim();
+      document.getElementById('pNotas').textContent = document.getElementById('cNotas').value.trim();
+      document.getElementById('pValidez').textContent = 'Válida por ' + (document.getElementById('cValidez').value || 15) + ' días.';
+
+      let total = 0;
+      document.getElementById('pItemsBody').innerHTML = items.map((it) => {
+        const sub = (it.qty || 1) * (it.price || 0);
+        total += sub;
+        return `
+          <tr class="text-slate-200 print-dark-text">
+            <td class="py-2.5 pr-2">${it.desc}</td>
+            <td class="py-2.5 text-center">${it.qty}</td>
+            <td class="py-2.5 text-right">${fmtMoney(it.price, cur)}</td>
+            <td class="py-2.5 text-right font-bold">${fmtMoney(sub, cur)}</td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('pTotal').textContent = fmtMoney(total, cur);
+    }
+
+    function sendWhatsAppQuote() {
+      const cur = document.getElementById('cMoneda').value;
+      const cli = document.getElementById('cCliente').value.trim() || 'Cliente';
+      let total = 0;
+      const lines = items.map((it) => {
+        const sub = (it.qty || 1) * (it.price || 0);
+        total += sub;
+        return `• ${it.desc} (x${it.qty}): ${fmtMoney(sub, cur)}`;
+      }).join('\n');
+      const txt = `🧾 *Cotización AuraFlow Tech*\nHola ${cli}, te comparto el detalle:\n\n${lines}\n\n*Total:* ${fmtMoney(total, cur)}\n_${document.getElementById('cNotas').value.trim()}_`;
+      window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+    }
+
+    async function loadProspectos() {
+      const resp = await fetch('/api/crm/prospectos', { headers: hdrs() });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const box = document.getElementById('crmList');
+      if (!data.prospectos || data.prospectos.length === 0) {
+        box.innerHTML = '<p class="text-sm text-slate-400">Aún no hay prospectos registrados.</p>';
+        return;
+      }
+      box.innerHTML = data.prospectos.map((p) => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="font-bold text-white text-sm">${p.nombre}</span>
+              <span class="text-xs text-sky-400 ml-2">${p.contacto}</span>
+            </div>
+            <span class="text-xs text-slate-500">${p.created_at}</span>
+          </div>
+          <p class="text-xs text-amber-300 font-semibold">${p.servicio}</p>
+          <p class="text-xs text-slate-300">${p.detalle || 'Sin detalle'}</p>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <select id="est_${p.id}" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white">
+              <option value="pendiente" ${p.estado==='pendiente'?'selected':''}>Pendiente</option>
+              <option value="cotizado" ${p.estado==='cotizado'?'selected':''}>Cotizado</option>
+              <option value="cerrado" ${p.estado==='cerrado'?'selected':''}>Cerrado</option>
+            </select>
+            <input id="not_${p.id}" type="text" value="${(p.notas||'').replace(/"/g, '&quot;')}" placeholder="Notas..." class="flex-1 min-w-[160px] bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white" />
+            <button onclick="saveProspecto(${p.id})" class="px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-semibold">Guardar</button>
+            <button onclick="quoteFromProspecto('${p.nombre.replace(/'/g, "\\'")}', '${p.contacto.replace(/'/g, "\\'")}', '${p.servicio.replace(/'/g, "\\'")}')" class="px-3 py-1 rounded-lg bg-sky-500 text-slate-950 text-xs font-bold">⚡ Cotizar</button>
+            <button onclick="delProspecto(${p.id})" class="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-300 text-xs">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function saveProspecto(id) {
+      await fetch('/api/crm/prospectos/update', {
+        method: 'POST',
+        headers: hdrs(),
+        body: JSON.stringify({
+          id,
+          estado: document.getElementById('est_' + id).value,
+          notas: document.getElementById('not_' + id).value
+        })
+      });
+      loadProspectos();
+    }
+
+    async function delProspecto(id) {
+      await fetch('/api/crm/prospectos/delete', {
+        method: 'POST',
+        headers: hdrs(),
+        body: JSON.stringify({ id })
+      });
+      loadProspectos();
+    }
+
+    function quoteFromProspecto(nombre, contacto, servicio) {
+      document.getElementById('cCliente').value = nombre;
+      document.getElementById('cContacto').value = contacto;
+      items = [{ desc: servicio, qty: 1, price: 150000 }];
+      renderEditorItems();
+      renderPreview();
+      switchTab('quote');
+    }
+  </script>
+</body>
+</html>

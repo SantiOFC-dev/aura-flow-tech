@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AuraFlow ID · Iniciar sesión</title>
+<meta name="description" content="Cuenta única para todas las aplicaciones de AuraFlow Tech.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+<style>.box{max-width:440px;margin:40px auto}.apps a{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--txt)}</style>
+</head><body><main>
+<div class="box">
+  <div class="card" id="login" style="display:none">
+    <h1>🔐 AuraFlow ID</h1>
+    <p class="mut">Una sola cuenta para todas las aplicaciones. Te enviaremos un código de 6 dígitos a tu correo.</p>
+    <form id="f1"><label>Correo electrónico</label><input type="email" id="email" required placeholder="tu@empresa.cr" autocomplete="email">
+      <button class="btn w" id="b1">Enviar código</button></form>
+    <form id="f2" style="display:none"><label>Código de 6 dígitos</label>
+      <input id="code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required placeholder="123456" autocomplete="one-time-code" style="font-size:1.4rem;letter-spacing:8px;text-align:center">
+      <button class="btn w">Verificar e ingresar</button>
+      <button type="button" class="btn s w" id="back">Usar otro correo</button></form>
+    <p class="mut" id="msg" style="font-size:.85rem"></p>
+  </div>
+  <div class="card" id="logged" style="display:none">
+    <h1>👋 Hola</h1><p class="mut" id="who"></p>
+    <h2 style="margin-top:18px">Tus aplicaciones</h2>
+    <div class="apps" id="apps"></div>
+  </div>
+</div>
+</main><script>
+const APPS=[["fac","🧾 Factura CR v4.4"],["pos","🛒 POS & Inventario"],["crm","📊 Kanban CRM"],["clinica","🏥 Clínicas"],["club","💎 Club de Lealtad"],
+ ["bot","🤖 WaBot IA"],["builder","⚙️ Flow Studio"],["radio","📻 Radio PTT & GPS"],["admin","🛡️ Consola Admin"],["demo","🧪 Demo"]];
+function safeNext(){
+  const n=new URLSearchParams(location.search).get("next"); if(!n) return null;
+  try{const u=new URL(n); if(u.protocol==="https:"&&(u.hostname===AF.DOMAIN||u.hostname.endsWith("."+AF.DOMAIN))) return u.href;}catch(e){}
+  return null;
+}
+function showLogged(email){
+  AF.$("#login").style.display="none"; AF.$("#logged").style.display="block";
+  AF.$("#who").textContent="Sesión iniciada como "+email;
+  AF.$("#apps").innerHTML=APPS.map(([s,n])=>`<a href="https://${s}.${AF.DOMAIN}"><span>${n}</span><span class="mut">${s}.${AF.DOMAIN} ↗</span></a>`).join("");
+}
+(async()=>{
+  const email=await AF.shell("id");
+  if(email){ const n=safeNext(); if(n){location.href=n;return;} showLogged(email); }
+  else AF.$("#login").style.display="block";
+})();
+AF.$("#f1").onsubmit=async e=>{e.preventDefault();const b=AF.$("#b1");b.disabled=true;
+  try{const r=await AF.api("/api/sso/send-code",{body:{email:AF.$("#email").value.trim()}});
+    if(!r.email_sent){AF.$("#msg").textContent="No pudimos enviar el correo. Intenta de nuevo en un momento.";return;}
+    AF.$("#msg").textContent="Código enviado a "+r.email+". Revisa tu bandeja (y spam). Vence en 15 minutos.";
+    AF.$("#f1").style.display="none";AF.$("#f2").style.display="block";AF.$("#code").focus();
+  }catch(err){AF.$("#msg").textContent=err.message}finally{b.disabled=false}};
+AF.$("#back").onclick=()=>{AF.$("#f2").style.display="none";AF.$("#f1").style.display="block";AF.$("#msg").textContent=""};
+AF.$("#f2").onsubmit=async e=>{e.preventDefault();
+  try{const r=await AF.api("/api/sso/verify",{body:{email:AF.$("#email").value.trim(),code_6:AF.$("#code").value.trim()}});
+    AF.setToken(r.token); const n=safeNext(); if(n){location.href=n;return;} location.reload();
+  }catch(err){AF.$("#msg").textContent=err.message}};
+</script></body></html>

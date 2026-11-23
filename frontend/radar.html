@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraFlow CyberRadar — Mapa Vivo de Amenazas SSH</title>
+  <meta name="theme-color" content="#050814">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body { background: #050814; }
+    #map { height: 460px; width: 100%; border-radius: 1rem; border: 1px solid rgba(34, 211, 238, 0.25); }
+    .leaflet-container { background: #090d1a; }
+    .osm-dark-tiles { filter: invert(100%) hue-rotate(180deg) brightness(92%) contrast(92%) saturate(75%); }
+    .leaflet-control-layers {
+      background: rgba(15, 23, 42, 0.92) !important;
+      color: #e2e8f0 !important;
+      border: 1px solid rgba(34, 211, 238, 0.3) !important;
+      border-radius: 0.75rem !important;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="text-slate-200 antialiased min-h-screen flex flex-col">
+  <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">← AuraFlow Tech</a>
+        <h1 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+          CyberRadar — Mapa Vivo de Ciberataques (Fail2ban)
+        </h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="lastUpdate" class="text-xs text-slate-400 hidden sm:inline">Actualizando...</span>
+        <button onclick="loadRadar()" class="text-xs font-semibold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg">🔄 Actualizar</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 space-y-6">
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+        <p class="text-xs text-slate-400 uppercase tracking-wider">Intentos Fallidos</p>
+        <p id="statFailed" class="text-2xl sm:text-3xl font-bold text-amber-400 mt-1">—</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+        <p class="text-xs text-slate-400 uppercase tracking-wider">Total Baneados</p>
+        <p id="statTotalBanned" class="text-2xl sm:text-3xl font-bold text-rose-400 mt-1">—</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+        <p class="text-xs text-slate-400 uppercase tracking-wider">Bloqueos Activos</p>
+        <p id="statCurrentBanned" class="text-2xl sm:text-3xl font-bold text-cyan-400 mt-1">—</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+        <p class="text-xs text-slate-400 uppercase tracking-wider">Países Detectados</p>
+        <p id="statCountries" class="text-2xl sm:text-3xl font-bold text-emerald-400 mt-1">—</p>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2">
+        <div id="map"></div>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col max-h-[460px]">
+        <h2 class="text-sm font-bold text-white mb-3">🛡️ Últimas IPs Bloqueadas</h2>
+        <div id="attackList" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const map = L.map('map', {
+      zoomControl: true,
+      minZoom: 2,
+      maxBounds: [[-85, -180], [85, 180]],
+      maxBoundsViscosity: 1.0
+    }).setView([25, 10], 2);
+    const osmDark = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 18,
+      noWrap: true,
+      className: 'osm-dark-tiles'
+    });
+
+    const esriSatellite = L.layerGroup([
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+        maxZoom: 18,
+        noWrap: true
+      }),
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        noWrap: true
+      })
+    ]);
+
+    const esriDarkGray = L.layerGroup([
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri, HERE, Garmin, OpenStreetMap',
+        maxZoom: 16,
+        noWrap: true
+      }),
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16,
+        noWrap: true
+      })
+    ]);
+
+    osmDark.addTo(map);
+    L.control.layers({
+      'Oscuro Detallado (OSM)': osmDark,
+      'Satélite (Esri)': esriSatellite,
+      'Minimalista (Esri)': esriDarkGray
+    }, null, { position: 'topright' }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+
+    async function loadRadar() {
+      try {
+        const resp = await fetch('/api/security-radar');
+        const data = await resp.json();
+        document.getElementById('statFailed').textContent = (data.total_failed ?? 0).toLocaleString();
+        document.getElementById('statTotalBanned').textContent = (data.total_banned ?? 0).toLocaleString();
+        document.getElementById('statCurrentBanned').textContent = (data.currently_banned ?? 0).toLocaleString();
+
+        const attacks = data.attacks || [];
+        const countries = new Set(attacks.map(a => a.country).filter(Boolean));
+        document.getElementById('statCountries').textContent = countries.size;
+        document.getElementById('lastUpdate').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+
+        markersLayer.clearLayers();
+        const listEl = document.getElementById('attackList');
+        listEl.innerHTML = '';
+
+        for (const a of attacks) {
+          if (typeof a.lat === 'number' && typeof a.lon === 'number') {
+            const color = a.active ? '#f43f5e' : '#f59e0b';
+            const marker = L.circleMarker([a.lat, a.lon], {
+              radius: a.active ? 8 : 5,
+              color: color,
+              fillColor: color,
+              fillOpacity: a.active ? 0.75 : 0.45,
+              weight: 2
+            });
+            marker.bindPopup(
+              `<div style="color:#0f172a;font-size:12px;">
+                <strong>${a.ip}</strong> ${a.active ? '🔴 ACTIVO' : '🟡 HISTÓRICO'}<br>
+                ${a.city ? a.city + ', ' : ''}${a.country || 'Desconocido'}<br>
+                <em>${a.isp || ''}</em><br>
+                <small>${a.timestamp || ''}</small>
+              </div>`
+            );
+            marker.addTo(markersLayer);
+          }
+
+          const card = document.createElement('div');
+          card.className = 'p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/90 flex items-start justify-between gap-2';
+          card.innerHTML = `
+            <div>
+              <div class="font-mono font-semibold text-white">${a.ip} ${a.active ? '<span class="text-rose-400">●</span>' : ''}</div>
+              <div class="text-slate-400">${a.city ? a.city + ', ' : ''}${a.country || 'Desconocido'}</div>
+              <div class="text-slate-500 truncate max-w-[200px]">${a.isp || ''}</div>
+            </div>
+            <span class="text-[10px] text-slate-500 whitespace-nowrap">${(a.timestamp || '').slice(5, 16)}</span>
+          `;
+          listEl.appendChild(card);
+        }
+      } catch (err) {
+        console.error('Error loading radar:', err);
+      }
+    }
+
+    loadRadar();
+    setInterval(loadRadar, 30000);
+  </script>
+</body>
+</html>

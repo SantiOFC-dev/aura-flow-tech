@@ -1,0 +1,2650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>AuraFlow Bot — WhatsApp Chatbot Studio & IA 24/7</title>
+  <meta name="description" content="Estudio y panel de control de AuraFlow Bot: automatización de WhatsApp con Inteligencia Artificial 24/7, notas de voz, personalidad adaptable y comandos en Costa Rica." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://bot.auraflowtech.lat/" />
+  <meta property="og:title" content="AuraFlow Bot — WhatsApp Chatbot Studio & IA 24/7" />
+  <meta property="og:description" content="Automatización inteligente de WhatsApp 24/7 creada por el Ing. Santiago Delgado Leiva en AuraFlow Tech Costa Rica." />
+  <meta property="og:url" content="https://bot.auraflowtech.lat/" />
+  <meta property="og:image" content="https://auraflowtech.lat/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --bg-card: #000000;
+      --bg-card-sub: #1c1c1e;
+      --bg-bubble-in: #262629;
+      --bg-bubble-out: #005c4b;
+      --bg-bubble-assist: #025144;
+      --border: rgba(255, 255, 255, 0.1);
+      --border-focus: rgba(10, 132, 255, 0.6);
+      --wa-green: #25d366;
+      --wa-emerald: #00a884;
+      --cyan: #0a84ff;
+      --amber: #f59e0b;
+      --rose: #ff453a;
+      --text: #ffffff;
+      --text-muted: #8e8e93;
+      --text-dim: #8e8e93;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* --- App Container --- */
+    .app-root {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* --- Universal Top Navigation Header --- */
+    .header-bar {
+      padding-top: max(10px, var(--safe-top));
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-bottom: 10px;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .brand-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-conn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--wa-green);
+    }
+
+    .pill-conn.offline {
+      color: var(--amber);
+    }
+
+    .pill-conn::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: currentColor;
+      border-radius: 50%;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    /* Segmented Navigation Control */
+    .nav-segmented {
+      display: flex;
+      background: rgba(7, 9, 14, 0.8);
+      border: 1px solid var(--border);
+      padding: 3px;
+      border-radius: 12px;
+      gap: 2px;
+    }
+
+    @media (max-width: 700px) {
+      .header-bar {
+        padding-bottom: 8px;
+      }
+      .nav-segmented {
+        position: fixed;
+        bottom: max(12px, var(--safe-bottom));
+        left: 14px;
+        right: 14px;
+        z-index: 90;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        background: rgba(28, 28, 30, 0.78);
+        backdrop-filter: blur(26px) saturate(180%);
+        -webkit-backdrop-filter: blur(26px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 28px;
+        padding: 5px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      }
+      .nav-tab {
+        padding: 8px 4px !important;
+        font-size: 0.7rem !important;
+        flex-direction: column;
+        gap: 2px;
+        justify-content: center;
+        border-radius: 22px;
+      }
+      .nav-tab.active {
+        background: rgba(255, 255, 255, 0.14) !important;
+        color: #ffffff !important;
+      }
+      .chat-list, .studio-wrap {
+        padding-bottom: 92px !important;
+      }
+      .chat-master-detail.mobile-in-chat ~ .nav-segmented,
+      body.in-chat-mobile .nav-segmented {
+        display: none !important;
+      }
+    }
+
+    .nav-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.18s ease;
+      font-family: inherit;
+    }
+
+    .nav-tab.active {
+      background: rgba(34, 211, 238, 0.16);
+      color: var(--cyan);
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.15);
+    }
+
+    /* --- Workspace Views --- */
+    .workspace {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .tab-view {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tab-view.active {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       VIEW: CHATS (Mobile-first Master/Detail Slide)
+       ========================================================================== */
+    .chat-master-detail {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Left: Chat List Panel */
+    .pane-list {
+      width: 340px;
+      height: 100%;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      z-index: 10;
+    }
+
+    .pane-list-header {
+      padding: 12px 14px 8px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(7, 9, 14, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px 8px 34px;
+      color: var(--text);
+      font-size: 0.82rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .filter-btn {
+      flex: 1;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      padding: 5px 0;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .filter-btn.active {
+      background: rgba(34, 211, 238, 0.14);
+      color: var(--cyan);
+      border-color: rgba(34, 211, 238, 0.4);
+      font-weight: 700;
+    }
+
+    .chats-scroll {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: #000000;
+    }
+
+    .chat-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .chat-card:active, .chat-card.active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .avatar-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #1c1c1e;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-box.group {
+      background: #2c2c2e;
+      color: #ffffff;
+    }
+
+    .avatar-online {
+      display: none;
+    }
+
+    .chat-details {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-bottom: 10px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .chat-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .timestamp {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+
+    .snippet-text {
+      font-size: 0.77rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 5px;
+      margin-top: 3px;
+    }
+
+    .micro-badge {
+      font-size: 0.65rem;
+      padding: 1px 6px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .micro-badge.away {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .micro-badge.muted {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .micro-badge.blocked {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.45);
+    }
+
+    /* Right: Thread & Conversation Panel */
+    .pane-thread {
+      flex: 1;
+      height: 100%;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      transition: transform 0.25s ease;
+      z-index: 20;
+    }
+
+    .thread-nav {
+      height: 54px;
+      background: rgba(15, 21, 35, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      flex-shrink: 0;
+    }
+
+    .thread-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .btn-back {
+      display: none;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .thread-title-wrap h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .thread-title-wrap p {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    .thread-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-header-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-header-action.warn {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+    }
+
+    .btn-header-action.danger {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+    }
+
+    .blocked-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .blocked-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      font-size: 0.8rem;
+    }
+
+    /* Thread Messages Scroll View (WhatsApp Dark Wallpaper) */
+    .thread-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background-color: #0b141a;
+      background-image: radial-gradient(rgba(134, 150, 160, 0.07) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    .msg-bubble-wrap {
+      display: flex;
+      width: 100%;
+    }
+
+    .msg-bubble-wrap.in {
+      justify-content: flex-start;
+    }
+
+    .msg-bubble-wrap.out {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      word-break: break-word;
+    }
+
+    .msg-bubble-wrap.in .bubble {
+      background: #202c33;
+      border: none;
+      color: #e9edef;
+      border-radius: 10px;
+      border-top-left-radius: 2px;
+    }
+
+    .msg-bubble-wrap.out.owner .bubble {
+      background: #005c4b;
+      border: none;
+      color: #e9edef;
+      border-radius: 10px;
+      border-top-right-radius: 2px;
+    }
+
+    .msg-bubble-wrap.out.assist .bubble {
+      background: #025144;
+      border: 1px solid rgba(0, 168, 132, 0.35);
+      color: #e9edef;
+      border-radius: 10px;
+      border-top-right-radius: 2px;
+    }
+
+    .msg-bubble-wrap.out.cmd .bubble {
+      background: #004a3d;
+      border: 1px solid rgba(83, 189, 235, 0.25);
+      color: #e9edef;
+      border-radius: 10px;
+      border-top-right-radius: 2px;
+    }
+
+    .bubble-header {
+      font-size: 0.7rem;
+      font-weight: 700;
+      opacity: 0.8;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .bubble-time-row {
+      text-align: right;
+      font-size: 0.66rem;
+      opacity: 0.65;
+      font-family: var(--font-mono);
+      margin-top: 4px;
+    }
+
+    .bubble-img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .wa-audio-card {
+      margin-top: 6px;
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 240px;
+      max-width: 100%;
+    }
+
+    .wa-audio-el {
+      width: 100%;
+      height: 36px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .wa-audio-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .wa-audio-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #e9edef;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wa-audio-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+
+    .wa-transcription-box {
+      font-size: 0.76rem;
+      color: #d1fae5;
+      background: rgba(0, 0, 0, 0.18);
+      border-left: 2px solid #34d399;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-style: italic;
+    }
+
+    .wa-audio-unavailable {
+      font-size: 0.72rem;
+      color: rgba(233, 237, 239, 0.6);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* Quick Action Chips */
+    .chips-carousel {
+      padding: 6px 12px;
+      background: rgba(15, 21, 35, 0.9);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
+    }
+
+    .chips-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip-item {
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip-item:active {
+      background: var(--cyan);
+      color: #07090e;
+    }
+
+    /* Composer Bar (iOS Safe Area Ready) */
+    .composer-bar {
+      padding: 8px 12px;
+      padding-bottom: max(10px, var(--safe-bottom));
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .composer-field {
+      flex: 1;
+      background: rgba(7, 9, 14, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .composer-field:focus {
+      border-color: var(--cyan);
+    }
+
+    .btn-send-wa {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--wa-green), var(--wa-emerald));
+      border: none;
+      color: #041019;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       VIEW: ASSISTANT & RULES (Full Card Studio)
+       ========================================================================== */
+    .studio-wrap {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px;
+      padding-bottom: max(20px, var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .field-label {
+      font-size: 0.77rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .textarea-box {
+      width: 100%;
+      height: 95px;
+      background: rgba(7, 9, 14, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+    }
+
+    .textarea-box:focus {
+      border-color: var(--cyan);
+    }
+
+    .mode-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-card-btn {
+      border: 1px solid var(--border);
+      background: rgba(7, 9, 14, 0.6);
+      color: var(--text-muted);
+      padding: 12px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-card-btn.active-away {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .mode-card-btn.active-auto {
+      background: rgba(34, 211, 238, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .mode-card-btn.active-online {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--wa-green);
+      color: var(--wa-green);
+    }
+
+    .btn-gradient {
+      width: 100%;
+      background: linear-gradient(135deg, var(--cyan), #0284c7);
+      border: none;
+      color: #07090e;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       VIEW: ANALYTICS & TOOLS
+       ========================================================================== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .metric-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-box .val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--cyan);
+    }
+
+    .metric-box .lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .link-card {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .link-card:active {
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    /* Empty and Placeholder States */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 24px;
+      text-align: center;
+      color: var(--text-dim);
+      gap: 10px;
+    }
+
+    .empty-state .ico {
+      font-size: 2.8rem;
+      opacity: 0.5;
+    }
+
+    /* Auth Overlay */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 380px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: max(20px, var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-focus);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 200;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BEHAVIOR (iPhone / Mobile Specifics)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .chat-master-detail.mobile-in-chat .pane-list {
+        display: none;
+      }
+      .chat-master-detail:not(.mobile-in-chat) .pane-thread {
+        display: none;
+      }
+      .pane-list {
+        width: 100%;
+        border-right: none;
+      }
+      .btn-back {
+        display: inline-flex;
+      }
+      .header-bar {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      .brand-text p {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Authentication Modal -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-box">
+      <div style="text-align:center;">
+        <div class="brand-avatar" style="margin: 0 auto 10px auto; width:52px; height:52px;">
+          <img src="/bot-avatar.jpg" alt="AuraFlow" />
+        </div>
+        <h2 style="font-size:1.15rem; font-weight:800;">AuraFlow Bot Studio</h2>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Panel Privado de Control WhatsApp</p>
+      </div>
+
+      <div id="auth-error" style="color:var(--rose); font-size:0.75rem; display:none;"></div>
+      <div id="auth-success" style="color:var(--wa-emerald); font-size:0.75rem; display:none;"></div>
+
+      <div>
+        <label class="field-label">Correo Administrador</label>
+        <input type="email" id="auth-email" class="composer-field" value="support@auraflowtech.lat" style="width:100%;" />
+      </div>
+
+      <div class="filter-row">
+        <button type="button" class="filter-btn active" id="auth-tab-otp" onclick="switchAuthMethod('otp')">📧 Código</button>
+        <button type="button" class="filter-btn" id="auth-tab-pass" onclick="switchAuthMethod('pass')">🔑 Contraseña</button>
+      </div>
+
+      <div id="auth-otp-box">
+        <button type="button" class="filter-btn" style="width:100%; padding:9px 0; margin-bottom:10px;" onclick="requestLoginCode()" id="btn-send-otp">
+          📨 Solicitar Código (6 dígitos)
+        </button>
+        <input type="text" id="auth-code" class="composer-field" placeholder="123456" maxlength="6" style="width:100%; text-align:center; font-family:var(--font-mono); letter-spacing:4px; font-size:1.1rem;" />
+      </div>
+
+      <div id="auth-pass-box" style="display:none;">
+        <input type="password" id="auth-password" class="composer-field" placeholder="••••••••••••" style="width:100%;" />
+      </div>
+
+      <button type="button" class="btn-gradient" onclick="verifyAdminLogin()">
+        Entrar al Dashboard ➤
+      </button>
+    </div>
+  </div>
+
+  <!-- App Root -->
+  <div class="app-root">
+
+    <!-- Top App Navigation Bar -->
+    <header class="header-bar">
+      <div class="brand-group">
+        <div class="brand-avatar">
+          <img src="/bot-avatar.jpg" alt="AuraFlow" />
+        </div>
+        <div class="brand-text">
+          <h1>
+            AuraFlow Bot
+            <span class="pill-conn" id="wa-conn-badge">Conectando...</span>
+          </h1>
+          <p style="font-size:0.7rem; color:var(--text-dim);" id="owner-activity-label">Monitoreando WhatsApp</p>
+        </div>
+      </div>
+
+      <!-- Segmented Navigation for iPhone / Desktop -->
+      <nav class="nav-segmented">
+        <button class="nav-tab active" id="tab-btn-chats" onclick="switchTab('chats')">
+          💬 Chats
+        </button>
+        <button class="nav-tab" id="tab-btn-assistant" onclick="switchTab('assistant')">
+          🤖 Asistente
+        </button>
+        <button class="nav-tab" id="tab-btn-commands" onclick="switchTab('commands')">
+          ⚡ Comandos
+        </button>
+        <button class="nav-tab" id="tab-btn-stats" onclick="switchTab('stats')">
+          📊 Métricas
+        </button>
+      </nav>
+    </header>
+
+    <!-- Workspace Area -->
+    <main class="workspace">
+
+      <!-- ====================================================================
+           TAB 1: CHATS (Mobile Optimized)
+           ==================================================================== -->
+      <section class="tab-view active" id="view-chats">
+        <div class="chat-master-detail" id="master-detail-wrap">
+
+          <!-- Left / Mobile Master: Chat List -->
+          <div class="pane-list">
+            <div class="pane-list-header">
+              <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="chat-search" class="search-input" placeholder="Buscar contacto o chat..." oninput="renderChatList()" />
+              </div>
+              <div class="filter-row">
+                <button class="filter-btn active" id="filter-all" onclick="setChatFilter('all')">Todos</button>
+                <button class="filter-btn" id="filter-private" onclick="setChatFilter('private')">Privados</button>
+                <button class="filter-btn" id="filter-groups" onclick="setChatFilter('groups')">Grupos</button>
+                <button class="filter-btn" id="filter-blocked" onclick="setChatFilter('blocked')">🚫 Bloqueados</button>
+              </div>
+            </div>
+
+            <div class="chats-scroll" id="chat-list">
+              <div class="empty-state">
+                <div class="ico">📡</div>
+                <p style="font-size:0.8rem;">Cargando conversaciones de WhatsApp...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right / Mobile Detail: Thread Conversation -->
+          <div class="pane-thread">
+            <div class="thread-nav" id="thread-header" style="display:none;">
+              <div class="thread-left">
+                <button class="btn-back" onclick="backToChatList()">← Volver</button>
+                <div class="avatar-box" id="thread-avatar" style="width:34px; height:34px; font-size:0.75rem;">WA</div>
+                <div class="thread-title-wrap">
+                  <h3 id="active-chat-name">Contacto</h3>
+                  <p id="active-chat-jid"></p>
+                </div>
+              </div>
+              <div class="thread-right">
+                <button class="btn-header-action warn" onclick="sendInstantAwayReply()" title="Enviar aviso de no disponible">
+                  🤖 Avisar
+                </button>
+                <button class="btn-header-action" id="btn-toggle-mute" onclick="toggleChatMute()">
+                  🔔 Activo
+                </button>
+                <button class="btn-header-action" id="btn-toggle-block" onclick="toggleChatBlock()" title="Bloquear usuario para que el bot no le conteste">
+                  🚫 Bloquear
+                </button>
+                <button class="btn-header-action" onclick="exportActiveChat()" title="Exportar conversación a .txt">
+                  📥
+                </button>
+              </div>
+            </div>
+
+            <div class="thread-body" id="messages-box">
+              <div class="empty-state">
+                <div class="ico">💬</div>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Selecciona un contacto para ver los mensajes en vivo.</p>
+              </div>
+            </div>
+
+            <!-- Quick Reply Chips for Easy Tapping on iPhone -->
+            <div class="chips-carousel" id="chips-carousel" style="display:none;">
+              <button class="chip-item" onclick="insertChip('👋 ¡Hola! Con gusto te atiendo, ¿en qué te puedo ayudar?')">👋 Saludo</button>
+              <button class="chip-item" onclick="insertChip('📋 Puedes ver nuestros servicios y cotizaciones en https://auraflowtech.lat')">📋 Cotización</button>
+              <button class="chip-item" onclick="insertChip('⏳ En este momento estoy ocupado, te escribo en unos minutos.')">⏳ Ocupado</button>
+              <button class="chip-item" onclick="insertChip('💳 Puedes solicitar los datos de cuenta para transferencia.')">💳 Pagos</button>
+            </div>
+
+            <form class="composer-bar" id="composer-form" style="display:none;" onsubmit="sendManualMessage(event)">
+              <input type="file" id="media-file-input" accept="image/*" style="display:none;" onchange="handleMediaFileSelected(this)" />
+              <button type="button" class="filter-btn" style="padding:8px 10px; border-radius:50%; flex-shrink:0;" title="Enviar imagen" onclick="pickMediaToSend(false)">🖼️</button>
+              <button type="button" class="filter-btn" style="padding:8px 10px; border-radius:50%; flex-shrink:0;" title="Enviar como sticker" onclick="pickMediaToSend(true)">🎨</button>
+              <button type="button" id="btn-mic-rec" class="filter-btn" style="padding:8px 10px; border-radius:50%; flex-shrink:0;" title="Grabar nota de voz" onclick="toggleVoiceRecording()">🎤</button>
+              <input type="text" id="composer-input" class="composer-field" placeholder="Escribe un mensaje de WhatsApp..." autocomplete="off" />
+              <button type="submit" class="btn-send-wa">➤</button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: ASSISTANT & RULES STUDIO
+           ==================================================================== -->
+      <section class="tab-view" id="view-assistant">
+        <div class="studio-wrap">
+
+          <div class="card">
+            <h3>
+              <span>🤖 Modo del Asistente Virtual</span>
+              <span id="assistant-pill" style="font-size:0.72rem; color:var(--amber);">ACTIVO</span>
+            </h3>
+
+            <div class="mode-selector-grid">
+              <button type="button" class="mode-card-btn" id="m-away" onclick="setAssistantMode('always_away')">
+                <span style="font-size:1.2rem;">🤖</span>
+                <span>IA Activa (Responde Todo)</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="m-auto" onclick="setAssistantMode('auto')">
+                <span style="font-size:1.2rem;">⏱️</span>
+                <span>Automático (Al Ausentarse)</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="m-online" onclick="setAssistantMode('commands_only')">
+                <span style="font-size:1.2rem;">🟢</span>
+                <span>Solo Comandos (-)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>
+              <span>🧠 Personalidad de la IA (WhatsApp)</span>
+              <span id="personality-active-badge" style="font-size:0.72rem; color:var(--cyan);">🇨🇷 Natural CR</span>
+            </h3>
+            <p style="font-size:0.77rem; color:var(--text-muted); margin-top:-4px;">
+              Elige un estilo rápido o personaliza las instrucciones con las que el bot contestará todos los mensajes de WhatsApp:
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(145px, 1fr)); gap:8px;">
+              <button type="button" class="mode-card-btn" id="p-natural_cr" onclick="selectPersonalityPreset('natural_cr')">
+                <span style="font-size:1.15rem;">🇨🇷</span>
+                <span>Natural / Asistente CR</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="p-amigo_casual" onclick="selectPersonalityPreset('amigo_casual')">
+                <span style="font-size:1.15rem;">😎</span>
+                <span>Amigo Casual / Relajado</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="p-ejecutivo_auraflow" onclick="selectPersonalityPreset('ejecutivo_auraflow')">
+                <span style="font-size:1.15rem;">💼</span>
+                <span>Ejecutivo AuraFlow</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="p-vendedor_pro" onclick="selectPersonalityPreset('vendedor_pro')">
+                <span style="font-size:1.15rem;">🔥</span>
+                <span>Vendedor & Closer</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="p-divertido" onclick="selectPersonalityPreset('divertido')">
+                <span style="font-size:1.15rem;">😏</span>
+                <span>Ingenioso / Divertido</span>
+              </button>
+              <button type="button" class="mode-card-btn" id="p-custom" onclick="selectPersonalityPreset('custom')">
+                <span style="font-size:1.15rem;">✍️</span>
+                <span>Personalizada</span>
+              </button>
+            </div>
+
+            <div>
+              <label class="field-label">Instrucciones de personalidad de la IA (puedes editarlas a tu gusto):</label>
+              <textarea id="cfg-personality-prompt" class="textarea-box" style="height:115px;" placeholder="Describe cómo quieres que hable y responda el bot..."></textarea>
+            </div>
+
+            <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; color:var(--cyan);">
+              <input type="checkbox" id="cfg-reply-all" checked style="width:16px; height:16px;" />
+              <span>💬 Contestar TODOS los mensajes continuamente con IA (no solo el primero)</span>
+            </label>
+
+            <button type="button" class="btn-gradient" onclick="saveAssistantSettings()">
+              💾 Guardar Personalidad y Activar
+            </button>
+          </div>
+
+          <div class="card">
+            <h3><span>📝 Mensaje de Respaldo / Ausencia</span></h3>
+            <div>
+              <label class="field-label">Mensaje enviado automáticamente cuando no estás disponible:</label>
+              <textarea id="cfg-away-msg" class="textarea-box"></textarea>
+            </div>
+            <div>
+              <label class="field-label">Minutos de inactividad para activar modo Ausente:</label>
+              <input type="number" id="cfg-inactivity" class="composer-field" style="width:100%;" min="1" max="240" value="3" />
+            </div>
+            <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer;">
+              <input type="checkbox" id="cfg-private-only" checked style="width:16px; height:16px;" />
+              <span>Responder solo en chats privados (ignorar grupos)</span>
+            </label>
+            <hr style="border:none; border-top:1px solid var(--border); margin:12px 0;" />
+            <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:700; cursor:pointer; margin-bottom:8px;">
+              <input type="checkbox" id="cfg-dnd-enabled" style="width:16px; height:16px;" />
+              <span>🌙 Modo No Molestar por horario (CR)</span>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+              <div><label class="field-label">Desde:</label><input type="time" id="cfg-dnd-start" class="composer-field" style="width:100%;" value="22:00" /></div>
+              <div><label class="field-label">Hasta:</label><input type="time" id="cfg-dnd-end" class="composer-field" style="width:100%;" value="07:00" /></div>
+            </div>
+            <div>
+              <label class="field-label">Mensaje en horario No Molestar:</label>
+              <textarea id="cfg-dnd-msg" class="textarea-box" style="min-height:60px;" placeholder="🌙 En este momento estoy en horario de descanso..."></textarea>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:6px;">
+              <button type="button" class="btn-gradient" onclick="saveAssistantSettings()">
+                💾 Guardar Configuración
+              </button>
+              <button type="button" class="filter-btn" style="padding:10px 14px;" onclick="resetAllCooldowns()" title="Permite volver a avisar">
+                🔄 Reiniciar
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>
+              <span>🚫 Usuarios Bloqueados (El bot no responde)</span>
+              <span id="blocked-count-pill" style="font-size:0.72rem; color:#fca5a5;">0</span>
+            </h3>
+            <p style="font-size:0.76rem; color:var(--text-muted);">
+              Los usuarios bloqueados no recibirán respuestas de IA, avisos de ausencia ni respuestas a comandos (-) ni en privado ni en grupos.
+            </p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input type="text" id="block-phone-input" class="composer-field" style="flex:1; min-width:160px;" placeholder="Número ej: +50688887777" />
+              <input type="text" id="block-name-input" class="composer-field" style="flex:1; min-width:140px;" placeholder="Nombre (opcional)" />
+              <button type="button" class="btn-gradient" style="background:linear-gradient(135deg,#ef4444,#b91c1c);" onclick="addBlockedUserManual()">
+                🚫 Bloquear
+              </button>
+            </div>
+            <div id="blocked-users-list" class="blocked-list"></div>
+          </div>
+
+          <div class="card" id="qr-relink-section" style="display:none; text-align:center;">
+            <h3><span>📱 Vincular WhatsApp Web</span></h3>
+            <div id="qr-box" style="margin:12px auto;"></div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">Escanea este código QR con tu WhatsApp</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: COMANDOS & SANDBOX
+           ==================================================================== -->
+      <section class="tab-view" id="view-commands">
+        <div class="studio-wrap">
+          <div class="card">
+            <h3><span>⚡ Consola de Comandos en Vivo</span></h3>
+            <p class="helper" style="margin-bottom:10px;">
+              Prueba cualquier comando del bot aquí mismo (incluyendo <code>-qr</code> con el nuevo diseño AuraFlow, <code>-numeros</code>, <code>-notas</code>, <code>-media</code> y diagnósticos de red).
+            </p>
+            <div style="display:flex; gap:8px; margin-bottom:12px;">
+              <input type="text" id="cmd-sandbox-input" placeholder="Ej: -qr https://media.auraflowtech.lat" style="flex:1; margin:0;" onkeydown="if(event.key==='Enter') runDashboardCommand()" />
+              <button type="button" class="btn btn-primary" id="cmd-sandbox-btn" onclick="runDashboardCommand()">▶ Ejecutar</button>
+            </div>
+            <div id="cmd-sandbox-output" style="display:none; background:rgba(6,9,19,0.75); border:1px solid var(--border, #2a3448); border-radius:12px; padding:14px; white-space:pre-wrap; font-size:0.86rem; line-height:1.45;"></div>
+            <div id="cmd-sandbox-media" style="display:none; margin-top:12px; text-align:center;"></div>
+            <div id="cmd-send-bar" style="display:none; margin-top:10px; gap:8px; align-items:center; flex-wrap:wrap;">
+              <select id="cmd-target-chat" style="flex:1; min-width:180px; margin:0;"></select>
+              <button type="button" class="btn btn-primary" onclick="sendCmdResultToWhatsApp()">📲 Enviar por WhatsApp</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h3 style="margin:0;"><span>📞 Números &amp; 📝 Notas (SQLite en Vivo)</span></h3>
+              <button type="button" class="filter-btn" onclick="loadDbItems()">🔄</button>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+              <input type="text" id="db-phone-input" placeholder="+506 8888 8888" style="flex:1; min-width:140px; margin:0;" />
+              <input type="text" id="db-label-input" placeholder="Nombre / Etiqueta" style="flex:1; min-width:120px; margin:0;" />
+              <button type="button" class="btn btn-primary" onclick="addDbNumber()">+ Guardar</button>
+            </div>
+            <div id="db-numbers-list" style="font-size:0.84rem; margin-bottom:12px;">Cargando...</div>
+            <div style="display:flex; gap:6px; margin-bottom:8px;">
+              <input type="text" id="db-note-input" placeholder="Nueva nota rápida..." style="flex:1; margin:0;" />
+              <button type="button" class="btn btn-primary" onclick="addDbNote()">+ Nota</button>
+            </div>
+            <div id="db-notes-list" style="font-size:0.84rem;">Cargando...</div>
+          </div>
+
+          <div class="card">
+            <h3><span>🔀 Flows Automáticos (Palabra Clave → Respuesta)</span></h3>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+              <input type="text" id="flow-trigger-input" placeholder="Palabras clave (ej: precio, cotizar, horario)" style="margin:0;" />
+              <input type="text" id="flow-reply-input" placeholder="Respuesta automática..." style="margin:0;" />
+              <button type="button" class="btn btn-primary" onclick="addDbFlow()">+ Agregar Flow</button>
+            </div>
+            <div id="db-flows-list" style="font-size:0.84rem;">Cargando...</div>
+          </div>
+
+          <div class="card">
+            <h3><span>⚡ Respuestas Rápidas del Chat</span></h3>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+              <input type="text" id="qr-label-input" placeholder="Etiqueta (ej: 📍 Ubicación)" style="flex:1; min-width:130px; margin:0;" />
+              <input type="text" id="qr-msg-input" placeholder="Texto completo..." style="flex:2; min-width:180px; margin:0;" />
+              <button type="button" class="btn btn-primary" onclick="addDbQuickReply()">+ Chip</button>
+            </div>
+            <div id="db-quick-replies-list" style="font-size:0.84rem;">Cargando...</div>
+          </div>
+
+          <div class="card">
+            <h3><span>📅 Programar Mensaje por WhatsApp</span></h3>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+              <select id="sched-chat-select" style="margin:0;"></select>
+              <input type="datetime-local" id="sched-datetime" style="margin:0;" />
+              <input type="text" id="sched-msg-input" placeholder="Mensaje a enviar..." style="margin:0;" />
+              <button type="button" class="btn btn-primary" onclick="addDbSchedule()">📅 Programar Envío</button>
+            </div>
+            <div id="db-scheduled-list" style="font-size:0.84rem;">Cargando...</div>
+          </div>
+
+          <div class="card">
+            <h3><span>🗄️ Base de Datos, Media &amp; QR</span></h3>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-numeros')">📞 -numeros</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-notas')">📝 -notas</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-media')">🎬 -media</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-qr https://auraflowtech.lat')">⚡ -qr (Estilo AuraFlow)</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><span>🌐 Redes, Diagnóstico &amp; VPS</span></h3>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-ip auraflowtech.lat')">🌐 -ip</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-ssl media.auraflowtech.lat')">🔒 -ssl</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-http https://media.auraflowtech.lat')">📡 -http</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-whois auraflowtech.lat')">🔎 -whois</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-puertos 127.0.0.1 80,443,8090')">🔌 -puertos</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-meta https://media.auraflowtech.lat')">🏷️ -meta</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-systemd')">⚙️ -systemd</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-status')">📊 -status</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><span>🪙 Mercado, CR &amp; Utilidades Dev</span></h3>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-dolar')">💵 -dolar</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-crypto')">🪙 -crypto</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-hora')">🕒 -hora</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-uuid')">🆔 -uuid</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-hash AuraFlow')">🔐 -hash</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-base64 enc AuraFlow')">🔤 -base64</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-json {&quot;bot&quot;:&quot;AuraFlow&quot;,&quot;ok&quot;:true}')">🧩 -json</button>
+              <button type="button" class="filter-btn" onclick="quickRunCmd('-menu')">📋 -menu</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 4: METRICS & SYSTEM
+           ==================================================================== -->
+      <section class="tab-view" id="view-stats">
+        <div class="studio-wrap">
+
+          <div class="kpi-grid">
+            <div class="metric-box">
+              <span class="val" id="stat-chats">0</span>
+              <span class="lbl">Chats Vistos</span>
+            </div>
+            <div class="metric-box">
+              <span class="val" id="stat-msgs">0</span>
+              <span class="lbl">Mensajes</span>
+            </div>
+            <div class="metric-box">
+              <span class="val" id="stat-assist">0</span>
+              <span class="lbl">Auto-Avisos</span>
+            </div>
+            <div class="metric-box">
+              <span class="val" id="stat-cmds">0</span>
+              <span class="lbl">Comandos</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><span>🖥️ Telemetría Real del VPS &amp; Bot</span></h3>
+            <div id="sys-telemetry-box" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.84rem;">
+              <div>• <b>WhatsApp:</b> <span id="sys-wa-user">—</span></div>
+              <div>• <b>Uptime Bot:</b> <span id="sys-uptime">—</span></div>
+              <div>• <b>RAM Bot:</b> <span id="sys-bot-ram">—</span></div>
+              <div>• <b>RAM VPS Libre:</b> <span id="sys-vps-ram">—</span></div>
+              <div>• <b>Carga CPU (1m):</b> <span id="sys-cpu-load">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><span>📜 Logs en Tiempo Real</span></h3>
+            <div id="live-logs-box" style="background:rgba(6,9,19,0.85); border:1px solid var(--border); border-radius:10px; padding:10px; max-height:220px; overflow-y:auto; font-family:monospace; font-size:0.75rem; line-height:1.5; color:#cbd5e1;">Cargando logs...</div>
+          </div>
+
+          <div class="card">
+            <h3><span>⚡ Accesos Directos del VPS</span></h3>
+            <a href="https://media.auraflowtech.lat" target="_blank" class="link-card">
+              <span>🎬 AuraFlow Media Hub &amp; CDN</span>
+              <span>Abrir ↗</span>
+            </a>
+            <a href="https://status.auraflowtech.lat" target="_blank" class="link-card">
+              <span>📈 Monitor Uptime Kuma</span>
+              <span>Abrir ↗</span>
+            </a>
+            <a href="https://admin.auraflowtech.lat" target="_blank" class="link-card">
+              <span>🛠️ Gestor Docker Dockge</span>
+              <span>Abrir ↗</span>
+            </a>
+            <button type="button" class="link-card" style="width:100%; text-align:left; cursor:pointer;" onclick="logoutAdmin()">
+              <span>🚪 Cerrar Sesión del Dashboard</span>
+              <span>Salir</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    let dashboardData = {};
+    let selectedChatJid = null;
+    let currentFilter = "all";
+    let configDirty = false;
+    let authMethod = "otp";
+
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      setTimeout(() => { el.style.display = "none"; }, 3000);
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".tab-view").forEach(v => v.classList.remove("active"));
+      
+      const btn = document.getElementById("tab-btn-" + tabName);
+      const view = document.getElementById("view-" + tabName);
+      if (btn) btn.classList.add("active");
+      if (view) view.classList.add("active");
+    }
+
+    function quickRunCmd(cmdText) {
+      const input = document.getElementById("cmd-sandbox-input");
+      if (input) {
+        input.value = cmdText;
+        runDashboardCommand();
+      }
+    }
+
+    async function runDashboardCommand() {
+      const input = document.getElementById("cmd-sandbox-input");
+      const outEl = document.getElementById("cmd-sandbox-output");
+      const mediaEl = document.getElementById("cmd-sandbox-media");
+      const btn = document.getElementById("cmd-sandbox-btn");
+      const msg = (input?.value || "").trim();
+      if (!msg) return;
+      btn.disabled = true;
+      btn.textContent = "⏳...";
+      outEl.style.display = "block";
+      outEl.textContent = "Ejecutando " + msg + "...";
+      mediaEl.style.display = "none";
+      mediaEl.innerHTML = "";
+      try {
+        const res = await fetch("/command", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        if (data.isCommand) {
+          window._lastCmdReply = data.reply || "";
+          outEl.textContent = data.reply || "(Sin texto)";
+          document.getElementById("cmd-send-bar").style.display = "flex";
+          if (data.qrDataUrl) {
+            mediaEl.style.display = "block";
+            mediaEl.innerHTML = `<img src="${data.qrDataUrl}" style="max-width:280px; border-radius:16px; border:1px solid rgba(56,189,248,0.35);" /><div style="margin-top:8px;"><a href="${data.qrDataUrl}" download="auraflow-qr.png" class="filter-btn" style="display:inline-block; text-decoration:none;">⬇️ Descargar QR PNG</a></div>`;
+          } else if (data.audioUrl) {
+            mediaEl.style.display = "block";
+            mediaEl.innerHTML = `<div class="wa-audio-card" style="max-width:340px;"><audio controls preload="metadata" src="${escapeHtml(data.audioUrl)}" class="wa-audio-el" onplay="pauseOtherAudios(this)"></audio><div class="wa-audio-actions"><a href="${escapeHtml(data.audioUrl)}" download class="wa-audio-btn">⬇️ Descargar Audio</a></div></div>`;
+          }
+        } else {
+          outEl.textContent = "⚠️ Comando no reconocido. Prueba con -menu.";
+        }
+      } catch (e) {
+        outEl.textContent = "❌ Error ejecutando comando: " + e.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "▶ Ejecutar";
+      }
+    }
+
+    async function sendCmdResultToWhatsApp() {
+      const jid = document.getElementById("cmd-target-chat")?.value;
+      const text = window._lastCmdReply || "";
+      if (!jid || !text) return;
+      try {
+        const res = await fetch("/api/chat/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jid, text })
+        });
+        if (res.ok) showToast("✅ Resultado enviado por WhatsApp");
+        else showToast("⚠️ No se pudo enviar (verifica sesión)");
+      } catch (e) {
+        showToast("❌ Error enviando");
+      }
+    }
+
+    function renderDbItems(data) {
+      const numEl = document.getElementById("db-numbers-list");
+      const noteEl = document.getElementById("db-notes-list");
+      if (numEl) {
+        numEl.innerHTML = (data.numbers || []).length
+          ? data.numbers.map(n => `<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span><b>${n.phone}</b> ${n.label ? "— " + n.label : ""}</span><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('del_number', ${n.id})">🗑️</button></div>`).join("")
+          : "<span style='color:var(--text-muted)'>Sin números guardados.</span>";
+      }
+      if (noteEl) {
+        noteEl.innerHTML = (data.notes || []).length
+          ? data.notes.map(n => `<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span>#${n.id} · ${n.content}</span><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('del_note', ${n.id})">🗑️</button></div>`).join("")
+          : "<span style='color:var(--text-muted)'>Sin notas guardadas.</span>";
+      }
+      const flowsEl = document.getElementById("db-flows-list");
+      if (flowsEl) {
+        flowsEl.innerHTML = (data.flows || []).length
+          ? data.flows.map(f => `<div style="display:flex; justify-content:space-between; align-items:center; gap:6px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span><b>${escapeHtml(f.trigger_text)}</b> → ${escapeHtml(f.reply_text)}</span><div style="display:flex;gap:4px;"><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('toggle_flow', ${f.id})">${f.enabled ? "🟢" : "⚪"}</button><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('del_flow', ${f.id})">🗑️</button></div></div>`).join("")
+          : "<span style='color:var(--text-muted)'>Sin flows creados.</span>";
+      }
+      const qrListEl = document.getElementById("db-quick-replies-list");
+      const chipsEl = document.getElementById("chips-carousel");
+      if (Array.isArray(data.quickReplies)) {
+        if (qrListEl) {
+          qrListEl.innerHTML = data.quickReplies.map(q => `<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span><b>${escapeHtml(q.label)}</b>: ${escapeHtml(q.message_text)}</span><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('del_quick_reply', ${q.id})">🗑️</button></div>`).join("");
+        }
+        if (chipsEl && data.quickReplies.length > 0) {
+          chipsEl.innerHTML = data.quickReplies.map(q => `<button type="button" class="chip-item" onclick='insertChip(${JSON.stringify(q.message_text)})'>${escapeHtml(q.label)}</button>`).join("");
+        }
+      }
+      const schedEl = document.getElementById("db-scheduled-list");
+      if (schedEl) {
+        schedEl.innerHTML = (data.scheduled || []).length
+          ? data.scheduled.map(s => `<div style="display:flex; justify-content:space-between; align-items:center; gap:6px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span>${s.sent ? "✅" : "⏳"} <b>${escapeHtml(s.contact_name || s.jid)}</b> (${new Date(s.send_at_ts).toLocaleString("es-CR")})<br>${escapeHtml(s.message_text)}</span><button type="button" class="filter-btn" style="padding:3px 8px;" onclick="deleteDbItem('del_schedule', ${s.id})">🗑️</button></div>`).join("")
+          : "<span style='color:var(--text-muted)'>Sin mensajes programados.</span>";
+      }
+    }
+
+    async function addDbSchedule() {
+      const sel = document.getElementById("sched-chat-select");
+      const jid = sel?.value;
+      const contact_name = sel?.options[sel.selectedIndex]?.text || jid;
+      const dtVal = document.getElementById("sched-datetime").value;
+      const message_text = document.getElementById("sched-msg-input").value.trim();
+      if (!jid || !dtVal || !message_text) return showToast("⚠️ Completa contacto, fecha y mensaje");
+      const send_at_ts = new Date(dtVal).getTime();
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "add_schedule", jid, contact_name, message_text, send_at_ts })
+      });
+      if (res.ok) {
+        document.getElementById("sched-msg-input").value = "";
+        renderDbItems(await res.json());
+        showToast("📅 Mensaje programado");
+      }
+    }
+
+    function exportActiveChat() {
+      const chat = dashboardData.activeChat;
+      if (!chat || !Array.isArray(chat.messages)) return showToast("⚠️ Abre un chat primero");
+      const lines = chat.messages.map(m => `[${new Date(m.timestamp).toLocaleString("es-CR")}] ${m.fromMe ? "Yo" : (m.senderName || chat.name)}: ${m.text || "[" + m.mediaType + "]"}`);
+      const blob = new Blob([`Chat: ${chat.name || chat.jid}\n\n` + lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `chat_${(chat.name || "whatsapp").replace(/[^a-zA-Z0-9_-]/g, "_")}.txt`;
+      a.click();
+    }
+
+    async function addDbFlow() {
+      const trigger_text = document.getElementById("flow-trigger-input").value.trim();
+      const reply_text = document.getElementById("flow-reply-input").value.trim();
+      if (!trigger_text || !reply_text) return;
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "add_flow", trigger_text, reply_text })
+      });
+      if (res.ok) {
+        document.getElementById("flow-trigger-input").value = "";
+        document.getElementById("flow-reply-input").value = "";
+        renderDbItems(await res.json());
+        showToast("✅ Flow guardado");
+      }
+    }
+
+    async function addDbQuickReply() {
+      const label = document.getElementById("qr-label-input").value.trim();
+      const message_text = document.getElementById("qr-msg-input").value.trim();
+      if (!label || !message_text) return;
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "add_quick_reply", label, message_text })
+      });
+      if (res.ok) {
+        document.getElementById("qr-label-input").value = "";
+        document.getElementById("qr-msg-input").value = "";
+        renderDbItems(await res.json());
+        showToast("✅ Respuesta rápida guardada");
+      }
+    }
+
+    async function loadDbItems() {
+      try {
+        const res = await fetch("/api/db/items");
+        if (res.ok) renderDbItems(await res.json());
+      } catch (e) {}
+    }
+
+    async function addDbNumber() {
+      const phone = document.getElementById("db-phone-input").value.trim();
+      const label = document.getElementById("db-label-input").value.trim();
+      if (!phone) return;
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "add_number", phone, label })
+      });
+      if (res.ok) {
+        document.getElementById("db-phone-input").value = "";
+        document.getElementById("db-label-input").value = "";
+        renderDbItems(await res.json());
+        showToast("✅ Número guardado");
+      }
+    }
+
+    async function addDbNote() {
+      const content = document.getElementById("db-note-input").value.trim();
+      if (!content) return;
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "add_note", content })
+      });
+      if (res.ok) {
+        document.getElementById("db-note-input").value = "";
+        renderDbItems(await res.json());
+        showToast("✅ Nota guardada");
+      }
+    }
+
+    async function deleteDbItem(action, id) {
+      const res = await fetch("/api/db/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, id })
+      });
+      if (res.ok) renderDbItems(await res.json());
+    }
+
+    function backToChatList() {
+      document.getElementById("master-detail-wrap").classList.remove("mobile-in-chat");
+      document.body.classList.remove("in-chat-mobile");
+    }
+
+    let _pendingAsSticker = false;
+    function pickMediaToSend(asSticker) {
+      if (!selectedChatJid) return;
+      _pendingAsSticker = asSticker;
+      document.getElementById("media-file-input").click();
+    }
+
+    function handleMediaFileSelected(input) {
+      const file = input.files?.[0];
+      if (!file || !selectedChatJid) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const caption = document.getElementById("composer-input").value.trim();
+        showToast(_pendingAsSticker ? "🎨 Enviando sticker..." : "🖼️ Enviando imagen...");
+        try {
+          const res = await fetch("/api/chat/send-media", {
+            method: "POST",
+            headers: authHeaders({ "Content-Type": "application/json" }),
+            body: JSON.stringify({ jid: selectedChatJid, dataUrl: reader.result, caption, asSticker: _pendingAsSticker })
+          });
+          if (res.ok) {
+            document.getElementById("composer-input").value = "";
+            showToast(_pendingAsSticker ? "✅ Sticker enviado" : "✅ Imagen enviada");
+            fetchDashboard();
+          } else {
+            showToast("❌ Error al enviar multimedia");
+          }
+        } catch (e) {
+          showToast("❌ Error de red");
+        } finally {
+          input.value = "";
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    let _mediaRecorder = null;
+    let _recChunks = [];
+    async function toggleVoiceRecording() {
+      const btn = document.getElementById("btn-mic-rec");
+      if (!selectedChatJid) return;
+      if (_mediaRecorder && _mediaRecorder.state === "recording") {
+        _mediaRecorder.stop();
+        btn.textContent = "🎤";
+        btn.style.background = "";
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        _recChunks = [];
+        _mediaRecorder = new MediaRecorder(stream);
+        _mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) _recChunks.push(e.data); };
+        _mediaRecorder.onstop = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          const blob = new Blob(_recChunks, { type: _mediaRecorder.mimeType || "audio/webm" });
+          const reader = new FileReader();
+          reader.onload = async () => {
+            showToast("🎤 Enviando nota de voz...");
+            const res = await fetch("/api/chat/send-media", {
+              method: "POST",
+              headers: authHeaders({ "Content-Type": "application/json" }),
+              body: JSON.stringify({ jid: selectedChatJid, dataUrl: reader.result, asAudio: true })
+            });
+            if (res.ok) { showToast("✅ Nota de voz enviada"); fetchDashboard(); }
+            else showToast("❌ Error enviando nota de voz");
+          };
+          reader.readAsDataURL(blob);
+        };
+        _mediaRecorder.start();
+        btn.textContent = "⏹️";
+        btn.style.background = "#ef4444";
+        showToast("🔴 Grabando... toca ⏹️ para enviar");
+      } catch (e) {
+        showToast("⚠️ Permite el acceso al micrófono");
+      }
+    }
+
+    function switchAuthMethod(method) {
+      authMethod = method;
+      document.getElementById("auth-tab-otp").className = "filter-btn" + (method === "otp" ? " active" : "");
+      document.getElementById("auth-tab-pass").className = "filter-btn" + (method === "pass" ? " active" : "");
+      document.getElementById("auth-otp-box").style.display = method === "otp" ? "block" : "none";
+      document.getElementById("auth-pass-box").style.display = method === "pass" ? "block" : "none";
+    }
+
+    function authHeaders(extra = {}) {
+      const token = localStorage.getItem("wabot_admin_token");
+      return token ? { ...extra, Authorization: `Bearer ${token}` } : extra;
+    }
+
+    async function requestLoginCode() {
+      const email = document.getElementById("auth-email").value.trim();
+      const btn = document.getElementById("btn-send-otp");
+      const err = document.getElementById("auth-error");
+      const succ = document.getElementById("auth-success");
+      err.style.display = "none";
+      succ.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "⏳ Enviando...";
+      try {
+        const res = await fetch("/api/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          succ.textContent = d.message || "Código enviado a tu correo.";
+          succ.style.display = "block";
+        } else {
+          err.textContent = d.error || "No se pudo enviar el código.";
+          err.style.display = "block";
+        }
+      } catch (e) {
+        err.textContent = "Error de red.";
+        err.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "📨 Solicitar Código (6 dígitos)";
+      }
+    }
+
+    async function verifyAdminLogin() {
+      const email = document.getElementById("auth-email").value.trim();
+      const code = document.getElementById("auth-code").value.trim();
+      const password = document.getElementById("auth-password").value.trim();
+      const err = document.getElementById("auth-error");
+      err.style.display = "none";
+
+      const payload = { email, method: authMethod };
+      if (authMethod === "otp") payload.code = code;
+      else payload.password = password;
+
+      try {
+        const res = await fetch("/api/auth/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        if (res.ok && d.token) {
+          localStorage.setItem("wabot_admin_token", d.token);
+          document.getElementById("auth-overlay").style.display = "none";
+          showToast("Sesión iniciada");
+          fetchDashboard();
+        } else {
+          err.textContent = d.error || "Credenciales inválidas.";
+          err.style.display = "block";
+        }
+      } catch (e) {
+        err.textContent = "Error de conexión.";
+        err.style.display = "block";
+      }
+    }
+
+    async function logoutAdmin() {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: authHeaders()
+        });
+      } catch (e) {}
+      localStorage.removeItem("wabot_admin_token");
+      document.getElementById("auth-overlay").style.display = "flex";
+    }
+
+    function escapeHtml(s) {
+      if (!s) return "";
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatTime(iso) {
+      if (!iso) return "";
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "";
+      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function formatRelativeMin(iso) {
+      if (!iso) return "Sin registro reciente";
+      const diff = Date.now() - new Date(iso).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return "hace segundos";
+      if (mins === 1) return "hace 1 min";
+      if (mins < 60) return `hace ${mins}m`;
+      const hrs = Math.floor(mins / 60);
+      return `hace ${hrs}h ${mins % 60}m`;
+    }
+
+    function insertChip(text) {
+      const input = document.getElementById("composer-input");
+      input.value = text;
+      input.focus();
+    }
+
+    ["cfg-away-msg", "cfg-inactivity", "cfg-private-only", "cfg-personality-prompt", "cfg-reply-all"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", () => { configDirty = true; });
+    });
+
+    async function fetchDashboard() {
+      try {
+        const url = selectedChatJid
+          ? `/api/dashboard?chatJid=${encodeURIComponent(selectedChatJid)}`
+          : `/api/dashboard`;
+        const res = await fetch(url, { headers: authHeaders() });
+        if (res.status === 401) {
+          document.getElementById("auth-overlay").style.display = "flex";
+          return;
+        }
+        if (!res.ok) return;
+        document.getElementById("auth-overlay").style.display = "none";
+        const data = await res.json();
+        dashboardData = data;
+        updateTopBar();
+        updateAssistantForm();
+        renderBlockedUsers();
+        renderChatList();
+        if (selectedChatJid && data.activeChat) {
+          renderActiveChat(data.activeChat);
+        } else if (!selectedChatJid && data.chats && data.chats.length > 0 && window.innerWidth > 768) {
+          selectChat(data.chats[0].jid);
+        }
+      } catch (e) {}
+    }
+
+    function updateTopBar() {
+      const badge = document.getElementById("wa-conn-badge");
+      const qrSec = document.getElementById("qr-relink-section");
+      if (dashboardData.status === "connected" && dashboardData.connectedUser) {
+        badge.textContent = `Conectado (${dashboardData.connectedUser.phone})`;
+        badge.className = "pill-conn";
+        qrSec.style.display = "none";
+      } else {
+        badge.textContent = dashboardData.status === "qr_ready" ? "Esperando QR" : "Reconectando...";
+        badge.className = "pill-conn offline";
+        if (dashboardData.qrDataUrl) {
+          qrSec.style.display = "block";
+          document.getElementById("qr-box").innerHTML = `<img src="${dashboardData.qrDataUrl}" style="max-width:200px;border-radius:10px;" />`;
+        }
+      }
+
+      const a = dashboardData.assistant || {};
+      const mAway = document.getElementById("m-away");
+      const mAuto = document.getElementById("m-auto");
+      const mOnline = document.getElementById("m-online");
+      mAway.className = "mode-card-btn" + (a.mode === "always_away" ? " active-away" : "");
+      mAuto.className = "mode-card-btn" + (a.mode === "auto" ? " active-auto" : "");
+      mOnline.className = "mode-card-btn" + (a.mode === "commands_only" ? " active-online" : "");
+
+      const ownerLabel = document.getElementById("owner-activity-label");
+      const pill = document.getElementById("assistant-pill");
+      if (a.isCurrentlyAway) {
+        pill.textContent = "🌙 AVISANDO";
+        pill.style.color = "#fbbf24";
+      } else {
+        pill.textContent = "🟢 PAUSA";
+        pill.style.color = "#34d399";
+      }
+      ownerLabel.textContent = `Activo: ${formatRelativeMin(a.lastOwnerActivityAt)}`;
+
+      document.getElementById("stat-chats").textContent = dashboardData.stats?.totalChats || 0;
+      document.getElementById("stat-msgs").textContent = dashboardData.stats?.totalMessagesSeen || 0;
+      document.getElementById("stat-assist").textContent = dashboardData.stats?.autoRepliesSent || 0;
+      document.getElementById("stat-cmds").textContent = dashboardData.commandsExecuted || 0;
+
+      const sys = dashboardData.system || {};
+      const waUser = dashboardData.connectedUser ? `${dashboardData.connectedUser.name || ""} (${dashboardData.connectedUser.phone || ""})` : dashboardData.status;
+      document.getElementById("sys-wa-user").textContent = waUser || "—";
+      const upMin = Math.floor((sys.uptimeSec || 0) / 60);
+      document.getElementById("sys-uptime").textContent = upMin >= 60 ? `${Math.floor(upMin/60)}h ${upMin%60}m` : `${upMin}m`;
+      document.getElementById("sys-bot-ram").textContent = sys.rssMb ? `${sys.rssMb} MB` : "—";
+      document.getElementById("sys-vps-ram").textContent = sys.freeRamMb ? `${sys.freeRamMb} / ${sys.totalRamMb} MB` : "—";
+      document.getElementById("sys-cpu-load").textContent = sys.load1m || "—";
+
+      const logsEl = document.getElementById("live-logs-box");
+      if (logsEl && Array.isArray(dashboardData.logs)) {
+        logsEl.innerHTML = dashboardData.logs.length
+          ? dashboardData.logs.map(l => `<div>${String(l).replace(/</g, "&lt;")}</div>`).join("")
+          : "Sin eventos recientes.";
+      }
+
+      const targetSel = document.getElementById("cmd-target-chat");
+      const schedSel = document.getElementById("sched-chat-select");
+      if (Array.isArray(dashboardData.chats)) {
+        const opts = dashboardData.chats.slice(0, 30).map(c => `<option value="${c.jid}">${c.name || c.phone || c.jid}</option>`).join("");
+        if (targetSel) { const p = targetSel.value; targetSel.innerHTML = opts; if (p) targetSel.value = p; }
+        if (schedSel) { const p = schedSel.value; schedSel.innerHTML = opts; if (p) schedSel.value = p; }
+      }
+      if (!window._dbLoadedOnce) {
+        window._dbLoadedOnce = true;
+        loadDbItems();
+      }
+    }
+
+    const FRONTEND_PERSONALITY_PRESETS = {
+      natural_cr: {
+        label: "🇨🇷 Natural / Asistente CR",
+        prompt: "Eres el asistente personal de Santiago Delgado en WhatsApp. Tu personalidad es natural, cercana, amigable y conversacional (estilo costarricense natural, servicial y humano, sin sonar robótico ni repetir quién eres en cada mensaje). Contestas TODOS los mensajes de forma fluida, breve y útil, siguiendo el hilo de la conversación como en un chat real de WhatsApp. Si te consultan por servicios de AuraFlow Tech (Facturación Electrónica v4.4, bots, redes, desarrollo web) o asuntos de Santiago, ayudas con gusto."
+      },
+      amigo_casual: {
+        label: "😎 Amigo Casual / Relajado",
+        prompt: "Hablas como un amigo cercano y buena nota por WhatsApp en Costa Rica. Tus respuestas son cortas, naturales, relajadas y al grano (puedes usar expresiones naturales como 'pura vida', 'claro', 'todo bien' sin exagerar). Cero discurso corporativo y cero listas largas a menos que te las pidan. Contestas todos los mensajes como una conversación normal de WhatsApp."
+      },
+      ejecutivo_auraflow: {
+        label: "💼 Ejecutivo AuraFlow",
+        prompt: "Eres el Asistente Ejecutivo de AuraFlow Tech Costa Rica y del Ing. Santiago Delgado Leiva (auraflowtech.lat). Tu tono es profesional, ejecutivo, claro y experto en soluciones tecnológicas, Facturación Electrónica Hacienda v4.4, automatización con IA, servidores y telecomunicaciones."
+      },
+      vendedor_pro: {
+        label: "🔥 Vendedor & Closer",
+        prompt: "Eres un asesor comercial experto, carismático y persuasivo de AuraFlow Tech y de Santiago Delgado. Respondes con energía positiva a todos los mensajes, identificas qué necesita la persona, destacas beneficios claros y la guías amablemente a cotizar o agendar con Santiago."
+      },
+      divertido: {
+        label: "😏 Ingenioso / Divertido",
+        prompt: "Tienes una personalidad carismática, ingeniosa y con buen sentido del humor. Respondes por WhatsApp con chispa y simpatía, haciendo la conversación entretenida pero siempre ayudando y respondiendo lo que te preguntan en mensajes cortos y dinámicos."
+      },
+      custom: {
+        label: "✍️ Personalizada",
+        prompt: ""
+      }
+    };
+    let selectedPersonalityPreset = "natural_cr";
+
+    function highlightPersonalityPreset(presetKey) {
+      selectedPersonalityPreset = presetKey || "natural_cr";
+      const keys = ["natural_cr", "amigo_casual", "ejecutivo_auraflow", "vendedor_pro", "divertido", "custom"];
+      keys.forEach((k) => {
+        const btn = document.getElementById(`p-${k}`);
+        if (btn) {
+          btn.className = "mode-card-btn" + (k === selectedPersonalityPreset ? " active-auto" : "");
+        }
+      });
+      const badge = document.getElementById("personality-active-badge");
+      if (badge) {
+        badge.textContent = FRONTEND_PERSONALITY_PRESETS[selectedPersonalityPreset]?.label || "✍️ Personalizada";
+      }
+    }
+
+    function selectPersonalityPreset(presetKey) {
+      configDirty = true;
+      highlightPersonalityPreset(presetKey);
+      const presets = dashboardData?.assistant?.presets || FRONTEND_PERSONALITY_PRESETS;
+      if (presetKey !== "custom" && presets[presetKey]?.prompt) {
+        document.getElementById("cfg-personality-prompt").value = presets[presetKey].prompt;
+      } else if (presetKey === "custom") {
+        document.getElementById("cfg-personality-prompt").focus();
+      }
+    }
+
+    function updateAssistantForm() {
+      if (configDirty) return;
+      const a = dashboardData.assistant || {};
+      const presetKey = a.personalityPreset || "natural_cr";
+      highlightPersonalityPreset(presetKey);
+      if (a.personalityPrompt !== undefined) {
+        document.getElementById("cfg-personality-prompt").value = a.personalityPrompt;
+      } else if (FRONTEND_PERSONALITY_PRESETS[presetKey]?.prompt) {
+        document.getElementById("cfg-personality-prompt").value = FRONTEND_PERSONALITY_PRESETS[presetKey].prompt;
+      }
+      if (a.replyAllMessages !== undefined) {
+        document.getElementById("cfg-reply-all").checked = Boolean(a.replyAllMessages);
+      }
+      if (a.awayMessage !== undefined) {
+        document.getElementById("cfg-away-msg").value = a.awayMessage;
+      }
+      if (a.inactivityMinutes !== undefined) {
+        document.getElementById("cfg-inactivity").value = a.inactivityMinutes;
+      }
+      if (a.onlyPrivateChats !== undefined) {
+        document.getElementById("cfg-private-only").checked = Boolean(a.onlyPrivateChats);
+      }
+      if (a.dndEnabled !== undefined) document.getElementById("cfg-dnd-enabled").checked = Boolean(a.dndEnabled);
+      if (a.dndStart) document.getElementById("cfg-dnd-start").value = a.dndStart;
+      if (a.dndEnd) document.getElementById("cfg-dnd-end").value = a.dndEnd;
+      if (a.dndMessage !== undefined) document.getElementById("cfg-dnd-msg").value = a.dndMessage;
+    }
+
+    function setChatFilter(filter) {
+      currentFilter = filter;
+      document.getElementById("filter-all").className = "filter-btn" + (filter === "all" ? " active" : "");
+      document.getElementById("filter-private").className = "filter-btn" + (filter === "private" ? " active" : "");
+      document.getElementById("filter-groups").className = "filter-btn" + (filter === "groups" ? " active" : "");
+      document.getElementById("filter-blocked").className = "filter-btn" + (filter === "blocked" ? " active" : "");
+      renderChatList();
+    }
+
+    function renderChatList() {
+      const listEl = document.getElementById("chat-list");
+      const q = (document.getElementById("chat-search").value || "").toLowerCase().trim();
+      let chats = dashboardData.chats || [];
+
+      if (currentFilter === "private") chats = chats.filter((c) => !c.isGroup);
+      if (currentFilter === "groups") chats = chats.filter((c) => c.isGroup);
+      if (currentFilter === "blocked") chats = chats.filter((c) => c.blocked);
+      if (q) {
+        chats = chats.filter(
+          (c) =>
+            (c.name || "").toLowerCase().includes(q) ||
+            (c.phone || "").toLowerCase().includes(q) ||
+            (c.lastMessagePreview || "").toLowerCase().includes(q)
+        );
+      }
+
+      if (chats.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <div class="ico">💬</div>
+            <p style="font-size:0.8rem;">No hay conversaciones en esta vista.</p>
+          </div>`;
+        return;
+      }
+
+      listEl.innerHTML = chats
+        .map((c) => {
+          const isSelected = c.jid === selectedChatJid;
+          const initials = (c.name || "WA").replace(/[^a-zA-Z0-9]/g, "").slice(0, 2).toUpperCase() || "WA";
+          const avatarInner = c.avatarUrl
+            ? `<img src="${escapeHtml(c.avatarUrl)}" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.replaceWith(document.createTextNode('${escapeHtml(c.isGroup ? "👥" : initials)}'))" />`
+            : (c.isGroup ? "👥" : escapeHtml(initials));
+          const checksHtml = c.lastFromMe ? '<span style="color:#0a84ff;font-weight:700;margin-right:3px;">✓✓</span>' : '';
+          const statusIcons = [
+            c.muteAssistant ? '🔕' : '',
+            c.blocked ? '🚫' : '',
+            c.awayNotified ? '🤖' : ''
+          ].filter(Boolean).join(' ');
+          return `
+            <div class="chat-card ${isSelected ? "active" : ""}" onclick="selectChat('${escapeHtml(c.jid)}')">
+              <div class="avatar-box ${c.isGroup ? "group" : ""}">
+                ${avatarInner}
+              </div>
+              <div class="chat-details">
+                <div class="chat-title-row">
+                  <span class="contact-title">${escapeHtml(c.name || c.phone)}</span>
+                  <span class="timestamp" style="color:${c.messageCount > 0 ? '#0a84ff' : '#8e8e93'};">${formatTime(c.lastMessageAt)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                  <div class="snippet-text" style="flex:1;">${checksHtml}${escapeHtml(c.lastMessagePreview || "Sin mensajes")}</div>
+                  <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+                    ${statusIcons ? `<span style="font-size:0.72rem;">${statusIcons}</span>` : ''}
+                    <span style="background:#0a84ff; color:#fff; font-size:0.7rem; font-weight:700; min-width:20px; height:20px; padding:0 6px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;">${c.messageCount || 0}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function selectChat(jid) {
+      selectedChatJid = jid;
+      document.getElementById("master-detail-wrap").classList.add("mobile-in-chat");
+      document.body.classList.add("in-chat-mobile");
+      renderChatList();
+      await fetchDashboard();
+    }
+
+    function renderActiveChat(chat) {
+      document.getElementById("thread-header").style.display = "flex";
+      document.getElementById("chips-carousel").style.display = "flex";
+      document.getElementById("composer-form").style.display = "flex";
+      document.getElementById("active-chat-name").textContent = chat.name || chat.phone || chat.jid;
+      document.getElementById("active-chat-jid").textContent = `${chat.phone || ""}`;
+
+      const initials = (chat.name || "WA").replace(/[^a-zA-Z0-9]/g, "").slice(0, 2).toUpperCase() || "WA";
+      const threadAv = document.getElementById("thread-avatar");
+      if (chat.avatarUrl) {
+        threadAv.innerHTML = `<img src="${escapeHtml(chat.avatarUrl)}" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.replaceWith(document.createTextNode('${escapeHtml(chat.isGroup ? "👥" : initials)}'))" />`;
+      } else {
+        threadAv.textContent = chat.isGroup ? "👥" : initials;
+      }
+
+      const muteBtn = document.getElementById("btn-toggle-mute");
+      if (chat.muteAssistant) {
+        muteBtn.textContent = "🔕 Mudo";
+        muteBtn.style.color = "#f43f5e";
+      } else {
+        muteBtn.textContent = "🔔 Activo";
+        muteBtn.style.color = "";
+      }
+
+      const blockBtn = document.getElementById("btn-toggle-block");
+      if (chat.blocked) {
+        blockBtn.textContent = "🔓 Desbloquear";
+        blockBtn.className = "btn-header-action danger";
+      } else {
+        blockBtn.textContent = "🚫 Bloquear";
+        blockBtn.className = "btn-header-action";
+      }
+
+      const box = document.getElementById("messages-box");
+      const wasAtBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 90;
+
+      const msgs = chat.messages || [];
+      if (msgs.length === 0) {
+        box.dataset.chatJid = chat.jid;
+        box.innerHTML = `<div class="empty-state"><p style="font-size:0.8rem;">Sin mensajes registrados.</p></div>`;
+        return;
+      }
+
+      function buildMessageInnerHtml(m) {
+        let roleBadge = escapeHtml(m.senderName || m.senderPhone || "Contacto");
+        if (m.fromMe) {
+          if (m.kind === "assistant") {
+            roleBadge = "🤖 Asistente";
+          } else if (m.kind === "bot_command") {
+            roleBadge = "⚡ Bot";
+          } else {
+            roleBadge = "👤 Tú";
+          }
+        }
+
+        const thumbHtml = m.mediaThumb
+          ? `<img src="${m.mediaThumb}" class="bubble-img" alt="Foto" />`
+          : "";
+
+        const isAudioType =
+          Boolean(m.audioUrl) ||
+          (m.mediaType && (m.mediaType.includes("audio") || m.mediaType.includes("voz"))) ||
+          (m.text && (m.text.includes("[Nota de voz") || m.text.includes("[Audio")));
+
+        let audioHtml = "";
+        if (m.audioUrl) {
+          const transHtml = m.transcription
+            ? `<div class="wa-transcription-box">📝 "${escapeHtml(m.transcription)}"</div>`
+            : "";
+          const transBtn = !m.transcription
+            ? `<button type="button" class="wa-audio-btn" onclick="transcribeChatAudio('${escapeHtml(chat.jid)}', '${escapeHtml(m.id)}', this)">📝 Transcribir</button>`
+            : "";
+          audioHtml = `
+            <div class="wa-audio-card">
+              <audio controls preload="metadata" src="${escapeHtml(m.audioUrl)}" class="wa-audio-el" onplay="pauseOtherAudios(this)"></audio>
+              <div class="wa-audio-actions">
+                <div style="display:flex; gap:5px; align-items:center;">
+                  <button type="button" class="wa-audio-btn" onclick="cycleAudioSpeed(this)">⚡ 1x</button>
+                  ${transBtn}
+                </div>
+                <a href="${escapeHtml(m.audioUrl)}" download class="wa-audio-btn" title="Descargar audio MP3">⬇️ MP3</a>
+              </div>
+              ${transHtml}
+            </div>
+          `;
+        } else if (isAudioType) {
+          audioHtml = `<div class="wa-audio-unavailable">🔇 Audio histórico (previo a activación de reproductor web)</div>`;
+        }
+
+        return `
+          <div class="bubble">
+            <div class="bubble-header">
+              <span>${roleBadge}</span>
+            </div>
+            <div>${escapeHtml(m.text || "")}</div>
+            ${audioHtml}
+            ${thumbHtml}
+            <div class="bubble-time-row">${formatTime(m.timestamp)} ${m.fromMe ? '<span style="color:#53bdeb;font-weight:700;">✓✓</span>' : ''}</div>
+          </div>
+        `;
+      }
+
+      function getRowClass(m) {
+        if (!m.fromMe) return "msg-bubble-wrap in";
+        if (m.kind === "assistant") return "msg-bubble-wrap out assist";
+        if (m.kind === "bot_command") return "msg-bubble-wrap out cmd";
+        return "msg-bubble-wrap out owner";
+      }
+
+      function getMsgSig(m) {
+        return `${m.id || ""}|${m.text || ""}|${m.audioUrl || ""}|${m.transcription || ""}|${m.mediaThumb ? "1" : "0"}`;
+      }
+
+      if (box.dataset.chatJid !== chat.jid || box.querySelector(".empty-state")) {
+        box.dataset.chatJid = chat.jid;
+        box.innerHTML = msgs
+          .map((m, idx) => {
+            const msgKey = String(m.id || `idx_${idx}`);
+            return `<div class="${getRowClass(m)}" data-msg-id="${escapeHtml(msgKey)}" data-msg-sig="${escapeHtml(getMsgSig(m))}">${buildMessageInnerHtml(m)}</div>`;
+          })
+          .join("");
+        box.scrollTop = box.scrollHeight;
+        return;
+      }
+
+      // Incremental update so playing <audio> elements are never interrupted by 2.5s polling
+      const existingById = new Map();
+      Array.from(box.children).forEach((el) => {
+        if (el.dataset && el.dataset.msgId) {
+          existingById.set(el.dataset.msgId, el);
+        }
+      });
+
+      let addedNew = false;
+      msgs.forEach((m, idx) => {
+        const msgKey = String(m.id || `idx_${idx}`);
+        const sig = getMsgSig(m);
+        const existingEl = existingById.get(msgKey);
+        if (existingEl) {
+          if (existingEl.dataset.msgSig !== sig) {
+            const audioEl = existingEl.querySelector("audio");
+            const isPlaying = audioEl && (!audioEl.paused || audioEl.currentTime > 0);
+            if (!isPlaying) {
+              existingEl.className = getRowClass(m);
+              existingEl.dataset.msgSig = sig;
+              existingEl.innerHTML = buildMessageInnerHtml(m);
+            }
+          }
+        } else {
+          const wrap = document.createElement("div");
+          wrap.className = getRowClass(m);
+          wrap.dataset.msgId = msgKey;
+          wrap.dataset.msgSig = sig;
+          wrap.innerHTML = buildMessageInnerHtml(m);
+          box.appendChild(wrap);
+          addedNew = true;
+        }
+      });
+
+      if (wasAtBottom && addedNew) {
+        box.scrollTop = box.scrollHeight;
+      }
+    }
+
+    function pauseOtherAudios(currentAudio) {
+      document.querySelectorAll("audio.wa-audio-el").forEach((a) => {
+        if (a !== currentAudio && !a.paused) {
+          a.pause();
+        }
+      });
+    }
+
+    function cycleAudioSpeed(btn) {
+      const card = btn.closest(".wa-audio-card");
+      const audio = card ? card.querySelector("audio") : null;
+      if (!audio) return;
+      const rates = [1, 1.5, 2];
+      const curIdx = rates.indexOf(audio.playbackRate);
+      const nextRate = rates[(curIdx + 1) % rates.length];
+      audio.playbackRate = nextRate;
+      btn.textContent = `⚡ ${nextRate}x`;
+    }
+
+    async function transcribeChatAudio(jid, msgId, btn) {
+      if (!jid || !msgId) return;
+      const origText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "⏳ Transcribiendo...";
+      try {
+        const res = await fetch("/api/chat/transcribe-audio", {
+          method: "POST",
+          headers: authHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ jid, msgId })
+        });
+        const data = await res.json();
+        if (res.ok && data.transcription) {
+          const card = btn.closest(".wa-audio-card");
+          if (card) {
+            let tBox = card.querySelector(".wa-transcription-box");
+            if (!tBox) {
+              tBox = document.createElement("div");
+              tBox.className = "wa-transcription-box";
+              card.appendChild(tBox);
+            }
+            tBox.textContent = `📝 "${data.transcription}"`;
+          }
+          btn.remove();
+          showToast("📝 Audio transcrito");
+        } else {
+          showToast(data.error || "⚠️ No se pudo transcribir");
+          btn.disabled = false;
+          btn.textContent = origText;
+        }
+      } catch (e) {
+        showToast("❌ Error de red al transcribir");
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+    }
+
+    async function setAssistantMode(mode) {
+      try {
+        const res = await fetch("/api/assistant/config", {
+          method: "POST",
+          headers: authHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ mode })
+        });
+        if (res.ok) {
+          showToast("Modo actualizado");
+          await fetchDashboard();
+        }
+      } catch (e) {}
+    }
+
+    async function saveAssistantSettings() {
+      const awayMessage = document.getElementById("cfg-away-msg").value.trim();
+      const inactivityMinutes = parseFloat(document.getElementById("cfg-inactivity").value) || 3;
+      const onlyPrivateChats = document.getElementById("cfg-private-only").checked;
+      const personalityPrompt = document.getElementById("cfg-personality-prompt").value.trim();
+      const replyAllMessages = document.getElementById("cfg-reply-all").checked;
+      const dndEnabled = document.getElementById("cfg-dnd-enabled").checked;
+      const dndStart = document.getElementById("cfg-dnd-start").value;
+      const dndEnd = document.getElementById("cfg-dnd-end").value;
+      const dndMessage = document.getElementById("cfg-dnd-msg").value.trim();
+
+      const res = await fetch("/api/assistant/config", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({
+          personalityPreset: selectedPersonalityPreset,
+          personalityPrompt,
+          replyAllMessages,
+          awayMessage,
+          inactivityMinutes,
+          onlyPrivateChats,
+          dndEnabled,
+          dndStart,
+          dndEnd,
+          dndMessage
+        })
+      });
+      if (res.ok) {
+        configDirty = false;
+        showToast("Personalidad y configuración guardadas");
+        await fetchDashboard();
+      }
+    }
+
+    async function resetAllCooldowns() {
+      await fetch("/api/assistant/config", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ resetCooldowns: true })
+      });
+      showToast("Avisos reiniciados");
+      await fetchDashboard();
+    }
+
+    async function toggleChatMute() {
+      if (!selectedChatJid) return;
+      const res = await fetch("/api/chat/toggle-mute", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid })
+      });
+      if (res.ok) {
+        showToast("Preferencia actualizada");
+        await fetchDashboard();
+      }
+    }
+
+    async function toggleChatBlock() {
+      if (!selectedChatJid) return;
+      const res = await fetch("/api/chat/toggle-block", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        showToast(data.blocked ? "🚫 Usuario bloqueado" : "🔓 Usuario desbloqueado");
+        await fetchDashboard();
+      }
+    }
+
+    function renderBlockedUsers() {
+      const listEl = document.getElementById("blocked-users-list");
+      const countEl = document.getElementById("blocked-count-pill");
+      if (!listEl || !countEl) return;
+      const list = dashboardData.blockedUsers || [];
+      countEl.textContent = list.length;
+      if (list.length === 0) {
+        listEl.innerHTML = `<p style="font-size:0.75rem; color:var(--text-muted);">No hay usuarios bloqueados.</p>`;
+        return;
+      }
+      listEl.innerHTML = list
+        .map((u) => `
+          <div class="blocked-item">
+            <div>
+              <div style="font-weight:700;">${escapeHtml(u.name || u.phone || u.key)}</div>
+              <div style="font-size:0.7rem; color:var(--text-dim); font-family:var(--font-mono);">${escapeHtml(u.phone || u.jid || u.key)}</div>
+            </div>
+            <button type="button" class="btn-header-action" onclick="unblockUser('${escapeHtml(u.key)}', '${escapeHtml(u.jid || "")}')">
+              🔓 Desbloquear
+            </button>
+          </div>
+        `)
+        .join("");
+    }
+
+    async function addBlockedUserManual() {
+      const phoneEl = document.getElementById("block-phone-input");
+      const nameEl = document.getElementById("block-name-input");
+      const phone = (phoneEl.value || "").trim();
+      const name = (nameEl.value || "").trim();
+      if (!phone) {
+        showToast("Ingresa un número para bloquear");
+        return;
+      }
+      const res = await fetch("/api/blocked/add", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ phone, name })
+      });
+      if (res.ok) {
+        phoneEl.value = "";
+        nameEl.value = "";
+        showToast("🚫 Número bloqueado");
+        await fetchDashboard();
+      } else {
+        showToast("Error al bloquear número");
+      }
+    }
+
+    async function unblockUser(key, jid) {
+      const res = await fetch("/api/blocked/remove", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ key, jid })
+      });
+      if (res.ok) {
+        showToast("🔓 Usuario desbloqueado");
+        await fetchDashboard();
+      }
+    }
+
+    async function sendInstantAwayReply() {
+      if (!selectedChatJid) return;
+      const msg = document.getElementById("cfg-away-msg").value.trim();
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid, text: msg, isAssistant: true })
+      });
+      if (res.ok) {
+        showToast("Aviso enviado");
+        await fetchDashboard();
+      }
+    }
+
+    async function sendManualMessage(e) {
+      e.preventDefault();
+      if (!selectedChatJid) return;
+      const input = document.getElementById("composer-input");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: authHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ jid: selectedChatJid, text, isAssistant: false })
+      });
+      if (res.ok) {
+        showToast("Mensaje enviado");
+        await fetchDashboard();
+      }
+    }
+
+    fetchDashboard();
+    setInterval(fetchDashboard, 2500);
+  </script>
+</body>
+</html>

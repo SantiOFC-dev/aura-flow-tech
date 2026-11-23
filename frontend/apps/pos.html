@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POS & Inventario con Tiquete Electrónico v4.4 · AuraFlow Tech</title>
+<meta name="description" content="Punto de Venta (POS) e Inventario en la nube de AuraFlow Tech Costa Rica con lector de código de barras y emisión de Tiquete Electrónico Hacienda v4.4.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pos.auraflowtech.lat/">
+<meta property="og:title" content="POS & Inventario CR v4.4 · AuraFlow Tech">
+<meta property="og:description" content="Vende con lector de código de barras y emite tiquete electrónico v4.4 al instante.">
+<meta property="og:url" content="https://pos.auraflowtech.lat/">
+<meta property="og:image" content="https://auraflowtech.lat/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+<style>.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.prod{background:#020617;border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;text-align:left;color:var(--txt);font:inherit}
+.prod:hover{border-color:var(--cyan)}.prod:disabled{opacity:.4;cursor:not-allowed}.prod b{display:block;margin-bottom:4px}
+.tabs{display:flex;gap:8px;margin:16px 0}.tabs button.on{background:linear-gradient(90deg,#06b6d4,#7c3aed);border:0}</style>
+</head><body><main>
+<h1>🛒 POS & Inventario</h1><p class="mut">Vende con lector de código de barras y emite tiquete electrónico v4.4 al instante.</p>
+<div class="tabs"><button class="btn s on" data-t="venta">Venta</button><button class="btn s" data-t="inv">Inventario</button></div>
+<div id="t-venta" class="grid g2">
+  <div class="card"><input id="scan" placeholder="📷 Escanea o escribe el código / nombre y presiona Enter" autofocus>
+    <div class="prods" id="prods" style="margin-top:14px"></div></div>
+  <div class="card"><h2>Carrito</h2><div id="cart"></div>
+    <label>Cliente (opcional)</label><input id="cli" placeholder="Cliente Contado">
+    <div class="card" style="margin-top:14px;background:#020617">
+      <div class="row"><span class="mut">Subtotal</span><b id="sub" style="text-align:right">₡0</b></div>
+      <div class="row"><span class="mut">IVA</span><b id="iva" style="text-align:right">₡0</b></div>
+      <div class="row"><span>Total</span><b id="tot" style="text-align:right;font-size:1.4rem;color:var(--cyan)">₡0</b></div></div>
+    <div class="row"><button class="btn s w" id="clear">Vaciar</button><button class="btn w" id="pay">Cobrar y emitir tiquete</button></div>
+    <div id="ticket"></div></div>
+</div>
+<div id="t-inv" style="display:none" class="grid g2">
+  <div class="card"><h2>Productos</h2><div id="inv"></div></div>
+  <form class="card" id="pf"><h2>Agregar / editar producto</h2>
+    <label>Código de barras *</label><input id="p-cod" required>
+    <label>Nombre *</label><input id="p-nom" required>
+    <div class="row"><div><label>Precio (₡)</label><input id="p-pre" type="number" min="0" step="any" required></div>
+      <div><label>IVA</label><select id="p-iva"><option value="13">13%</option><option value="4">4%</option><option value="2">2%</option><option value="1">1%</option><option value="0">Exento</option></select></div>
+      <div><label>Stock</label><input id="p-stk" type="number" step="1" value="0"></div></div>
+    <label>CABYS</label><input id="p-cab" value="2399000000000">
+    <button class="btn w">Guardar producto</button></form>
+</div>
+</main><script>
+const {esc,api,money,$}=AF; let prods=[], cart={};
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $("#t-venta").style.display=b.dataset.t==="venta"?"":"none";$("#t-inv").style.display=b.dataset.t==="inv"?"":"none";});
+function add(id){const p=prods.find(x=>x.id===id);if(!p)return;const q=(cart[id]||0)+1;if(q>p.stock){AF.toast("Sin stock suficiente de "+p.nombre,true);return;}cart[id]=q;drawCart();}
+window.add=add; window.setQty=(id,q)=>{q=Math.max(0,parseInt(q)||0);const p=prods.find(x=>x.id===id);if(q>p.stock){q=p.stock;AF.toast("Stock máximo: "+p.stock,true)}
+  if(q)cart[id]=q;else delete cart[id];drawCart();};
+function drawProds(){$("#prods").innerHTML=prods.map(p=>`<button class="prod" onclick="add(${p.id})" ${p.stock<1?"disabled":""}><b>${esc(p.nombre)}</b>${money(p.precio)}<br><span class="mut" style="font-size:.75rem">Stock ${p.stock} · IVA ${p.tarifa_iva}%</span></button>`).join("");
+  $("#inv").innerHTML=`<table><tr><th>Código</th><th>Producto</th><th>Precio</th><th>Stock</th><th></th></tr>${prods.map(p=>`<tr><td><code>${esc(p.codigo)}</code></td><td>${esc(p.nombre)}</td><td>${money(p.precio)}</td><td><span class="b ${p.stock<=3?'bad':p.stock<=10?'warn':'ok'}">${p.stock}</span></td><td><button class="btn s sm" onclick="edit(${p.id})">Editar</button></td></tr>`).join("")}</table>`;}
+window.edit=id=>{const p=prods.find(x=>x.id===id);$("#p-cod").value=p.codigo;$("#p-nom").value=p.nombre;$("#p-pre").value=p.precio;$("#p-iva").value=String(p.tarifa_iva|0);$("#p-stk").value=p.stock;$("#p-cab").value=p.cabys;};
+function drawCart(){let s=0,i=0;const ids=Object.keys(cart);
+  $("#cart").innerHTML=ids.length?`<table>${ids.map(id=>{const p=prods.find(x=>x.id==id),l=p.precio*cart[id];s+=l;i+=l*p.tarifa_iva/100;
+    return `<tr><td>${esc(p.nombre)}</td><td style="width:80px"><input type="number" min="0" value="${cart[id]}" onchange="setQty(${p.id},this.value)"></td><td style="text-align:right">${money(l)}</td></tr>`}).join("")}</table>`:'<div class="empty">Carrito vacío</div>';
+  $("#sub").textContent=money(s);$("#iva").textContent=money(i);$("#tot").textContent=money(s+i);$("#pay").disabled=!ids.length;}
+$("#scan").onkeydown=e=>{if(e.key!=="Enter")return;const v=e.target.value.trim().toLowerCase();if(!v)return;
+  const p=prods.find(x=>x.codigo===v)||prods.find(x=>x.nombre.toLowerCase().includes(v));if(p)add(p.id);else AF.toast("Producto no encontrado",true);e.target.value="";};
+$("#clear").onclick=()=>{cart={};drawCart()};
+$("#pay").onclick=async()=>{$("#pay").disabled=true;
+  try{const r=await api("/api/pos/venta",{body:{cliente:$("#cli").value,items:Object.entries(cart).map(([id,c])=>({id:+id,cantidad:c}))}});
+    const f=r.factura;$("#ticket").innerHTML=`<div class="card" style="margin-top:14px;background:#020617"><span class="b ok">${esc(f.estado_hacienda)}</span>
+      <p><b>Tiquete ${esc(f.consecutivo_20)}</b><br><span class="mut" style="font-size:.75rem;word-break:break-all">Clave ${esc(f.clave_50)}</span></p><p>Total cobrado: <b>${money(f.total)}</b></p>
+      <a class="btn s sm" href="https://fac.auraflowtech.lat" target="_blank">Ver en Facturación ↗</a></div>`;
+    cart={};AF.toast("Venta registrada");await load();
+  }catch(err){AF.toast(err.message,true)}finally{drawCart()}};
+$("#pf").onsubmit=async e=>{e.preventDefault();
+  try{await api("/api/productos",{body:{codigo:$("#p-cod").value,nombre:$("#p-nom").value,precio:+$("#p-pre").value,tarifa_iva:+$("#p-iva").value,stock:+$("#p-stk").value,cabys:$("#p-cab").value}});
+    AF.toast("Producto guardado");e.target.reset();$("#p-cab").value="2399000000000";await load();}catch(err){AF.toast(err.message,true)}};
+async function load(){prods=(await api("/api/productos")).productos;drawProds();drawCart();}
+AF.shell("pos");load();
+</script></body></html>

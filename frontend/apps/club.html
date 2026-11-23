@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Club de Lealtad & Puntos · AuraFlow Tech</title>
+<meta name="description" content="Programa digital de fidelización y Club de Lealtad de AuraFlow Tech Costa Rica: niveles Bronce, Plata, Oro y Diamante con puntos por compra.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://club.auraflowtech.lat/">
+<meta property="og:title" content="Club de Lealtad & Puntos · AuraFlow Tech">
+<meta property="og:description" content="Premia a tus clientes frecuentes con niveles Bronce, Plata, Oro y Diamante en Costa Rica.">
+<meta property="og:url" content="https://club.auraflowtech.lat/">
+<meta property="og:image" content="https://auraflowtech.lat/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+<style>.tier{font-weight:700}.Bronce{color:#d97706}.Plata{color:#cbd5e1}.Oro{color:#facc15}.Diamante{color:#22d3ee}
+.bar{height:6px;background:#1e293b;border-radius:99px;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#06b6d4,#7c3aed)}</style>
+</head><body><main>
+<h1>💎 Club de Lealtad</h1><p class="mut">Premia a tus clientes frecuentes: Bronce → Plata (350) → Oro (1 000) → Diamante (2 000 pts).</p>
+<div class="grid g4" id="kpis" style="margin-top:16px"></div>
+<div class="grid g2" style="margin-top:16px">
+  <div class="card"><div class="row"><h2 style="flex:0 0 auto">Miembros</h2><input id="q" placeholder="Buscar nombre o teléfono…" style="max-width:260px;margin-left:auto"></div><div id="list"></div></div>
+  <div>
+    <form class="card" id="pf"><h2>Sumar puntos por compra</h2>
+      <label>Miembro</label><select id="mem"></select>
+      <label>Monto de la compra (₡) — 1 punto por cada ₡1 000</label><input id="monto" type="number" min="1000" step="500" value="10000">
+      <button class="btn w">Sumar puntos</button></form>
+    <form class="card" id="nf" style="margin-top:16px"><h2>Nuevo miembro</h2>
+      <label>Nombre *</label><input id="nn" required><label>Teléfono *</label><input id="nt" required value="+506 ">
+      <button class="btn w">Registrar</button></form>
+  </div>
+</div>
+</main><script>
+const {esc,api,$}=AF; let members=[];
+const NEXT={Bronce:350,Plata:1000,Oro:2000,Diamante:null};
+function draw(){const q=$("#q").value.toLowerCase();const rows=members.filter(m=>!q||(m.member_name+m.phone).toLowerCase().includes(q));
+  $("#list").innerHTML=rows.length?`<table><tr><th>Miembro</th><th>Nivel</th><th>Puntos</th></tr>${rows.map(m=>{const n=NEXT[m.tier];const pct=n?Math.min(100,m.points/n*100):100;
+    return `<tr><td>${esc(m.member_name)}<br><span class="mut">${esc(m.phone)}</span></td><td class="tier ${esc(m.tier)}">${esc(m.tier)}</td>
+    <td>${m.points}<div class="bar"><i style="width:${pct}%"></i></div><span class="mut" style="font-size:.72rem">${n?`faltan ${n-m.points} para subir`:"nivel máximo"}</span></td></tr>`}).join("")}</table>`:'<div class="empty">Sin miembros</div>';
+  const t=["Bronce","Plata","Oro","Diamante"];
+  $("#kpis").innerHTML=t.map(x=>`<div class="card kpi"><div class="v tier ${x}">${members.filter(m=>m.tier===x).length}</div><div class="l">${x}</div></div>`).join("");
+  const sel=$("#mem").value;$("#mem").innerHTML=members.map(m=>`<option value="${m.id}">${esc(m.member_name)} (${m.points} pts)</option>`).join("");if(sel)$("#mem").value=sel;}
+async function load(){members=(await api("/api/loyalty")).members||[];draw();}
+$("#q").oninput=draw;
+$("#pf").onsubmit=async e=>{e.preventDefault();const pts=Math.floor(+$("#monto").value/1000);if(pts<1)return;
+  try{const r=await api("/api/loyalty/add-points",{body:{member_id:+$("#mem").value,points:pts}});AF.toast(`+${pts} pts · nivel ${r.tier}`);await load();}catch(err){AF.toast(err.message,true)}};
+$("#nf").onsubmit=async e=>{e.preventDefault();
+  try{await api("/api/loyalty/members",{body:{member_name:$("#nn").value,phone:$("#nt").value}});AF.toast("Miembro registrado");e.target.reset();$("#nt").value="+506 ";await load();}catch(err){AF.toast(err.message,true)}};
+AF.shell("club");load();
+</script></body></html>

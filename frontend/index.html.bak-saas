@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4</title>
+  <meta name="description" content="Bots de WhatsApp con IA 24/7, Facturación Electrónica v4.4, POS, CRM, clínicas y radio PTT GPS para PYMEs en Costa Rica." />
+  <meta name="author" content="Ing. Santiago Delgado Leiva — AuraFlow Tech Costa Rica" />
+  <meta name="google-site-verification" content="dY808zPfuPhf1VpDRTwBTINsTzvLStecsJPKU5_yZmI" />
+  <link rel="canonical" href="https://auraflowtech.lat/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AuraFlow Tech Costa Rica" />
+  <meta property="og:url" content="https://auraflowtech.lat/" />
+  <meta property="og:title" content="AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4" />
+  <meta property="og:description" content="Bots de WhatsApp con IA 24/7, Facturación Electrónica v4.4, POS, CRM y más para PYMEs en Costa Rica." />
+  <meta property="og:image" content="https://auraflowtech.lat/og-image.png" />
+  <meta property="og:image:secure_url" content="https://auraflowtech.lat/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="AuraFlow Tech — Software, IA & Factura CR v4.4 · Zona Sur, Costa Rica" />
+  <meta property="og:locale" content="es_CR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4" />
+  <meta name="twitter:description" content="Bots de WhatsApp con IA 24/7, Facturación Electrónica v4.4, POS, CRM y más para PYMEs en Costa Rica." />
+  <meta name="twitter:image" content="https://auraflowtech.lat/og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    html { scroll-behavior: smooth; }
+    .promo-banner { background: linear-gradient(90deg, #06b6d4, #7c3aed); color: #fff; text-align: center; padding: 9px 16px; font-size: 0.88rem; font-weight: 600; }
+    .promo-banner a { color: #fff; text-decoration: underline; }
+    .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    .app-card { display: block; text-decoration: none; background: rgba(11,19,37,.85); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px; transition: all .2s ease; }
+    .app-card:hover { border-color: #22d3ee; transform: translateY(-2px); }
+    .app-card .ic { font-size: 1.6rem; }
+    .app-card .nm { color: #f8fafc; font-weight: 700; margin: 8px 0 4px; }
+    .app-card .ds { color: #94a3b8; font-size: 0.82rem; line-height: 1.45; }
+    .app-card .hs { font-family: var(--font-mono); color: #22d3ee; font-size: 0.74rem; margin-top: 10px; }
+    .benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .benefit { text-align: center; padding: 22px 16px; }
+    .benefit .big { font-size: 2rem; font-weight: 800; }
+    .cta-final { text-align: center; padding: 40px 24px; }
+    .cta-final .hero-cta-group { justify-content: center; }
+    .wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 50; background: #22c55e; color: #fff; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+  </style>
+</head>
+<body>
+  <div class="bg-grid-pattern"></div>
+
+  <div class="promo-banner">
+    🧪 Prueba todas nuestras apps <strong>gratis</strong> en la demo en vivo · <a href="https://demo.auraflowtech.lat">Entrar a la demo</a>
+  </div>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="brand-logo">
+        <div class="brand-orb">⚡</div>
+        <span>AuraFlow <span class="gradient-text">Tech</span></span>
+        <span class="brand-badge">CR v4.4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#soluciones">Soluciones</a></li>
+        <li><a href="#sectores">Sectores</a></li>
+        <li><a href="#apps">Apps</a></li>
+        <li><a href="#planes">Planes</a></li>
+        <li><a href="#faq">Preguntas</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/game/" class="btn btn-secondary btn-sm" style="border-color:#a855f7; color:#c084fc; font-weight:700;">🎮 Jugar 3D</a>
+        <a href="https://id.auraflowtech.lat" class="btn btn-secondary btn-sm">🔐 Iniciar sesión</a>
+        <a href="https://demo.auraflowtech.lat" class="btn btn-primary btn-sm">🧪 Probar demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow-pill">
+        <span class="pulse-dot" style="background:#22d3ee; box-shadow:0 0 10px #22d3ee;"></span>
+        <span>SOFTWARE HECHO EN COSTA RICA</span>
+      </div>
+      <h1>Automatiza tu negocio con <span class="gradient-text">IA, WhatsApp y Factura v4.4</span></h1>
+      <div class="hero-subtitle-mono">Bots 24/7 · Facturación Electrónica Hacienda · POS · CRM · Clínicas</div>
+      <p>
+        Ayudamos a PYMEs, clínicas y comercios de la Zona Sur y todo Costa Rica a vender más y trabajar menos:
+        atención automática por WhatsApp las 24 horas, facturación electrónica homologada con el Ministerio de Hacienda
+        y todas tus herramientas en una sola cuenta. Dirigido por el <strong>Ing. Santiago Delgado Leiva</strong>.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#contacto" class="btn btn-primary">🚀 Solicitar propuesta gratis</a>
+        <a href="#planes" class="btn btn-secondary">💳 Ver planes y precios</a>
+        <a href="https://demo.auraflowtech.lat" class="btn btn-secondary">🧪 Probar la demo en vivo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <div class="metrics-strip">
+    <div class="container">
+      <div class="benefits">
+        <div class="metric-card benefit"><div class="big gradient-text">24/7</div><div class="metric-label">Atención automática por WhatsApp</div></div>
+        <div class="metric-card benefit"><div class="big gradient-text">v4.4</div><div class="metric-label">Homologado con Hacienda CR</div></div>
+        <div class="metric-card benefit"><div class="big gradient-text">+150 h</div><div class="metric-label">Ahorradas al mes por negocio</div></div>
+        <div class="metric-card benefit"><div class="big gradient-text">1 cuenta</div><div class="metric-label">Para todas las apps</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Soluciones -->
+  <section id="soluciones">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">NUESTRAS SOLUCIONES</span>
+        <h2>Todo lo que tu negocio necesita, <span class="gradient-text">en un solo lugar</span></h2>
+      </div>
+      <div class="core-nodes-grid">
+        <div class="core-node-card">
+          <div class="core-node-tag">IA & WHATSAPP</div>
+          <div class="core-node-title">WaBot IA 24/7</div>
+          <ul class="core-node-list">
+            <li>• Responde clientes al instante, día y noche</li>
+            <li>• Catálogo, citas, pedidos y SINPE Móvil</li>
+            <li>• Flujos visuales sin programar</li>
+          </ul>
+        </div>
+        <div class="core-node-card highlighted-v44">
+          <div class="core-node-tag">HACIENDA COSTA RICA</div>
+          <div class="core-node-title">Factura Electrónica v4.4</div>
+          <ul class="core-node-list">
+            <li>• Facturas y tiquetes ilimitados</li>
+            <li>• CABYS e IVA Ley 9635 automáticos</li>
+            <li>• Emite desde PC, celular o WhatsApp</li>
+          </ul>
+        </div>
+        <div class="core-node-card">
+          <div class="core-node-tag">GESTIÓN</div>
+          <div class="core-node-title">POS, CRM & Lealtad</div>
+          <ul class="core-node-list">
+            <li>• Punto de venta con inventario</li>
+            <li>• Embudo de ventas conectado a WhatsApp</li>
+            <li>• Club de puntos para clientes frecuentes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sectores -->
+  <section id="sectores" style="padding-top:20px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">SOLUCIONES ADAPTADAS A COSTA RICA</span>
+        <h2>Para cada tipo de <span class="gradient-text">negocio</span></h2>
+      </div>
+      <div class="core-nodes-grid">
+        <div class="core-node-card">
+          <div class="core-node-tag">COMERCIO & PYMES</div>
+          <div class="core-node-title">Comercios, Retail & Agro</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">Punto de venta, inventario con CABYS, tiquete electrónico instantáneo, catálogo por WhatsApp y club de puntos.</p>
+          <span class="brand-badge">IVA 13% / 1% Canasta Básica</span>
+        </div>
+        <div class="core-node-card">
+          <div class="core-node-tag">SALUD & CLÍNICAS</div>
+          <div class="core-node-title">Clínicas & Consultorios</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">Citas 24/7 por WhatsApp, recordatorios automáticos que reducen ausencias y facturación con IVA del 4%.</p>
+          <span class="brand-badge">IVA 4% Salud (Ley 9635)</span>
+        </div>
+        <div class="core-node-card">
+          <div class="core-node-tag">FLOTAS & SERVICIOS</div>
+          <div class="core-node-title">Logística & Seguridad</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">Radio walkie-talkie web y GPS en tiempo real para tu equipo, despacho de órdenes y facturación recurrente.</p>
+          <span class="brand-badge">Radio PTT + GPS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apps (solo enlaces informativos) -->
+  <section id="apps">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">ECOSISTEMA AURAFLOW</span>
+        <h2>Nuestras <span class="gradient-text">aplicaciones</span></h2>
+        <p>Cada herramienta vive en su propia web app y todas funcionan con una sola cuenta <strong>AuraFlow ID</strong>.</p>
+      </div>
+      <div class="app-grid">
+        <a class="app-card" href="/game/" style="border-color:rgba(168,85,247,0.4);"><div class="ic">🚀</div><div class="nm">Sabotaje Orbital 3D</div><div class="ds">Juego multijugador estilo Among Us en 3D en tiempo real.</div><div class="hs" style="color:#c084fc;">auraflowtech.lat/game/ ↗</div></a>
+        <a class="app-card" href="https://fac.auraflowtech.lat"><div class="ic">🧾</div><div class="nm">Factura CR v4.4</div><div class="ds">Facturación electrónica homologada con Hacienda.</div><div class="hs">fac.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://bot.auraflowtech.lat"><div class="ic">🤖</div><div class="nm">WaBot IA</div><div class="ds">Chatbot de WhatsApp con IA 24/7.</div><div class="hs">bot.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://pos.auraflowtech.lat"><div class="ic">🛒</div><div class="nm">POS & Inventario</div><div class="ds">Punto de venta con tiquete electrónico.</div><div class="hs">pos.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://crm.auraflowtech.lat"><div class="ic">📊</div><div class="nm">Kanban CRM</div><div class="ds">Embudo de ventas conectado a WhatsApp.</div><div class="hs">crm.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://clinica.auraflowtech.lat"><div class="ic">🏥</div><div class="nm">Salud & Clínicas</div><div class="ds">Agenda médica y recordatorios.</div><div class="hs">clinica.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://club.auraflowtech.lat"><div class="ic">💎</div><div class="nm">Club de Lealtad</div><div class="ds">Puntos, niveles y premios para tus clientes.</div><div class="hs">club.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://radio.auraflowtech.lat"><div class="ic">📻</div><div class="nm">Radio PTT & GPS</div><div class="ds">Walkie-talkie web y radar GPS.</div><div class="hs">radio.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://builder.auraflowtech.lat"><div class="ic">⚙️</div><div class="nm">Flow Studio</div><div class="ds">Agentes IA y automatizaciones low-code.</div><div class="hs">builder.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://id.auraflowtech.lat"><div class="ic">🔐</div><div class="nm">AuraFlow ID</div><div class="ds">Tu cuenta única para todo el ecosistema.</div><div class="hs">id.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://demo.auraflowtech.lat"><div class="ic">🧪</div><div class="nm">Demo en vivo</div><div class="ds">Prueba todo gratis antes de contratar.</div><div class="hs">demo.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://api.auraflowtech.lat"><div class="ic">🔌</div><div class="nm">API para desarrolladores</div><div class="ds">Integra tus sistemas vía REST.</div><div class="hs">api.auraflowtech.lat ↗</div></a>
+        <a class="app-card" href="https://status.auraflowtech.lat"><div class="ic">📡</div><div class="nm">Estado del servicio</div><div class="ds">Disponibilidad en tiempo real.</div><div class="hs">status.auraflowtech.lat ↗</div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Planes -->
+  <section id="planes">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PRECIOS TRANSPARENTES</span>
+        <h2>Planes diseñados para <span class="gradient-text">Costa Rica</span></h2>
+        <p>Sin contratos forzosos. Incluye actualizaciones de Hacienda, certificado SSL y soporte técnico directo.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div>
+            <span class="section-tag">FACTURACIÓN</span>
+            <h3>Plan Emprendedor</h3>
+            <div class="price-amount">₡18,500 <span>/ mes ($36)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">Para profesionales independientes y comercios que necesitan facturar rápido desde el celular o la PC.</p>
+            <ul class="core-node-list">
+              <li>✓ Facturas y tiquetes v4.4 ilimitados</li>
+              <li>✓ Buscador CABYS e IVA automático</li>
+              <li>✓ Cuenta AuraFlow ID</li>
+            </ul>
+          </div>
+          <a href="#contacto" class="btn btn-secondary">Quiero este plan</a>
+        </div>
+        <div class="price-card featured">
+          <div class="popular-ribbon">Más elegido</div>
+          <div>
+            <span class="section-tag">IA + FACTURACIÓN</span>
+            <h3>Plan PYME Pro</h3>
+            <div class="price-amount">₡49,500 <span>/ mes ($95)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">Ventas automáticas por WhatsApp 24/7 conectadas a facturación y CRM.</p>
+            <ul class="core-node-list">
+              <li>✓ Todo lo del Plan Emprendedor</li>
+              <li>✓ WaBot IA 24/7 + Flow Studio</li>
+              <li>✓ CRM Kanban + Club de Puntos</li>
+              <li>✓ POS e inventario</li>
+            </ul>
+          </div>
+          <a href="#contacto" class="btn btn-primary">Quiero este plan</a>
+        </div>
+        <div class="price-card">
+          <div>
+            <span class="section-tag">ECOSISTEMA COMPLETO</span>
+            <h3>Clínicas & Multi-Sucursal</h3>
+            <div class="price-amount">₡95,000 <span>/ mes ($185)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">Para clínicas, empresas con varias sucursales, flotas o software a la medida.</p>
+            <ul class="core-node-list">
+              <li>✓ Todas las apps del ecosistema</li>
+              <li>✓ Agenda médica (IVA 4%)</li>
+              <li>✓ Radio PTT & GPS</li>
+              <li>✓ Soporte directo con el Ing. Santiago Delgado</li>
+            </ul>
+          </div>
+          <a href="#contacto" class="btn btn-secondary">Solicitar cotización</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="padding-top:10px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PREGUNTAS FRECUENTES</span>
+        <h2>Resolvemos tus <span class="gradient-text">dudas</span></h2>
+      </div>
+      <div class="core-nodes-grid">
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Cumple con la normativa v4.4 de Hacienda?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Sí. Generamos la clave numérica de 50 dígitos, el consecutivo, validamos CABYS, calculamos el IVA de la Ley 9635 y firmamos el XML bajo el esquema v4.4.</p>
+        </div>
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Necesito una cuenta para cada app?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">No. Con tu cuenta AuraFlow ID entras a todas las aplicaciones con un código de 6 dígitos que te llega al correo.</p>
+        </div>
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Puedo probar antes de contratar?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Claro. En <a href="https://demo.auraflowtech.lat" style="color:#22d3ee;">demo.auraflowtech.lat</a> puedes probar el facturador, el bot y las automatizaciones sin costo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto">
+    <div class="container">
+      <div class="glass-panel cta-final">
+        <span class="section-tag">CONTACTO DIRECTO · ZONA SUR, COSTA RICA</span>
+        <h2 style="margin:10px 0;">¿Listo para <span class="gradient-text">automatizar tu negocio</span>?</h2>
+        <p style="color:var(--text-secondary); max-width:620px; margin:0 auto 20px;">Escríbenos y te preparamos una propuesta personalizada sin compromiso.</p>
+        <div class="hero-cta-group">
+          <a href="https://bot.auraflowtech.lat" class="btn btn-primary">💬 Escribir por WhatsApp</a>
+          <a href="mailto:support@auraflowtech.lat?subject=Solicitud%20de%20propuesta%20AuraFlow%20Tech" class="btn btn-secondary">✉️ support@auraflowtech.lat</a>
+          <a href="https://crm.auraflowtech.lat/#nuevo" class="btn btn-secondary">📝 Llenar formulario</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+      <div><strong>⚡ AuraFlow Tech</strong> — Fundado por el <strong>Ing. Santiago Delgado Leiva</strong> · Zona Sur, Costa Rica.</div>
+      <div style="font-family:var(--font-mono); font-size:0.78rem;">
+        <a href="https://status.auraflowtech.lat" style="color:#94a3b8; text-decoration:none;">Estado</a> ·
+        <a href="https://api.auraflowtech.lat" style="color:#94a3b8; text-decoration:none;">API</a> ·
+        <a href="mailto:support@auraflowtech.lat" style="color:#22d3ee; text-decoration:none;">support@auraflowtech.lat</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

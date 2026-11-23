@@ -1,0 +1,21 @@
+{
+  "name": "wabot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@distube/ytdl-core": "^5.2.1",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "node-webpmux": "^3.2.1",
+    "pino": "^10.4.0",
+    "qrcode": "^1.5.4",
+    "ruhend-scraper": "^10.0.3",
+    "sharp": "^0.35.5"
+  }
+}

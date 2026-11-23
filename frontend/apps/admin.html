@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Consola Admin · AuraFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/common.css"><script src="/apps/common.js"></script>
+</head><body><main>
+<h1>🛡️ Consola Central</h1><p class="mut">Resumen de todo el ecosistema.</p>
+<div class="grid g4" id="kpis" style="margin-top:16px"></div>
+<div class="grid g2" style="margin-top:16px">
+  <div class="card"><h2>Embudo comercial</h2><div id="leads"></div></div>
+  <div class="card"><h2>Citas por estado</h2><div id="citas"></div></div>
+  <div class="card"><h2>Inventario bajo (≤ 10)</h2><div id="stock"></div></div>
+  <div class="card"><h2>Estado de los subdominios</h2><div id="subs"></div></div>
+  <div class="card"><h2>Últimos inicios de sesión</h2><div id="ses"></div></div>
+  <div class="card"><h2>Accesos rápidos</h2><div class="row" style="flex-wrap:wrap">
+    <a class="btn s" href="https://crm.auraflowtech.lat">CRM</a><a class="btn s" href="https://fac.auraflowtech.lat">Facturación</a>
+    <a class="btn s" href="https://pos.auraflowtech.lat">POS</a><a class="btn s" href="https://clinica.auraflowtech.lat">Clínica</a>
+    <a class="btn s" href="https://club.auraflowtech.lat">Club</a><a class="btn s" href="https://panel.auraflowtech.lat">Panel VPS</a></div></div>
+</div>
+</main><script>
+const {esc,api,money}=AF;
+const tbl=(rows,cols)=>rows.length?`<table><tr>${cols.map(c=>`<th>${c[0]}</th>`).join("")}</tr>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</table>`:'<div class="empty">Sin datos</div>';
+(async()=>{
+  try{ await AF.shell("admin",{requireLogin:true}); }catch(e){return;}
+  try{
+    const [d,s]=await Promise.all([api("/api/admin/overview"),api("/api/subdomains")]);
+    const leadsN=d.leads.reduce((a,b)=>a+b.n,0), citasN=d.citas.reduce((a,b)=>a+b.n,0);
+    AF.$("#kpis").innerHTML=[["Comprobantes emitidos",d.facturas.n],["Total facturado",money(d.facturas.total)],["Leads en CRM",leadsN],["Miembros del club",d.club.n]]
+      .map(k=>`<div class="card kpi"><div class="v">${esc(k[1])}</div><div class="l">${k[0]}</div></div>`).join("");
+    AF.$("#leads").innerHTML=tbl(d.leads,[["Etapa",r=>esc(r.status)],["Leads",r=>r.n]]);
+    AF.$("#citas").innerHTML=tbl(d.citas,[["Estado",r=>esc(r.estado)],["Citas",r=>r.n]]);
+    AF.$("#stock").innerHTML=tbl(d.productos_bajo_stock,[["Producto",r=>esc(r.nombre)],["Stock",r=>`<span class="b ${r.stock<=3?'bad':'warn'}">${r.stock}</span>`]]);
+    AF.$("#ses").innerHTML=tbl(d.sesiones,[["Correo",r=>esc(r.email)],["Fecha",r=>esc(r.created_at)]]);
+    AF.$("#subs").innerHTML=`<p class="mut">${s.online} / ${s.total} en línea</p>`+tbl(s.subdomains.filter(x=>x.status!=="ONLINE"),[["Subdominio",r=>esc(r.subdomain)],["Estado",r=>`<span class="b ${r.status}">${r.status}</span>`]]).replace("Sin datos","Todos en línea ✓");
+  }catch(err){AF.toast(err.message,true)}
+})();
+</script></body></html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Factura CR v4.4 · AuraFlow</title>
+  <meta name="description" content="Emisión de comprobantes electrónicos v4.4 para Hacienda Costa Rica.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/apps/common.css">
+  <script src="/apps/common.js"></script>
+  <style>
+    .fac-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px;padding:20px 22px;border-radius:18px;
+      background:radial-gradient(circle at top right,rgba(34,211,238,.14),transparent 55%),radial-gradient(circle at bottom left,rgba(124,58,237,.16),transparent 55%),var(--card);
+      border:1px solid rgba(34,211,238,.22)}
+    .fac-hero h1{display:flex;align-items:center;gap:10px;font-size:1.65rem}
+    .fac-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .kpi{position:relative;overflow:hidden}
+    .kpi .v{font-size:1.55rem;margin-top:4px}
+    .kpi .sub{font-size:.75rem;color:var(--mut);margin-top:2px}
+    .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+    .seg button{background:#020617;border:1px solid rgba(148,163,184,.25);color:var(--mut);border-radius:10px;padding:9px 8px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:.15s}
+    .seg button.active{background:rgba(34,211,238,.12);border-color:var(--cyan);color:var(--txt);box-shadow:0 0 0 1px rgba(34,211,238,.25) inset}
+    .presets{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+    .chip{background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.22);color:#cbd5e1;border-radius:99px;padding:4px 10px;font-size:.74rem;cursor:pointer;transition:.15s}
+    .chip:hover{border-color:var(--cyan);color:var(--cyan)}
+    .totals-box{margin-top:14px;background:#020617;border:1px solid rgba(34,211,238,.2);border-radius:12px;padding:14px}
+    .totals-box .trow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:.9rem}
+    .totals-box .trow.big{border-top:1px solid rgba(148,163,184,.16);margin-top:6px;padding-top:10px;font-size:1.15rem;font-weight:800}
+    .tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .tab-btns{display:flex;gap:6px}
+    .tab-btn{background:transparent;border:1px solid rgba(148,163,184,.25);color:var(--mut);border-radius:8px;padding:6px 12px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+    .tab-btn.active{background:rgba(34,211,238,.14);border-color:var(--cyan);color:var(--txt)}
+    .inv-paper{background:#0b1325;border:1px solid rgba(148,163,184,.24);border-radius:14px;padding:18px}
+    .inv-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px dashed rgba(148,163,184,.25);padding-bottom:12px;margin-bottom:12px}
+    .inv-title{font-size:1.05rem;font-weight:800;color:var(--cyan)}
+    .mono{font-family:'JetBrains Mono',monospace}
+    .clave-box{background:#020617;border:1px solid rgba(148,163,184,.2);border-radius:10px;padding:10px 12px;margin:10px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .clave-box code{font-family:'JetBrains Mono',monospace;font-size:.74rem;word-break:break-all;color:#e2e8f0}
+    .inv-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.82rem;margin:12px 0}
+    @media(max-width:600px){.inv-meta,.seg{grid-template-columns:1fr}}
+    .inv-meta .box{background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.14);border-radius:10px;padding:10px}
+    .inv-meta .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin-bottom:4px}
+    .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .toolbar input{max-width:280px}
+    .toolbar select{max-width:190px}
+    .xml-wrap{display:none}
+    .xml-wrap.active,.view-wrap.active{display:block}
+    .view-wrap{display:none}
+    .btn-copy{white-space:nowrap}
+    @media print{
+      body{background:#fff;color:#0f172a}
+      .af-top,footer.af,.fac-hero,.g2>form,.card:has(#hist),.tabs,.no-print{display:none!important}
+      .g2{grid-template-columns:1fr!important}
+      main{padding:0;max-width:100%}
+      .card,.inv-paper,.inv-meta .box,.clave-box{background:#fff!important;color:#0f172a!important;border-color:#cbd5e1!important}
+      .inv-title{color:#0284c7!important}
+      .clave-box code,.mut{color:#334155!important}
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="fac-hero">
+    <div>
+      <h1>🧾 Facturación Electrónica CR <span class="b ok">Hacienda v4.4</span></h1>
+      <p class="mut" style="margin:4px 0 0">Emisión de Facturas, Tiquetes y Notas de Crédito con clave de 50 dígitos, catálogo CABYS e IVA Ley 9635.</p>
+      <div class="fac-pills">
+        <span class="b">XML v4.4 firmado</span>
+        <span class="b">Clave 50 dígitos</span>
+        <span class="b">CRC / USD</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn s sm" id="btn-csv">⬇ Exportar CSV</button>
+    </div>
+  </section>
+
+  <section class="grid g4" style="margin-bottom:16px">
+    <div class="card kpi"><div class="l">Comprobantes emitidos</div><div class="v" id="k-count">0</div><div class="sub">Historial total</div></div>
+    <div class="card kpi"><div class="l">Facturado en Colones</div><div class="v" id="k-crc" style="color:var(--cyan)">₡0</div><div class="sub">Documentos CRC</div></div>
+    <div class="card kpi"><div class="l">Facturado en Dólares</div><div class="v" id="k-usd" style="color:var(--ok)">$0</div><div class="sub">Documentos USD</div></div>
+    <div class="card kpi"><div class="l">Último consecutivo</div><div class="v mono" id="k-last" style="font-size:1.05rem;padding-top:6px">—</div><div class="sub" id="k-last-doc">Sin emisiones</div></div>
+  </section>
+
+  <div class="grid g2">
+    <form class="card" id="f">
+      <h2>Nuevo comprobante</h2>
+
+      <label>Tipo de comprobante</label>
+      <input type="hidden" id="tipo" value="Factura Electrónica">
+      <div class="seg" id="tipo-seg">
+        <button type="button" class="active" data-val="Factura Electrónica">🧾 Factura</button>
+        <button type="button" data-val="Tiquete Electrónico">🎟 Tiquete</button>
+        <button type="button" data-val="Nota de Crédito Electrónica">↩ Nota Crédito</button>
+      </div>
+
+      <label>Autocompletar receptor rápido</label>
+      <div class="presets" id="presets">
+        <button type="button" class="chip" data-ced="3101784512" data-nom="Servicios Integrales del Sur S.A." data-cor="contabilidad@serviciosdelsur.cr">Servicios del Sur S.A.</button>
+        <button type="button" class="chip" data-ced="114560892" data-nom="María Fernanda Rojas Mora" data-cor="mrojas@correo.cr">Cliente Físico</button>
+        <button type="button" class="chip" data-ced="999999999" data-nom="Cliente Contado" data-cor="">Cliente Contado</button>
+      </div>
+
+      <div class="row">
+        <div><label>Cédula receptor *</label><input id="ced" required placeholder="3101123456"></div>
+        <div><label>Moneda</label><select id="moneda"><option value="CRC">CRC (₡ Colones)</option><option value="USD">USD ($ Dólares)</option></select></div>
+      </div>
+
+      <div class="row">
+        <div><label>Nombre o razón social *</label><input id="nom" required placeholder="Empresa S.A."></div>
+        <div><label>Correo receptor</label><input id="cor" type="email" placeholder="facturas@empresa.cr"></div>
+      </div>
+
+      <label>Actividad económica / Código CABYS</label>
+      <select id="cabys">
+        <option value="8314300000000|13">8314300000000 — Software y servicios TI (13%)</option>
+        <option value="8313100000000|13">8313100000000 — Consultoría en tecnología (13%)</option>
+        <option value="6211000000000|13">6211000000000 — Comercio al por menor (13%)</option>
+        <option value="6331000000000|13">6331000000000 — Restaurantes y sodas (13%)</option>
+        <option value="8512010000000|4">8512010000000 — Servicios médicos privados (4%)</option>
+        <option value="9290000000000|2">9290000000000 — Educación y capacitación (2%)</option>
+        <option value="2111100000000|1">2111100000000 — Canasta básica alimentaria (1%)</option>
+        <option value="7211100000000|0">7211100000000 — Alquiler habitacional exento (0%)</option>
+      </select>
+
+      <label>Detalle del producto o servicio *</label>
+      <input id="det" required placeholder="Ej. Desarrollo de módulo de facturación mensual">
+
+      <div class="row">
+        <div><label>Cantidad</label><input id="cant" type="number" min="1" step="1" value="1"></div>
+        <div><label>Precio unitario</label><input id="precio" type="number" min="1" step="any" value="25000"></div>
+        <div><label>Tarifa IVA</label>
+          <select id="iva">
+            <option value="13">13% General</option>
+            <option value="4">4% Salud</option>
+            <option value="2">2% Educación</option>
+            <option value="1">1% Canasta</option>
+            <option value="0">0% Exento</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="totals-box">
+        <div class="trow"><span class="mut">Subtotal neto</span><b id="sub">—</b></div>
+        <div class="trow"><span class="mut">IVA (<span id="iva-lbl">13</span>%)</span><b id="mi">—</b></div>
+        <div class="trow big"><span>Total comprobante</span><b id="tot" style="color:var(--cyan)">—</b></div>
+      </div>
+
+      <button class="btn w" id="emit">⚡ Emitir comprobante v4.4</button>
+    </form>
+
+    <div class="card">
+      <div class="tabs">
+        <div class="tab-btns">
+          <button type="button" class="tab-btn active" id="tab-view">🧾 Vista Comprobante</button>
+          <button type="button" class="tab-btn" id="tab-xml">📄 XML v4.4</button>
+        </div>
+        <div id="out-actions" style="display:none;gap:6px" class="no-print">
+          <button type="button" class="btn s sm" id="btn-dl">⬇ XML</button>
+          <button type="button" class="btn s sm" onclick="window.print()">🖨 Imprimir / PDF</button>
+        </div>
+      </div>
+
+      <div id="out-empty" class="empty" style="padding:48px 16px">
+        <div style="font-size:2rem;margin-bottom:8px">🧾</div>
+        Emite un comprobante nuevo o selecciona uno del historial para ver su vista previa, clave numérica de 50 dígitos y XML v4.4.
+      </div>
+
+      <div id="view-wrap" class="view-wrap"></div>
+      <div id="xml-wrap" class="xml-wrap"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="toolbar">
+      <h2 style="margin:0;margin-right:auto">Historial de comprobantes</h2>
+      <select id="f-tipo">
+        <option value="">Todos los tipos</option>
+        <option value="Factura">Factura Electrónica</option>
+        <option value="Tiquete">Tiquete Electrónico</option>
+        <option value="Nota">Nota de Crédito</option>
+      </select>
+      <input id="q" placeholder="Buscar por cliente, cédula o clave…">
+    </div>
+    <div id="hist"></div>
+  </div>
+</main>
+
+<script>
+const { esc, api, money, $ } = AF;
+let facturas = [];
+let currentFac = null;
+
+function calc() {
+  const c = +$("#cant").value || 0;
+  const p = +$("#precio").value || 0;
+  const i = +$("#iva").value;
+  const s = c * p;
+  const m = s * i / 100;
+  const cur = $("#moneda").value;
+  $("#iva-lbl").textContent = i;
+  $("#sub").textContent = money(s, cur);
+  $("#mi").textContent = money(m, cur);
+  $("#tot").textContent = money(s + m, cur);
+}
+
+$("#tipo-seg").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-val]");
+  if (!btn) return;
+  $("#tipo-seg").querySelectorAll("button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  $("#tipo").value = btn.dataset.val;
+});
+
+$("#presets").addEventListener("click", e => {
+  const chip = e.target.closest("button[data-ced]");
+  if (!chip) return;
+  $("#ced").value = chip.dataset.ced;
+  $("#nom").value = chip.dataset.nom;
+  $("#cor").value = chip.dataset.cor;
+});
+
+$("#cabys").onchange = () => {
+  $("#iva").value = $("#cabys").value.split("|")[1];
+  calc();
+};
+["cant", "precio", "iva", "moneda"].forEach(id => $("#" + id).addEventListener("input", calc));
+
+function setTab(mode) {
+  const isView = mode === "view";
+  $("#tab-view").classList.toggle("active", isView);
+  $("#tab-xml").classList.toggle("active", !isView);
+  $("#view-wrap").classList.toggle("active", isView);
+  $("#xml-wrap").classList.toggle("active", !isView);
+}
+$("#tab-view").onclick = () => setTab("view");
+$("#tab-xml").onclick = () => setTab("xml");
+
+function copyText(txt, label) {
+  navigator.clipboard.writeText(txt).then(() => AF.toast(label + " copiado")).catch(() => AF.toast("No se pudo copiar", true));
+}
+
+function showFac(f) {
+  if (!f) return;
+  currentFac = f;
+  $("#out-empty").style.display = "none";
+  $("#out-actions").style.display = "flex";
+  if (!$("#view-wrap").classList.contains("active") && !$("#xml-wrap").classList.contains("active")) {
+    setTab("view");
+  }
+
+  $("#view-wrap").innerHTML = `
+    <div class="inv-paper">
+      <div class="inv-head">
+        <div>
+          <div class="inv-title">${esc(f.tipo_doc)}</div>
+          <div class="mut" style="font-size:.8rem">Consecutivo: <span class="mono">${esc(f.consecutivo_20)}</span></div>
+        </div>
+        <div style="text-align:right">
+          <span class="b ok">${esc(f.estado_hacienda)}</span>
+          <div class="mut" style="font-size:.75rem;margin-top:4px">${esc(f.created_at)}</div>
+        </div>
+      </div>
+
+      <div class="lbl mut" style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em">Clave Numérica (50 dígitos)</div>
+      <div class="clave-box">
+        <code>${esc(f.clave_50)}</code>
+        <button type="button" class="btn s sm btn-copy no-print" onclick="copyText('${esc(f.clave_50)}','Clave')">Copiar</button>
+      </div>
+
+      <div class="inv-meta">
+        <div class="box">
+          <div class="lbl">Emisor</div>
+          <div><b>AuraFlow Tech Costa Rica</b></div>
+          <div class="mut">Sistema Hacienda CR v4.4</div>
+        </div>
+        <div class="box">
+          <div class="lbl">Receptor</div>
+          <div><b>${esc(f.cliente_nombre)}</b></div>
+          <div class="mut">Cédula: <span class="mono">${esc(f.cliente_cedula)}</span></div>
+          ${f.cliente_correo ? `<div class="mut">${esc(f.cliente_correo)}</div>` : ""}
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>CABYS / Detalle</th><th style="text-align:right">Cant.</th><th style="text-align:right">P. Unit</th><th style="text-align:right">IVA</th><th style="text-align:right">Total</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono mut" style="font-size:.75rem">${esc(f.cabys_codigo)}</span><br>${esc(f.descripcion)}</td>
+            <td style="text-align:right">${esc(f.cantidad)}</td>
+            <td style="text-align:right">${money(f.precio_unitario, f.moneda)}</td>
+            <td style="text-align:right">${esc(f.tarifa_iva)}%</td>
+            <td style="text-align:right"><b>${money(f.total, f.moneda)}</b></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="totals-box" style="margin-top:12px">
+        <div class="trow"><span class="mut">Subtotal</span><span>${money(f.subtotal, f.moneda)}</span></div>
+        <div class="trow"><span class="mut">IVA (${esc(f.tarifa_iva)}%)</span><span>${money(f.monto_iva, f.moneda)}</span></div>
+        <div class="trow big"><span>Total (${esc(f.moneda)})</span><span style="color:var(--cyan)">${money(f.total, f.moneda)}</span></div>
+      </div>
+    </div>`;
+
+  $("#xml-wrap").innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="mut" style="font-size:.8rem">Payload XML v4.4 listo para Hacienda</span>
+      <button type="button" class="btn s sm" id="btn-copy-xml">Copiar XML</button>
+    </div>
+    <pre>${esc(f.xml_payload)}</pre>`;
+  $("#btn-copy-xml").onclick = () => copyText(f.xml_payload, "XML");
+}
+
+$("#btn-dl").onclick = () => {
+  if (!currentFac) return;
+  const b = new Blob([currentFac.xml_payload], { type: "application/xml" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b);
+  a.download = currentFac.clave_50 + ".xml";
+  a.click();
+};
+
+$("#btn-csv").onclick = () => {
+  if (!facturas.length) return AF.toast("No hay comprobantes para exportar", true);
+  const head = ["Fecha", "Tipo", "Consecutivo", "Clave", "Cedula", "Cliente", "Moneda", "Subtotal", "IVA", "Total", "Estado"];
+  const lines = [head.join(",")].concat(facturas.map(f =>
+    [f.created_at, f.tipo_doc, f.consecutivo_20, f.clave_50, f.cliente_cedula, `"${String(f.cliente_nombre || "").replace(/"/g, '""')}"`, f.moneda, f.subtotal, f.monto_iva, f.total, `"${f.estado_hacienda}"`].join(",")
+  ));
+  const b = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b);
+  a.download = "facturas_cr_v44.csv";
+  a.click();
+};
+
+function updateKpis() {
+  $("#k-count").textContent = facturas.length;
+  const sumCrc = facturas.filter(f => f.moneda !== "USD").reduce((a, f) => a + Number(f.total || 0), 0);
+  const sumUsd = facturas.filter(f => f.moneda === "USD").reduce((a, f) => a + Number(f.total || 0), 0);
+  $("#k-crc").textContent = money(sumCrc, "CRC");
+  $("#k-usd").textContent = money(sumUsd, "USD");
+  if (facturas.length) {
+    $("#k-last").textContent = facturas[0].consecutivo_20;
+    $("#k-last-doc").textContent = `${facturas[0].tipo_doc} · ${facturas[0].cliente_nombre}`;
+  }
+}
+
+function draw() {
+  const q = $("#q").value.trim().toLowerCase();
+  const ft = $("#f-tipo").value.toLowerCase();
+  const rows = facturas.filter(f => {
+    const matchType = !ft || String(f.tipo_doc || "").toLowerCase().includes(ft);
+    const matchQ = !q || `${f.cliente_nombre} ${f.cliente_cedula} ${f.clave_50} ${f.consecutivo_20}`.toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+  $("#hist").innerHTML = rows.length ? `
+    <table>
+      <tr><th>Fecha</th><th>Consecutivo</th><th>Tipo</th><th>Receptor</th><th>Total</th><th>Estado</th><th></th></tr>
+      ${rows.map(f => `
+        <tr>
+          <td class="mut">${esc(f.created_at)}</td>
+          <td class="mono" style="font-size:.76rem">${esc(f.consecutivo_20)}</td>
+          <td><span class="b">${esc(f.tipo_doc)}</span></td>
+          <td><b>${esc(f.cliente_nombre)}</b><br><span class="mut mono" style="font-size:.74rem">${esc(f.cliente_cedula)}</span></td>
+          <td><b>${money(f.total, f.moneda)}</b></td>
+          <td><span class="b ok">ACEPTADO</span></td>
+          <td><button class="btn s sm" onclick="showFac(facturas.find(x=>x.id===${f.id}))">Ver</button></td>
+        </tr>`).join("")}
+    </table>` : '<div class="empty">Sin comprobantes que coincidan con el filtro</div>';
+}
+
+$("#q").oninput = draw;
+$("#f-tipo").onchange = draw;
+
+async function load() {
+  try {
+    facturas = (await api("/api/facturas")).facturas || [];
+    updateKpis();
+    draw();
+    if (!currentFac && facturas.length) showFac(facturas[0]);
+  } catch (err) {
+    AF.toast(err.message || "Error cargando historial", true);
+  }
+}
+
+$("#f").onsubmit = async e => {
+  e.preventDefault();
+  $("#emit").disabled = true;
+  try {
+    const r = await api("/api/facturas", {
+      body: {
+        tipo_doc: $("#tipo").value,
+        cliente_cedula: $("#ced").value,
+        cliente_nombre: $("#nom").value,
+        cliente_correo: $("#cor").value,
+        cabys_codigo: $("#cabys").value.split("|")[0],
+        descripcion: $("#det").value,
+        cantidad: +$("#cant").value,
+        precio_unitario: +$("#precio").value,
+        tarifa_iva: +$("#iva").value,
+        moneda: $("#moneda").value
+      }
+    });
+    showFac(r.factura);
+    setTab("view");
+    AF.toast("Comprobante emitido y aceptado");
+    await load();
+  } catch (err) {
+    AF.toast(err.message, true);
+  } finally {
+    $("#emit").disabled = false;
+  }
+};
+
+AF.shell("fac");
+calc();
+load();
+</script>
+</body>
+</html>

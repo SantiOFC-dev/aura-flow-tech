@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4</title>
+  <meta name="description" content="Plataformas SaaS, Bots de WhatsApp 24/7, AuraFlow Builder y Facturación Electrónica v4.4 en Costa Rica." />
+  <meta name="author" content="Ing. Santiago Delgado Leiva — AuraFlow Tech Costa Rica" />
+  <meta name="google-site-verification" content="dY808zPfuPhf1VpDRTwBTINsTzvLStecsJPKU5_yZmI" />
+  <link rel="canonical" href="https://auraflowtech.lat/" />
+
+  <!-- Open Graph / WhatsApp / Facebook Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AuraFlow Tech Costa Rica" />
+  <meta property="og:url" content="https://auraflowtech.lat/" />
+  <meta property="og:title" content="AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4" />
+  <meta property="og:description" content="Plataformas SaaS, Bots de WhatsApp 24/7, AuraFlow Builder y Facturación Electrónica v4.4 en Costa Rica." />
+  <meta property="og:image" content="https://auraflowtech.lat/og-image.png" />
+  <meta property="og:image:secure_url" content="https://auraflowtech.lat/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="AuraFlow Tech — Software, IA & Factura CR v4.4 · Zona Sur, Costa Rica" />
+  <meta property="og:locale" content="es_CR" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AuraFlow Tech | Software, IA para WhatsApp y Facturación Electrónica CR v4.4" />
+  <meta name="twitter:description" content="Plataformas SaaS, Bots de WhatsApp 24/7, AuraFlow Builder y Facturación Electrónica v4.4 en Costa Rica." />
+  <meta name="twitter:image" content="https://auraflowtech.lat/og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="bg-grid-pattern"></div>
+
+  <!-- Top Cloud VPS Status Bar -->
+  <div class="top-vps-bar">
+    <div class="container top-vps-inner">
+      <div class="vps-left">
+        <span class="vps-tag"><span class="pulse-dot"></span> CLOUD VPS ONLINE · 24h Uptime</span>
+        <span class="vps-sep">•</span>
+        <span class="vps-muted">Zona Sur, Costa Rica</span>
+        <span class="vps-sep">•</span>
+        <span class="vps-muted">16 Subdominios Activos (<strong style="color:#22d3ee;">TLS 1.3</strong>)</span>
+      </div>
+      <div class="vps-right">
+        <span class="vps-muted">Hacienda CR <strong style="color:#10b981;">v4.4 Ready</strong></span>
+        <span class="vps-sep">•</span>
+        <span class="vps-muted">Fundador: <strong>Ing. Santiago Delgado Leiva</strong></span>
+        <span class="vps-sep">•</span>
+        <a href="mailto:support@auraflowtech.lat" style="color:#38bdf8; text-decoration:none;">support@auraflowtech.lat</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="https://auraflowtech.lat/" onclick="if(window.location.hostname==='auraflowtech.lat'||window.location.hostname==='www.auraflowtech.lat'){event.preventDefault();showPage('home');}" class="brand-logo">
+        <div class="brand-orb">⚡</div>
+        <span>AuraFlow <span class="gradient-text">Tech</span></span>
+        <span class="brand-badge">CR v4.4</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="?page=home" data-nav="home" onclick="event.preventDefault();showPage('home')">🏠 Inicio</a></li>
+        <li><a href="https://bot.auraflowtech.lat" data-nav="bot" onclick="event.preventDefault();showPage('bot')" style="color:#22d3ee; font-weight:700;">🤖 AuraFlow Bot</a></li>
+        <li><a href="https://fac.auraflowtech.lat" data-nav="fac" onclick="event.preventDefault();showPage('fac')">🧾 Factura CR v4.4</a></li>
+        <li><a href="https://builder.auraflowtech.lat" data-nav="builder" onclick="event.preventDefault();showPage('builder')">⚙️ Builder IA</a></li>
+        <li><a href="https://crm.auraflowtech.lat" data-nav="crm" onclick="event.preventDefault();showPage('crm')">📌 Kanban CRM</a></li>
+        <li><a href="https://club.auraflowtech.lat" data-nav="roi" onclick="event.preventDefault();showPage('roi')">📊 ROI &amp; Club</a></li>
+        <li><a href="https://clinica.auraflowtech.lat" data-nav="sectores" onclick="event.preventDefault();showPage('sectores')">🏥 Sectores CR</a></li>
+        <li><a href="https://status.auraflowtech.lat" data-nav="cloud" onclick="event.preventDefault();showPage('cloud')">🌐 16 Nodos</a></li>
+        <li><a href="?page=planes" data-nav="planes" onclick="event.preventDefault();showPage('planes')">💳 Planes</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openSsoModal()">🔐 AuraFlow ID (SSO)</button>
+        <a href="https://media.auraflowtech.lat" target="_blank" class="btn btn-primary btn-sm">📸 Media &amp; Videos</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section + 3 Core Nodes (Matches Open Graph Preview Card) -->
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow-pill">
+        <span class="pulse-dot" style="background:#22d3ee; box-shadow:0 0 10px #22d3ee;"></span>
+        <span>AURAFLOW CLOUD ECOSYSTEM</span>
+      </div>
+
+      <h1>
+        AuraFlow Tech — Software, IA &amp; <span class="gradient-text">Factura CR v4.4</span>
+      </h1>
+      <div class="hero-subtitle-mono">
+        Automatización WhatsApp 24/7, AuraFlow Builder y ERP Hacienda Costa Rica
+      </div>
+      <p>
+        Diseño e implementación de plataformas SaaS a medida, chatbots con Inteligencia Artificial 24/7 y sistemas ERP de Facturación Electrónica homologados con el Ministerio de Hacienda (v4.4) para PYMEs, clínicas y comercios en la Zona Sur y todo Costa Rica. Dirigido por el <strong>Ing. Santiago Delgado Leiva</strong>.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="https://bot.auraflowtech.lat" onclick="event.preventDefault();showPage('bot')" class="btn btn-primary">
+          🤖 Abrir AuraFlow Bot (Menú &amp; Vincular WhatsApp)
+        </a>
+        <a href="https://fac.auraflowtech.lat" onclick="event.preventDefault();showPage('fac')" class="btn btn-secondary">
+          🧾 Abrir Facturador CR v4.4 (Página Independiente)
+        </a>
+        <a href="https://crm.auraflowtech.lat" onclick="event.preventDefault();showPage('crm')" class="btn btn-secondary">
+          📌 Abrir Kanban CRM en Vivo
+        </a>
+      </div>
+
+      <!-- The 3 Core Nodes from the Open Graph Card -->
+      <div class="core-nodes-grid">
+        <!-- NODO 01 -->
+        <div class="core-node-card">
+          <div class="core-node-tag">NODO 01 • IA</div>
+          <div class="core-node-title">AuraFlow Builder</div>
+          <ul class="core-node-list">
+            <li>• Flujos Visuales WhatsApp</li>
+            <li>• Agentes Autónomos 24/7</li>
+            <li>• Catálogo, Citas &amp; SINPE Móvil</li>
+          </ul>
+          <div class="core-node-status">
+            <span style="color:#38bdf8;">✓ MULTI-DEVICE ONLINE</span>
+            <a href="#builder" style="color:#94a3b8; font-size:0.78rem; text-decoration:none;">bot.auraflowtech.lat →</a>
+          </div>
+        </div>
+
+        <!-- NODO 02 (Highlighted Cyan Border) -->
+        <div class="core-node-card highlighted-v44">
+          <div class="core-node-tag">NODO 02 • HACIENDA</div>
+          <div class="core-node-title">Factura CR v4.4</div>
+          <ul class="core-node-list">
+            <li>• Clave 50 Dígitos + XML</li>
+            <li>• CABYS &amp; IVA Ley 9635</li>
+            <li>• Emisión POS y vía WhatsApp</li>
+          </ul>
+          <div class="core-node-status">
+            <span>✓ SINCRONIZADO 24/7</span>
+            <a href="#facturador-v44" style="color:#22d3ee; font-size:0.78rem; text-decoration:none;">fac.auraflowtech.lat →</a>
+          </div>
+        </div>
+
+        <!-- NODO 03 -->
+        <div class="core-node-card">
+          <div class="core-node-tag">NODO 03 • SSO</div>
+          <div class="core-node-title">AuraFlow ID Cloud</div>
+          <ul class="core-node-list">
+            <li>• 1 Cuenta Multi-Plataforma</li>
+            <li>• support@auraflowtech.lat</li>
+            <li>• Código OTP 6 dígitos + MongoDB</li>
+          </ul>
+          <div class="core-node-status">
+            <span style="color:#a78bfa;">✓ TLS 1.3 · 16 SUBDOMINIOS</span>
+            <a href="javascript:void(0)" onclick="openSsoModal()" style="color:#94a3b8; font-size:0.78rem; text-decoration:none;">Iniciar SSO →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive CLI Terminal -->
+      <div class="cli-terminal-box">
+        <div class="cli-header">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="window-dots">
+              <span class="dot-red"></span>
+              <span class="dot-amber"></span>
+              <span class="dot-green"></span>
+            </div>
+            <span style="font-family:var(--font-mono); font-size:0.78rem; color:#38bdf8;">
+              root@auraflowtech.lat:~# auraflow-cli v4.4 (Zona Sur, Costa Rica)
+            </span>
+          </div>
+          <div class="cli-cmd-buttons">
+            <button class="cli-btn active" onclick="runTerminalCmd('--status', this)">$ auraflow --status</button>
+            <button class="cli-btn" onclick="runTerminalCmd('--factura-v4.4', this)">$ auraflow --factura-v4.4</button>
+            <button class="cli-btn" onclick="runTerminalCmd('--wabot-ia', this)">$ auraflow --wabot-ia</button>
+            <button class="cli-btn" onclick="runTerminalCmd('--sso', this)">$ auraflow --sso</button>
+            <button class="cli-btn" onclick="runTerminalCmd('--cotizar', this)">$ auraflow --cotizar</button>
+          </div>
+        </div>
+        <div class="cli-body" id="cli-output">
+          <div class="cli-line"><span class="cli-prompt">$ auraflow --status</span></div>
+          <div class="cli-line">Cargando telemetría del ecosistema auraflowtech.lat...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Telemetry Strip -->
+  <div class="metrics-strip">
+    <div class="container">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Comprobantes Emitidos (v4.4)</div>
+          <div class="metric-value" id="metric-runs">8,550</div>
+          <div class="metric-delta">● Clave 50 dígitos · Hacienda CR</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Subdominios Cloud Activos</div>
+          <div class="metric-value" id="metric-subdomains">16 / 16</div>
+          <div class="metric-delta">● SSL TLS 1.3 · SSO AuraFlow ID</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Ahorro Operativo PYMEs CR</div>
+          <div class="metric-value" id="metric-savings">₡22.4M</div>
+          <div class="metric-delta" id="metric-hours">1,570 hrs ahorradas</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Uptime &amp; Sincronización</div>
+          <div class="metric-value" id="metric-success">99.98%</div>
+          <div class="metric-delta">● Zona Sur, Costa Rica · 24/7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NODO 02: Facturador Electrónico Hacienda CR v4.4 Sandbox -->
+  <section id="facturador-v44">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">NODO 02 • HACIENDA COSTA RICA (fac.auraflowtech.lat)</span>
+        <h2>Simulador en Vivo: Factura Electrónica CR <span class="gradient-text">v4.4</span></h2>
+        <p>Prueba la generación instantánea de comprobantes electrónicos con Clave Numérica oficial de 50 dígitos, Consecutivo de 20 dígitos, código CABYS, cálculo de IVA Ley 9635 y XML v4.4 firmado.</p>
+      </div>
+
+      <div class="factura-sandbox-grid">
+        <!-- Left: Invoice Emitter Form -->
+        <div class="glass-panel">
+          <h3 style="margin-bottom:6px;">🧾 Emitir Comprobante Electrónico v4.4</h3>
+          <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:18px;">
+            Normativa MH-DGT-RES-0027-2024 · Emisor: AuraFlow Tech Costa Rica S.A.
+          </p>
+
+          <form onsubmit="emitirFacturaV44(event)">
+            <div class="form-row">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Tipo de Comprobante</label>
+                <select id="fac-tipo" class="form-control">
+                  <option value="Factura Electrónica">01 · Factura Electrónica</option>
+                  <option value="Tiquete Electrónico">04 · Tiquete Electrónico (POS)</option>
+                  <option value="Nota de Crédito Electrónica">03 · Nota de Crédito</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Cédula Física / Jurídica / DIMEX</label>
+                <input type="text" id="fac-cedula" class="form-control" value="3101754321" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Nombre o Razón Social Receptor</label>
+                <input type="text" id="fac-nombre" class="form-control" value="Comercial Brunca Zona Sur S.A." required />
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Correo para envío PDF + XML</label>
+                <input type="email" id="fac-correo" class="form-control" value="facturas@comercialbrunca.cr" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Catálogo Oficial CABYS (Bienes y Servicios Hacienda CR)</label>
+              <select id="fac-cabys" class="form-control" onchange="syncCabysPreset()">
+                <option value="8314300000000|Desarrollo de Software SaaS, Bot WhatsApp IA & Facturación v4.4|13|49500">8314300000000 — Software SaaS &amp; Automatización IA (IVA 13%)</option>
+                <option value="8512010000000|Consulta Médica / Odontológica Especializada (Clínicas CR)|4|35000">8512010000000 — Servicios Médicos y Clínicas Privadas (IVA 4% Ley 9635)</option>
+                <option value="8313100000000|Consultoría en TI, Redes Cloud VPS y Ciberseguridad TLS 1.3|13|75000">8313100000000 — Consultoría TI &amp; Cloud VPS (IVA 13%)</option>
+                <option value="9290000000000|Capacitación Tecnológica y Licenciamiento Educativo|2|28000">9290000000000 — Servicios de Educación / Capacitación (IVA 2%)</option>
+                <option value="2111100000000|Insumos Agropecuarios y Canasta Básica Zona Sur|1|18500">2111100000000 — Canasta Básica Tributaria / Agro (IVA 1%)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Detalle de la Línea de Factura</label>
+              <input type="text" id="fac-detalle" class="form-control" value="Desarrollo de Software SaaS, Bot WhatsApp IA & Facturación v4.4" required />
+            </div>
+
+            <div class="form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Cantidad</label>
+                <input type="number" id="fac-cant" class="form-control" value="1" min="1" step="1" required />
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Precio Unitario (₡)</label>
+                <input type="number" id="fac-precio" class="form-control" value="49500" min="100" step="500" required />
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Tarifa IVA (Ley 9635)</label>
+                <select id="fac-iva" class="form-control">
+                  <option value="13">13% (General)</option>
+                  <option value="4">4% (Salud / Clínicas)</option>
+                  <option value="2">2% (Educación / Med.)</option>
+                  <option value="1">1% (Canasta Básica)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;" id="btn-emitir-fac">
+              ⚡ Firmar y Emitir en Hacienda CR v4.4 (Clave 50 Dígitos)
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Live 50-digit Key, XML v4.4 & Recent Comprobantes -->
+        <div class="glass-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="font-size:1.1rem;">📡 Respuesta Ministerio de Hacienda CR</h3>
+            <span class="brand-badge" style="background:rgba(16,185,129,0.16); color:#34d399; border-color:rgba(16,185,129,0.4);">
+              ✓ SINCRONIZADO 24/7
+            </span>
+          </div>
+
+          <div class="clave-50-box">
+            <div class="clave-50-label">
+              <span>CLAVE NUMÉRICA OFICIAL (50 DÍGITOS)</span>
+              <span id="live-consecutivo">CONSECUTIVO: 00100001010000001043</span>
+            </div>
+            <div class="clave-50-value" id="live-clave-50">
+              50607112600310184920100100001010000001043184920174
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:12px;">
+            <div style="background:rgba(15,23,42,0.75); padding:10px; border-radius:9px; border:1px solid var(--border-subtle);">
+              <div style="font-size:0.72rem; color:var(--text-muted);">Subtotal</div>
+              <div style="font-family:var(--font-mono); font-weight:700;" id="live-fac-sub">₡49,500.00</div>
+            </div>
+            <div style="background:rgba(15,23,42,0.75); padding:10px; border-radius:9px; border:1px solid var(--border-subtle);">
+              <div style="font-size:0.72rem; color:var(--text-muted);">IVA Ley 9635</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:#38bdf8;" id="live-fac-iva">₡6,435.00</div>
+            </div>
+            <div style="background:rgba(15,23,42,0.75); padding:10px; border-radius:9px; border:1px solid rgba(16,185,129,0.35);">
+              <div style="font-size:0.72rem; color:var(--text-muted);">Total Comprobante</div>
+              <div style="font-family:var(--font-mono); font-weight:800; color:#10b981;" id="live-fac-total">₡55,935.00</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.76rem; font-family:var(--font-mono); color:var(--text-muted);">Esquema XML v4.4 Firmado (XAdES-EPES):</span>
+            <button class="cli-btn" onclick="downloadCurrentXml()">⬇ Descargar XML v4.4</button>
+          </div>
+          <pre class="xml-preview-box" id="live-xml-box">Cargando XML v4.4...</pre>
+
+          <h4 style="font-size:0.84rem; margin:14px 0 8px; color:var(--text-secondary);">Últimos Comprobantes Aceptados en SQLite:</h4>
+          <div id="facturas-history-list" style="max-height:140px; overflow-y:auto;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NODO 01: AuraFlow Builder & Sandbox + Loyalty Club -->
+  <section id="builder">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">NODO 01 • AURAFLOW BUILDER (bot.auraflowtech.lat)</span>
+        <h2>Orquestador Visual de Flujos <span class="gradient-text">WhatsApp 24/7 &amp; IA</span></h2>
+        <p>Selecciona un flujo del ecosistema costarricense, ejecuta una simulación en tiempo real nodo por nodo y prueba el Club de Lealtad automatizado.</p>
+      </div>
+
+      <div class="command-center-wrapper">
+        <div class="cc-grid">
+          <!-- Left: Workflows List -->
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="font-size:0.95rem;">Flujos Activos en Producción</h3>
+              <button class="btn btn-secondary btn-sm" onclick="openWorkflowModal()">+ Crear Flujo</button>
+            </div>
+            <div class="workflow-selector-list" id="workflow-list"></div>
+
+            <!-- Loyalty Club Card -->
+            <div style="margin-top:18px; padding:16px; background:rgba(15,23,42,0.8); border:1px solid var(--border-subtle); border-radius:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-family:var(--font-mono); font-size:0.74rem; color:#f59e0b;">🏆 CLUB DE LEALTAD CR (club.auraflowtech.lat)</span>
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:10px;">
+                Cada factura emitida por WhatsApp suma puntos automáticos (Bronce → Plata → Oro → Diamante):
+              </p>
+              <div id="loyalty-list"></div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Node Canvas & Execution Log -->
+          <div class="wf-canvas">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div>
+                <span class="section-tag" id="active-wf-category" style="margin-bottom:2px;">WHATSAPP + HACIENDA v4.4</span>
+                <h3 id="active-wf-title">WaBot IA 24/7 + Emisión Automática Factura CR v4.4</h3>
+              </div>
+              <span class="brand-badge" id="active-wf-stats">265 ms · 99.9% SLA</span>
+            </div>
+            <p id="active-wf-desc" style="font-size:0.86rem; color:var(--text-secondary); margin-top:6px;"></p>
+
+            <div class="canvas-nodes-flow" id="canvas-nodes"></div>
+
+            <div class="sim-controls">
+              <input
+                type="text"
+                id="sim-payload-input"
+                class="sim-input"
+                value="WhatsApp +506 8742-1900: 'Hola, envío comprobante SINPE por ₡49,500 para Factura v4.4'"
+              />
+              <button class="btn btn-primary" id="btn-run-sim" onclick="runWorkflowSimulation()">
+                ▶ Simular Flujo en Vivo
+              </button>
+            </div>
+
+            <div class="terminal-console" id="execution-terminal"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculadora ROI PYMEs CR & WaBot IA 24/7 Assistant -->
+  <section id="calculadora-roi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">IMPACTO FINANCIERO EN COLONES (₡) Y DÓLARES ($)</span>
+        <h2>Calculadora ROI Costa Rica &amp; <span class="gradient-text">WaBot IA 24/7</span></h2>
+        <p>Ajusta el volumen diario de mensajes de WhatsApp y facturas mensuales de tu negocio o clínica para estimar tu ahorro operativo.</p>
+      </div>
+
+      <div class="dual-lab-grid">
+        <!-- ROI Calculator CR -->
+        <div class="glass-panel">
+          <h3>📊 Calculadora de Ahorro para PYMEs y Clínicas CR</h3>
+          <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:20px;">
+            Cálculo automático en Colones Costarricenses (₡) y USD ($).
+          </p>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Mensajes y Consultas de WhatsApp por día</span>
+              <span class="slider-val" id="val-team">65 msgs / día</span>
+            </div>
+            <input type="range" id="input-team" min="10" max="400" value="65" oninput="updateRoiCalculator()" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Facturas / Tiquetes Electrónicos v4.4 al mes</span>
+              <span class="slider-val" id="val-hours">220 facturas / mes</span>
+            </div>
+            <input type="range" id="input-hours" min="20" max="2500" step="20" value="220" oninput="updateRoiCalculator()" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Costo Hora Operativa / Administrativa (₡ CRC)</span>
+              <span class="slider-val" id="val-cost">₡3,500 / hr</span>
+            </div>
+            <input type="range" id="input-cost" min="2000" max="12000" step="500" value="3500" oninput="updateRoiCalculator()" />
+          </div>
+
+          <div class="roi-results-box">
+            <div class="roi-stat">
+              <span>Ahorro Mensual Estimado (₡)</span>
+              <strong id="roi-monthly">₡455,000</strong>
+            </div>
+            <div class="roi-stat">
+              <span>Ahorro Anual Proyectado</span>
+              <strong id="roi-annual">₡5,460,000</strong>
+            </div>
+            <div class="roi-stat">
+              <span>Horas Liberadas / Mes</span>
+              <strong id="roi-hours">130.2 hrs</strong>
+            </div>
+            <div class="roi-stat">
+              <span>Retorno de Inversión (Payback)</span>
+              <strong id="roi-payback">0.5 semanas (9.2x ROI)</strong>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; font-size:0.82rem; color:var(--text-secondary); display:flex; justify-content:space-between;">
+            <span>Plan Sugerido: <strong id="roi-plan" style="color:var(--accent-cyan-light);">Plan PYME Pro (WaBot IA + Factura CR v4.4)</strong></span>
+          </div>
+        </div>
+
+        <!-- WaBot IA 24/7 Interactive Chat -->
+        <div class="glass-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div>
+              <h3>🤖 AuraFlow Bot — Consola &amp; Chat en Vivo</h3>
+              <p style="font-size:0.82rem; color:var(--text-secondary);">Ejecuta los 35+ comandos reales (`-menu`, `-cedula`, `-cabys`, `-dolar`, `-iva`, `-qr`, etc.)</p>
+            </div>
+            <span class="brand-badge">ONLINE 24/7</span>
+          </div>
+
+          <div class="quick-prompts">
+            <button class="chip-btn" onclick="sendQuickPrompt('-menu')">📋 -menu (Menú Completo)</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-servicios')">💼 -servicios</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-dolar')">💵 -dolar (TC BCCR)</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-cedula 3101754321')">🏛️ -cedula Hacienda</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-cabys software')">🧾 -cabys</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-clavehacienda')">🔑 -clavehacienda (50 díg)</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-iva 49500 13')">🧮 -iva 49500 13</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-qr https://auraflowtech.lat')">📱 -qr</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-attp Pura Vida CR')">🎨 -attp Sticker</button>
+            <button class="chip-btn" onclick="sendQuickPrompt('-dev')">👨💻 -dev</button>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-bubble chat-ai">
+              🤖 <strong>AuraFlow Bot — Menú</strong><br>
+              <em>by AuraFlow Tech</em><br><br>
+              <strong>━━ 💼 AURAFLOW TECH ━━</strong><br>
+              ▸ <strong>-servicios</strong> — Servicios y plataformas<br>
+              ▸ <strong>-cotizar</strong> <em>texto</em> — Pide una cotización<br>
+              ▸ <strong>-contacto</strong> — Datos de contacto<br>
+              ▸ <strong>-dev</strong> — Créditos del creador<br><br>
+              <strong>━━ 💬 DM COMMANDS ━━</strong><br>
+              ▸ <strong>-acortar</strong> · <strong>-a</strong> · <strong>-sorteo</strong> · <strong>-cabys</strong> · <strong>-calc</strong> · <strong>-cedula</strong> · <strong>-eva</strong> · <strong>-clave</strong> · <strong>-clavehacienda</strong> · <strong>-convertir</strong> · <strong>-sets</strong> · <strong>-delete</strong> · <strong>-dolar</strong> · <strong>-donate</strong> · <strong>-encuesta</strong> · <strong>-epicgames</strong> · <strong>-search</strong> · <strong>-help</strong> · <strong>-hora</strong> · <strong>-idp</strong> · <strong>-iva</strong> · <strong>-qr</strong> · <strong>-rank</strong> · <strong>-reddit</strong> · <strong>-remind</strong> · <strong>-steal</strong> · <strong>-sticker</strong> · <strong>-say</strong> · <strong>-tr</strong> · <strong>-attp</strong> · <strong>-weather</strong> · <strong>-wiki</strong><br><br>
+              💡 <em>Escribe <strong>-menu</strong> para ver el menú completo o haz clic en un botón arriba.</em><br>
+              ━━━━━━━━━━━━━━━━━━<br>
+              ⚡ <strong>AuraFlow Bot</strong> · AuraFlow Tech<br>
+              👨💻 Creado por <strong>Ing. Santiago Delgado Leiva</strong><br>
+              📱 <a href="https://wa.me/50689418680" target="_blank" style="color:#22d3ee;">https://wa.me/50689418680</a>
+            </div>
+          </div>
+
+          <div class="sim-controls" style="margin-bottom:0;">
+            <input
+              type="text"
+              id="chat-input"
+              class="sim-input"
+              placeholder="Escribe cualquier comando (ej. -menu, -dolar, -cedula 3101754321, -cabys software, -iva 49500)..."
+              onkeydown="if(event.key==='Enter') sendAiMessage()"
+            />
+            <button class="btn btn-primary" onclick="sendAiMessage()">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Panel en Vivo: Vinculación WhatsApp Multi-Device (QR + Código 8 Dígitos) -->
+  <section id="auraflow-bot" style="padding-top:15px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">WHATSAPP MULTI-DEVICE ENGINE • BAILEYS 24/7 (bot.auraflowtech.lat)</span>
+        <h2>Panel de Activación <span class="gradient-text">AuraFlow Bot WhatsApp</span></h2>
+        <p>Vincula tu número de WhatsApp (<strong>+506 8941-8680</strong> o cualquier línea) escaneando el código QR o mediante Código de 8 Dígitos.</p>
+      </div>
+
+      <div class="dual-lab-grid">
+        <!-- Left: QR Code & 8-digit Pairing Code -->
+        <div class="glass-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h3>📱 Vincular Dispositivo en WhatsApp</h3>
+              <p style="font-size:0.8rem; color:var(--text-secondary);">WhatsApp → Dispositivos vinculados → Vincular un dispositivo</p>
+            </div>
+            <span class="brand-badge" id="wabot-status-badge" style="background:rgba(34,211,238,0.16); color:#22d3ee;">CARGANDO...</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(15,23,42,0.85); border:1px solid var(--border-subtle); border-radius:14px; padding:18px; min-height:260px;" id="wabot-qr-container">
+            <div style="color:var(--text-secondary); font-size:0.86rem;">Obteniendo código QR en vivo...</div>
+          </div>
+
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border-subtle);">
+            <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:8px;">
+              🔑 ¿Prefieres vincular con <strong>Código de 8 dígitos</strong> en lugar de QR? Ingresa el número con código de país:
+            </label>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input type="text" id="wabot-pair-phone" class="form-control" value="50689418680" placeholder="50689418680" style="flex:1; min-width:160px;" />
+              <button class="btn btn-primary btn-sm" onclick="requestWabotPairingCode()" id="btn-pair-code">Generar Código 8 Dígitos</button>
+              <button class="btn btn-secondary btn-sm" onclick="resetWabotSession()">🔄 Nuevo QR</button>
+            </div>
+            <div id="wabot-pair-result" style="margin-top:10px; font-family:var(--font-mono); font-size:0.9rem;"></div>
+          </div>
+        </div>
+
+        <!-- Right: Live Bot Logs & Quick Command Tester -->
+        <div class="glass-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <h3>⚡ Estado &amp; Consola de Eventos del Bot</h3>
+              <p style="font-size:0.8rem; color:var(--text-secondary);">Demonio systemd <code>auraflow-wabot.service</code> activo 24/7</p>
+            </div>
+            <span class="brand-badge" id="wabot-cmd-count">0 comandos</span>
+          </div>
+
+          <div class="terminal-console" id="wabot-live-logs" style="height:210px; overflow-y:auto; margin-bottom:14px;">
+            <div class="log-line"><span class="log-ok">Conectando con motor AuraFlow Bot (127.0.0.1:8001)...</span></div>
+          </div>
+
+          <div style="background:rgba(15,23,42,0.75); border:1px solid var(--border-subtle); border-radius:12px; padding:12px;">
+            <div style="font-size:0.78rem; font-weight:700; color:#22d3ee; margin-bottom:8px;">🚀 Probar Comandos Rápidos en el Simulador:</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-menu')">-menu</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-servicios')">-servicios</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-contacto')">-contacto</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-dev')">-dev</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-a')">-a (ping)</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-dolar')">-dolar</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-convertir 100 usd')">-convertir 100</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-iva 49500 13')">-iva 49500</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-cabys software')">-cabys</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-cedula 3101754321')">-cedula</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-clavehacienda')">-clavehacienda</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-hora')">-hora</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-weather San Jose, Costa Rica')">-weather</button>
+              <button class="cli-btn" onclick="testBotCommandFromPanel('-wiki Costa Rica')">-wiki</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sectores CR -->
+  <section id="sectores-cr" style="padding-top:20px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">SOLUCIONES ADAPTADAS A COSTA RICA</span>
+        <h2>Sectores Productivos en <span class="gradient-text">Zona Sur y Todo el País</span></h2>
+        <p>Arquitectura 100% en la nube homologada con la Dirección General de Tributación (Ministerio de Hacienda CR).</p>
+      </div>
+
+      <div class="core-nodes-grid">
+        <div class="core-node-card">
+          <div class="core-node-tag">SECTOR 01 • COMERCIO &amp; PYMES</div>
+          <div class="core-node-title">Comercios, Retail &amp; Agro</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">
+            Punto de Venta (POS), control de inventarios con código CABYS, tiquete electrónico v4.4 instantáneo, catálogo por WhatsApp y Club de Puntos para fidelizar clientes.
+          </p>
+          <span class="brand-badge">IVA 13% / 1% Canasta Básica</span>
+        </div>
+
+        <div class="core-node-card">
+          <div class="core-node-tag">SECTOR 02 • SALUD &amp; CLÍNICAS</div>
+          <div class="core-node-title">Clínicas, Consultorios &amp; Lab</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">
+            Agendamiento médico 24/7 por WhatsApp, recordatorios automáticos para reducir ausencias, expediente digital y facturación electrónica con tarifa reducida del 4% de IVA.
+          </p>
+          <span class="brand-badge">IVA 4% Salud (Ley 9635)</span>
+        </div>
+
+        <div class="core-node-card">
+          <div class="core-node-tag">SECTOR 03 • FLOTAS &amp; SERVICIOS</div>
+          <div class="core-node-title">Logística, Seguridad &amp; Pro</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:14px;">
+            Comunicación táctica en vivo con <strong>AuraFlow PTT Radio &amp; Radar GPS</strong> (`radio.auraflowtech.lat`), despacho de órdenes y facturación recurrente automatizada.
+          </p>
+          <span class="brand-badge">Telemetría GPS + ERP v4.4</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 Active Subdomains Cloud Ecosystem -->
+  <section id="ecosistema-cloud">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">INFRAESTRUCTURA CLOUD VPS · SSL TLS 1.3 · SSO</span>
+        <h2>Ecosistema Cloud: <span class="gradient-text">16 Subdominios Activos</span></h2>
+        <p>Todos los módulos de <code>*.auraflowtech.lat</code> están interconectados mediante una sola cuenta <strong>AuraFlow ID Cloud</strong>.</p>
+      </div>
+
+      <div class="subdomains-grid" id="subdomains-container"></div>
+    </div>
+  </section>
+
+  <!-- Planes Costa Rica -->
+  <section id="planes">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">ESQUEMA COMERCIAL TRANSPARENTE</span>
+        <h2>Planes diseñados para <span class="gradient-text">Costa Rica</span></h2>
+        <p>Sin contratos forzosos. Incluye actualización garantizada a Hacienda v4.4, certificados SSL TLS 1.3 y soporte técnico directo.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div>
+            <span class="section-tag">NODO FACTURACIÓN</span>
+            <h3>Plan Emprendedor CR v4.4</h3>
+            <div class="price-amount">₡18,500 <span>/ mes ($36)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">
+              Ideal para profesionales independientes y comercios que requieren facturación v4.4 rápida desde celular o PC.
+            </p>
+            <ul class="core-node-list">
+              <li>✓ Facturas y Tiquetes Electrónicos v4.4 ilimitados</li>
+              <li>✓ Clave 50 dígitos + Consecutivo + XML firmado</li>
+              <li>✓ Buscador CABYS e IVA Ley 9635 automático</li>
+              <li>✓ Cuenta unificada AuraFlow ID Cloud</li>
+            </ul>
+          </div>
+          <a href="#cotizar" class="btn btn-secondary" onclick="selectPlan('Plan Emprendedor CR v4.4')">Activar Plan Emprendedor</a>
+        </div>
+
+        <div class="price-card featured">
+          <div class="popular-ribbon">Más Elegido en CR</div>
+          <div>
+            <span class="section-tag">NODO IA + HACIENDA v4.4</span>
+            <h3>Plan PYME Pro (WaBot + ERP)</h3>
+            <div class="price-amount">₡49,500 <span>/ mes ($95)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">
+              Automatización completa de ventas por WhatsApp 24/7 vinculada en tiempo real con Factura CR v4.4 y CRM.
+            </p>
+            <ul class="core-node-list">
+              <li>✓ Todo lo del Plan Emprendedor v4.4</li>
+              <li>✓ <strong>AuraFlow Builder</strong> + WaBot IA 24/7 Multi-Device</li>
+              <li>✓ Emisión de facturas directo desde WhatsApp</li>
+              <li>✓ CRM Kanban de prospectos + Club de Puntos</li>
+            </ul>
+          </div>
+          <a href="#cotizar" class="btn btn-primary" onclick="selectPlan('Plan PYME Pro (WaBot IA + Factura CR v4.4)')">Desplegar Plan PYME Pro</a>
+        </div>
+
+        <div class="price-card">
+          <div>
+            <span class="section-tag">ECOSISTEMA COMPLETO</span>
+            <h3>Clínicas, Multi-Sucursal &amp; Custom</h3>
+            <div class="price-amount">₡95,000 <span>/ mes ($185)</span></div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:18px;">
+              Para clínicas médicas, empresas multi-sucursal, flotas con Radio PTT GPS o desarrollo de software a medida.
+            </p>
+            <ul class="core-node-list">
+              <li>✓ Acceso completo a los 16 subdominios Cloud</li>
+              <li>✓ Módulo Clínicas (Agenda WhatsApp + IVA 4%)</li>
+              <li>✓ AuraFlow PTT Radio &amp; Radar GPS en tiempo real</li>
+              <li>✓ Soporte directo Ing. Santiago Delgado Leiva</li>
+            </ul>
+          </div>
+          <a href="#cotizar" class="btn btn-secondary" onclick="selectPlan('Plan Ecosistema Cloud Completo')">Solicitar Arquitectura</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" style="padding-top:10px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PREGUNTAS FRECUENTES (FAQ)</span>
+        <h2>Todo sobre <span class="gradient-text">Hacienda v4.4, CABYS y AuraFlow ID</span></h2>
+      </div>
+
+      <div class="core-nodes-grid">
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Cumple 100% con la normativa v4.4 de Hacienda CR?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">
+            Sí. Nuestro nodo <code>fac.auraflowtech.lat</code> genera la Clave Numérica oficial de 50 dígitos, el consecutivo de 20 dígitos, valida códigos CABYS, calcula las tarifas de IVA de la Ley 9635 y firma el XML bajo el esquema v4.4.
+          </p>
+        </div>
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Cómo funciona el inicio de sesión AuraFlow ID Cloud?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">
+            Con una sola cuenta accedes a todo el ecosistema. Al ingresar tu correo, el sistema envía un código seguro de verificación de 6 dígitos desde <code>support@auraflowtech.lat</code> respaldado por MongoDB y TLS 1.3.
+          </p>
+        </div>
+        <div class="glass-panel">
+          <h4 style="color:#22d3ee; margin-bottom:8px;">¿Puedo probar el sistema antes de contratar?</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">
+            Por supuesto. En esta misma página tienes activo el Sandbox del Facturador v4.4, el simulador de flujos de AuraFlow Builder y la consola CLI en vivo sin riesgo ni costo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cotizar & Kanban CRM -->
+  <section id="cotizar">
+    <div class="container">
+      <div class="dual-lab-grid">
+        <div class="glass-panel">
+          <span class="section-tag">CONTACTO DIRECTO · ZONA SUR, COSTA RICA</span>
+          <h3 style="font-size:1.45rem; margin-bottom:8px;">Solicitar Propuesta o Demo Personalizada</h3>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px;">
+            Registra los datos de tu comercio, clínica o empresa. El expediente se sincroniza en tiempo real con nuestro pipeline CRM.
+          </p>
+
+          <form onsubmit="submitLeadForm(event)">
+            <div class="form-row">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Nombre Completo *</label>
+                <input type="text" id="lead-name" class="form-control" placeholder="Ej. Ing. / Dr. / Administrador" required />
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">WhatsApp / Teléfono CR *</label>
+                <input type="text" id="lead-phone" class="form-control" placeholder="+506 8888-0000" value="+506 " required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Correo Electrónico *</label>
+                <input type="email" id="lead-email" class="form-control" placeholder="contacto@tuempresa.cr" required />
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Comercio / Clínica / Empresa</label>
+                <input type="text" id="lead-company" class="form-control" placeholder="Nombre de tu negocio en CR" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Plan o Nodo de Interés</label>
+                <select id="lead-plan" class="form-control">
+                  <option value="Plan PYME Pro (WaBot IA + Factura CR v4.4)">Plan PYME Pro (WaBot IA + Factura CR v4.4)</option>
+                  <option value="Plan Emprendedor CR v4.4">Plan Emprendedor CR v4.4 (₡18,500/mes)</option>
+                  <option value="Plan Ecosistema Cloud Completo">Plan Ecosistema Cloud / Clínicas (₡95,000/mes)</option>
+                  <option value="AuraFlow PTT Radio + Radar GPS">AuraFlow PTT Radio + Radar GPS</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.78rem; color:var(--text-secondary);">Sector en Costa Rica</label>
+                <select id="lead-sector" class="form-control">
+                  <option value="PYME / Comercio CR">PYME / Comercio Local</option>
+                  <option value="Clínicas & Salud CR">Clínica / Consultorio Salud (IVA 4%)</option>
+                  <option value="Restaurante / Cafetería">Restaurante / Cafetería / POS</option>
+                  <option value="Logística & Flotas">Logística / Seguridad / Radio PTT</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>¿Qué deseas automatizar o implementar? *</label>
+              <textarea
+                id="lead-goal"
+                class="form-control"
+                rows="3"
+                placeholder="Ej. Quiero automatizar ventas y citas por WhatsApp 24/7 y emitir Factura Electrónica v4.4..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;" id="btn-submit-lead">
+              🚀 Enviar Solicitud al Ecosistema AuraFlow Tech
+            </button>
+            <div id="lead-feedback" style="margin-top:10px; font-size:0.84rem;"></div>
+          </form>
+        </div>
+
+        <!-- Live Kanban CRM Pipeline -->
+        <div class="glass-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h3>📌 Kanban CRM en Vivo (`crm.auraflowtech.lat`)</h3>
+              <p style="font-size:0.8rem; color:var(--text-secondary);">Expedientes sincronizados con SQLite en tiempo real</p>
+            </div>
+            <span class="brand-badge">LIVE DB</span>
+          </div>
+          <div id="leads-pipeline-list" style="max-height:420px; overflow-y:auto;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal: AuraFlow ID Cloud SSO (6-Digit Verification) -->
+  <div class="modal-backdrop" id="sso-modal">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <span class="section-tag" style="margin-bottom:2px;">NODO 03 • AURAFLOW ID CLOUD (SSO)</span>
+          <h3>🔐 Acceso Unificado (16 Subdominios)</h3>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="closeSsoModal()">✕</button>
+      </div>
+      <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:16px;">
+        Ingresa tu correo corporativo para recibir un código seguro de <strong>6 dígitos</strong> emitido por <code>support@auraflowtech.lat</code>.
+      </p>
+
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <div style="display:flex; gap:8px;">
+          <input type="email" id="sso-email" class="form-control" value="santiago@auraflowtech.lat" />
+          <button class="btn btn-primary btn-sm" onclick="sendSsoCode()">Enviar Código</button>
+        </div>
+      </div>
+
+      <div id="sso-step-verify" style="display:none; margin-top:14px;">
+        <div class="form-group">
+          <label>Código de Verificación (6 dígitos)</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="sso-code" class="form-control" maxlength="6" placeholder="123456" />
+            <button class="btn btn-primary btn-sm" onclick="verifySsoCode()">Verificar SSO</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sso-feedback" style="margin-top:12px; font-size:0.83rem; font-family:var(--font-mono);"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Create New Workflow in AuraFlow Builder -->
+  <div class="modal-backdrop" id="workflow-modal">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>⚡ Crear Flujo en AuraFlow Builder</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeWorkflowModal()">✕</button>
+      </div>
+      <form onsubmit="createCustomWorkflow(event)">
+        <div class="form-group">
+          <label>Nombre del Flujo *</label>
+          <input type="text" id="wf-name" class="form-control" placeholder="Ej. Bot Pedidos Agro + Factura v4.4" required />
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Categoría</label>
+            <select id="wf-category" class="form-control">
+              <option value="WhatsApp + Hacienda v4.4">WhatsApp + Hacienda v4.4</option>
+              <option value="Clínicas & Salud CR">Clínicas &amp; Salud CR (IVA 4%)</option>
+              <option value="Radio PTT & Telemetría">Radio PTT &amp; Telemetría GPS</option>
+            </select>
+          </div>
+          <div>
+            <label>Disparador (Trigger)</label>
+            <input type="text" id="wf-trigger" class="form-control" value="WhatsApp Multi-Device Webhook" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción Operativa *</label>
+          <textarea id="wf-desc" class="form-control" rows="2" placeholder="Describe qué automatiza este flujo..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Guardar y Desplegar Nodo</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+      <div>
+        <strong>⚡ AuraFlow Tech (`auraflowtech.lat`)</strong> — Fundado por el <strong>Ing. Santiago Delgado Leiva</strong> · Zona Sur, Costa Rica.
+      </div>
+      <div style="font-family:var(--font-mono); font-size:0.78rem;">
+        Hacienda CR v4.4 · AuraFlow Builder · AuraFlow ID SSO · <a href="mailto:support@auraflowtech.lat" style="color:#22d3ee; text-decoration:none;">support@auraflowtech.lat</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
